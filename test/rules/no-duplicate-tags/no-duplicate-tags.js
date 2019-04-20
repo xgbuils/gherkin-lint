@@ -28,6 +28,11 @@ describe('No Duplicate Tags Rule', function() {
       messageElements: {tags: '@scenariotag'},
       rule: ruleName,
       line: 11,
+    },
+    {
+      messageElements: {tags: '@exampletag'},
+      rule: ruleName,
+      line: 14,
     }]);
   });
 });
