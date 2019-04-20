@@ -1,11 +1,7 @@
 const rule = 'no-duplicate-tags';
-const {
-  applyOver,
-  compose,
-  intoArray,
-} = require('../utils/generic');
+const {compose, intoArray} = require('../utils/generic');
 const {filter, map} = require('../utils/transducers');
-const {flatMapScenarios} = require('../utils/gherkin');
+const {flatMapNodeTags} = require('../utils/gherkin');
 
 const collectTagsInfo = (tags, {name, location}) => {
   const info = tags[name];
@@ -34,13 +30,8 @@ const verifyTags = ({tags, location}) => {
   ))(tagsInfo);
 };
 
-const noDuplicateTags = applyOver([
-  verifyTags,
-  flatMapScenarios(verifyTags),
-]);
-
 module.exports = {
   name: rule,
-  run: noDuplicateTags,
+  run: flatMapNodeTags(verifyTags),
   isValidConfig: () => [],
 };

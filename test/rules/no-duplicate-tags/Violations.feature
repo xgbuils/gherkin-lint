@@ -11,6 +11,7 @@ Scenario: This is a Scenario with three duplicate tags
 @scenariotag @scenariotag
 Scenario Outline: This is a Scenario Outline with two duplicate tags
   Then this is a then step <foo>
+  @exampletag @exampletag @exampletag
 Examples:
   | foo |
   | bar |
