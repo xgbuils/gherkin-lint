@@ -1,8 +1,6 @@
 const rule = 'one-space-between-tags';
-const {compose, intoArray} = require('../utils/generic');
-const {flatMap, map} = require('../utils/transducers');
-const {getFeatureNodes} = require('../utils/selectors');
-const {filterScenarios} = require('../utils/gherkin');
+const {flatMap} = require('../utils/generic');
+const {flatMapNodeTags} = require('../utils/gherkin');
 
 const groupTagsPerLine = require('../utils/group-tags-per-line');
 
@@ -34,22 +32,11 @@ const collectErrorsPerLine = (tags) => {
 
 const testTags = (allTags) => {
   const tagsPerLine = groupTagsPerLine(allTags);
-  return intoArray(flatMap(collectErrorsPerLine))(tagsPerLine);
+  return flatMap(collectErrorsPerLine)(tagsPerLine);
 };
 
-function run(feature) {
-  const featureTagErrors = testTags(feature.tags);
-  const scenarioTagErrors = intoArray(compose(
-    filterScenarios,
-    map(({tags}) => tags),
-    flatMap(testTags)
-  ))(getFeatureNodes(feature));
-
-  return featureTagErrors.concat(scenarioTagErrors);
-}
-
 module.exports = {
-  run: run,
+  run: flatMapNodeTags(({tags}) => testTags(tags)),
   name: rule,
   isValidConfig: () => [],
 };

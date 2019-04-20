@@ -13,6 +13,13 @@ Scenario: This is a Scenario with bad tag spacing
 @scenariotag5   @scenariotag6
 Scenario Outline: This is a Scenario Outline with bad tag spacing
   Then this is a then step <foo>
+      @exampletag1 @exampletag2
+   @exampletag3
 Examples:
   | foo |
   | bar |
+@exampletag5
+@exampletag6        @exampletag7
+Examples:
+  | foo |
+  | rab |

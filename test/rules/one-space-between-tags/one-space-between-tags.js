@@ -26,6 +26,10 @@ describe('One space between tags rule', function() {
       line: 13,
       rule: ruleName,
       messageElements: {left: '@scenariotag5', right: '@scenariotag6'},
+    }, {
+      line: 22,
+      rule: ruleName,
+      messageElements: {left: '@exampletag6', right: '@exampletag7'},
     }]);
   });
 });
