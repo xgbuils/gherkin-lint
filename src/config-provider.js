@@ -1,6 +1,6 @@
 const fs = require('fs');
-const path = require('path');
 const defaults = require('./defaults');
+const getPath = require('./utils/get-path');
 const {Successes, Failures} = require('./successes-failures');
 
 class ConfigProvider {
@@ -19,7 +19,7 @@ class ConfigProvider {
 
   provide() {
     const {fileName, message, cwd} = this;
-    const configPath = path.resolve(cwd, fileName);
+    const configPath = getPath(cwd, fileName);
     if (!fs.existsSync(configPath)) {
       return Failures.of([{
         type: 'config-error',

@@ -14,7 +14,7 @@ const linterFactory = ({format, ignore, config, rulesDirs, args}) => {
   const formatter = formatterFactory(format);
   const noConfigurableFileLinter = new NoConfigurableLinter(parser);
   const configurableFileLinter = new ConfigurableLinter(noConfigurableFileLinter);
-  const rulesProvider = new RulesProvider(rulesDirs);
+  const rulesProvider = new RulesProvider({rulesDirs, cwd});
   const rulesParser = new RulesParser(rulesProvider.provide());
   const featuresProvider = new FeaturesProvider(args, {ignore, cwd});
   const configProvider = new ConfigProvider({file: config, cwd});

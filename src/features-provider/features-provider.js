@@ -2,6 +2,7 @@ const {flatMap, uniq} = require('../utils/generic');
 const glob = require('glob');
 const fs = require('fs');
 const path = require('path');
+const getPath = require('../utils/get-path');
 const defaults = require('../defaults');
 const {Successes, Failures} = require('../successes-failures');
 const getGlobPatterns = require('./get-glob-patterns');
@@ -32,7 +33,7 @@ const parseFileListBasedOn = (cwd) => (fileNames) => {
 
 const getIgnorePatterns = (ignore, cwd) => {
   const ignorePatterns = [defaultIgnoredFiles];
-  const ignorePath = path.resolve(cwd, ignore);
+  const ignorePath = getPath(cwd, ignore);
   if (fs.existsSync(ignorePath)) {
     ignorePatterns.push(...fs.readFileSync(ignorePath)
       .toString()
