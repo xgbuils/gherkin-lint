@@ -8,7 +8,7 @@ const pathToOtherRules = path.join('test', 'linter', 'factory', 'other_rules'); 
 
 describe('factory', function() {
   it('linter that fails', function() {
-    const featureFile = path.join(__dirname, 'failure.feature');
+    const featureFile = 'failure.feature';
     const linter = linterFactory({
       config: path.join(__dirname, '.gherkin-lintrc'),
       format: 'stylish',
@@ -16,7 +16,7 @@ describe('factory', function() {
         pathToDefaultRules, pathToLocalRules, pathToOtherRules,
       ],
       args: [featureFile],
-    });
+    }, __dirname);
     const result = linter.lint();
 
     expect(result.logType).to.be.equal('error');
@@ -31,13 +31,13 @@ describe('factory', function() {
   });
 
   it('linter that succeed', function() {
-    const featureFile = path.join(__dirname, 'success.feature');
+    const featureFile = 'success.feature';
     const linter = linterFactory({
       config: path.join(__dirname, '.indentation-lintrc'),
       format: 'stylish',
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
-    });
+    }, __dirname);
     const result = linter.lint();
 
     expect(result).to.be.deep.equal({
@@ -48,13 +48,13 @@ describe('factory', function() {
   });
 
   it('config file not found', function() {
-    const featureFile = path.join(__dirname, 'success.feature');
+    const featureFile = 'success.feature';
     const linter = linterFactory({
       config: path.join(__dirname, '.not-found-lintrc'),
       format: 'stylish',
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
-    });
+    }, __dirname);
     const result = linter.lint();
 
     expect(result.logType).to.be.equal('error');
@@ -65,12 +65,12 @@ describe('factory', function() {
   });
 
   it('default config file not found', function() {
-    const featureFile = path.join(__dirname, 'success.feature');
+    const featureFile = 'success.feature';
     const linter = linterFactory({
       format: 'stylish',
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
-    });
+    }, __dirname);
     const result = linter.lint();
 
     expect(result.logType).to.be.equal('error');
@@ -81,11 +81,11 @@ describe('factory', function() {
   });
 
   it('default format is stylish', function() {
-    const featureFile = path.join(__dirname, 'success.feature');
+    const featureFile = 'success.feature';
     const linter = linterFactory({
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
-    });
+    }, __dirname);
     const result = linter.lint();
 
     expect(result.logType).to.be.equal('error');

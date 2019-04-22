@@ -29,7 +29,7 @@ const linter = linterFactory({
   config: program.config,
   rulesDirs: [path.resolve(__dirname, defaultRulesDir)].concat(program.rulesdir || []),
   args: program.args,
-});
+}, process.cwd());
 const {
   logType,
   errorLines,

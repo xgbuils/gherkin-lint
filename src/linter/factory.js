@@ -1,5 +1,5 @@
 const Linter = require('./');
-const FeaturesProvider = require('../features-provider.js');
+const FeaturesProvider = require('../features-provider/features-provider.js');
 const ConfigProvider = require('../config-provider.js');
 const RulesProvider = require('../rules-provider');
 const RulesParser = require('../rules-parser');
@@ -15,7 +15,10 @@ const linterFactory = ({format, ignore, config, rulesDirs, args}) => {
   const configurableFileLinter = new ConfigurableLinter(noConfigurableFileLinter);
   const rulesProvider = new RulesProvider(rulesDirs);
   const rulesParser = new RulesParser(rulesProvider.provide());
-  const featuresProvider = new FeaturesProvider(args, ignore);
+  const featuresProvider = new FeaturesProvider(args, {
+    ignore,
+    cwd: process.cwd(),
+  });
   const configProvider = new ConfigProvider(config);
   const linter = new Linter(
     configProvider,
