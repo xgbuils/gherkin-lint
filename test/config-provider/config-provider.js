@@ -1,12 +1,12 @@
 const expect = require('chai').expect;
 const ConfigProvider = require('../../src/config-provider.js');
-const CONFIG_PATH = './test/config-provider';
+const cwd = __dirname;
 
-describe('Configuration parser', () => {
+describe('Config Provider', () => {
   describe('early exits with a non 0 exit code when', () => {
     it('the specified config file doesn\'t exist', () => {
       const configFilePath = './non/existing/path';
-      const result = new ConfigProvider(configFilePath).provide();
+      const result = new ConfigProvider({file: configFilePath, cwd}).provide();
 
       expect(result.isSuccess()).to.be.equal(false);
       expect(result.getFailures()).to.be.deep.equal([{
@@ -16,7 +16,7 @@ describe('Configuration parser', () => {
     });
 
     it('the specified config file exists', () => {
-      const result = new ConfigProvider(`${CONFIG_PATH}/config.gherkinrc`).provide();
+      const result = new ConfigProvider({file: 'config.gherkinrc', cwd}).provide();
 
       expect(result.isSuccess()).to.be.equal(true);
       expect(result.getSuccesses()).to.be.deep.equal({
@@ -25,7 +25,7 @@ describe('Configuration parser', () => {
     });
 
     it('the specified config file exists but it is a badly formed JSON', () => {
-      const result = new ConfigProvider(`${CONFIG_PATH}/wrong-config.json`).provide();
+      const result = new ConfigProvider({file: 'wrong-config.json', cwd}).provide();
 
       expect(result.isSuccess()).to.be.equal(false);
       expect(result.getFailures()).to.be.deep.equal([{
@@ -35,7 +35,7 @@ describe('Configuration parser', () => {
     });
 
     it('no config file has been specified and default config file doesn\'t exist', () => {
-      const result = new ConfigProvider().provide();
+      const result = new ConfigProvider({cwd}).provide();
 
       expect(result.isSuccess()).to.be.equal(false);
       expect(result.getFailures()).to.be.deep.equal([{

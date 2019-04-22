@@ -1,14 +1,16 @@
 const fs = require('fs');
+const path = require('path');
 const defaults = require('./defaults');
 const {Successes, Failures} = require('./successes-failures');
 
 class ConfigProvider {
-  constructor(configPath) {
-    if (configPath) {
-      this.configPath = configPath;
-      this.message = `Could not find specified config file "${configPath}"`;
+  constructor({file, cwd}) {
+    this.cwd = cwd;
+    if (file) {
+      this.fileName = file;
+      this.message = `Could not find specified config file "${file}"`;
     } else {
-      this.configPath = defaults.config;
+      this.fileName = defaults.config;
       this.message = `Could not find default config file "${defaults.config}" ` +
         'in the working directory.\nTo use a custom name/path provide the config ' +
         'file using the "-c" arg.';
@@ -16,7 +18,8 @@ class ConfigProvider {
   }
 
   provide() {
-    const {configPath, message} = this;
+    const {fileName, message, cwd} = this;
+    const configPath = path.resolve(cwd, fileName);
     if (!fs.existsSync(configPath)) {
       return Failures.of([{
         type: 'config-error',
