@@ -21,7 +21,7 @@ Scenario Outline: This is a Scenario Outline with forbidden example tags
 Examples:
   | foo  |
   | fizz |
-@exampletag2
+    @exampletag2
 Examples:
   | bar  |
   | buzz |

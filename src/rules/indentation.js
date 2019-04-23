@@ -63,7 +63,7 @@ const checkNodeIndentation = (mergedConfiguration) => (type) => (node) => {
     message: `Wrong indentation for "${type}", expected indentation level of ` +
       `${expectedIndentation}, but got ${indentation}`,
     rule: rule,
-    line: location.line,
+    location,
   }] : [];
 };
 

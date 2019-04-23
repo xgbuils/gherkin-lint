@@ -37,42 +37,66 @@ describe('No Allowed Tags Rule', () => {
     }, [{
       messageElements: {tags: '@featuretag1', nodeType: 'Feature'},
       rule: ruleName,
-      line: 1,
+      location: {
+        line: 1,
+        column: 13,
+      },
     },
     {
       messageElements: {tags: '@anothertag', nodeType: 'Feature'},
       rule: ruleName,
-      line: 1,
+      location: {
+        line: 1,
+        column: 26,
+      },
     },
     {
       messageElements: {tags: '@scenariotag1', nodeType: 'Scenario'},
       rule: ruleName,
-      line: 7,
+      location: {
+        line: 7,
+        column: 14,
+      },
     },
     {
       messageElements: {tags: '@scenariotag2', nodeType: 'Scenario'},
       rule: ruleName,
-      line: 7,
+      location: {
+        line: 7,
+        column: 28,
+      },
     },
     {
       messageElements: {tags: '@anothertag', nodeType: 'Scenario'},
       rule: ruleName,
-      line: 7,
+      location: {
+        line: 7,
+        column: 42,
+      },
     },
     {
       messageElements: {tags: '@scenariotag1', nodeType: 'ScenarioOutline'},
       rule: ruleName,
-      line: 11,
+      location: {
+        line: 11,
+        column: 14,
+      },
     },
     {
       messageElements: {tags: '@exampletag1', nodeType: 'Examples'},
       rule: ruleName,
-      line: 14,
+      location: {
+        line: 14,
+        column: 1,
+      },
     },
     {
       messageElements: {tags: '@exampletag2', nodeType: 'Examples'},
       rule: ruleName,
-      line: 17,
+      location: {
+        line: 17,
+        column: 2,
+      },
     }]);
   });
 });

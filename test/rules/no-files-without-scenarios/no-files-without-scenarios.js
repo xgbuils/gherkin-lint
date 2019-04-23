@@ -11,7 +11,10 @@ describe('No files without scenarios Rule', function() {
 
   it('detects errors when there are not scenarios', function() {
     runTest('no-files-without-scenarios/Violations.feature', {}, [{
-      line: 1,
+      location: {
+        line: 1,
+        column: 1,
+      },
       rule: ruleName,
       messageElements: {},
     }]);

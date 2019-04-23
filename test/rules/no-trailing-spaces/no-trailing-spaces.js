@@ -11,15 +11,24 @@ describe('No Trailing Spaces Rule', function() {
 
   it('detects errors for scenarios, and scenario outlines', function() {
     runTest('no-trailing-spaces/Violations.feature', {}, [{
-      line: 3,
+      location: {
+        line: 3,
+        column: 12,
+      },
       rule: ruleName,
       messageElements: {},
     }, {
-      line: 12,
+      location: {
+        line: 12,
+        column: 33,
+      },
       rule: ruleName,
       messageElements: {},
     }, {
-      line: 14,
+      location: {
+        line: 14,
+        column: 10,
+      },
       rule: ruleName,
       messageElements: {},
     }]);

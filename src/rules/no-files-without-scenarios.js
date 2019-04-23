@@ -6,7 +6,10 @@ const noFilesWithoutScenarios = (feature) => {
     type: 'rule',
     message: 'Feature file does not have any Scenarios',
     rule: rule,
-    line: 1,
+    location: {
+      line: 1,
+      column: 1,
+    },
   }];
 };
 

@@ -28,27 +28,45 @@ describe('Name length rule', function() {
     runTest('name-length/WrongLength.feature', {}, [{
       messageElements: {element: 'Feature', length: 89},
       rule: ruleName,
-      line: 1,
+      location: {
+        line: 1,
+        column: 1,
+      },
     }, {
       messageElements: {element: 'Step', length: 94},
       rule: ruleName,
-      line: 4,
+      location: {
+        line: 4,
+        column: 3,
+      },
     }, {
       messageElements: {element: 'Scenario', length: 90},
       rule: ruleName,
-      line: 6,
+      location: {
+        line: 6,
+        column: 1,
+      },
     }, {
       messageElements: {element: 'Step', length: 101},
       rule: ruleName,
-      line: 7,
+      location: {
+        line: 7,
+        column: 3,
+      },
     }, {
       messageElements: {element: 'Scenario', length: 98},
       rule: ruleName,
-      line: 9,
+      location: {
+        line: 9,
+        column: 1,
+      },
     }, {
       messageElements: {element: 'Step', length: 108},
       rule: ruleName,
-      line: 10,
+      location: {
+        line: 10,
+        column: 3,
+      },
     }]);
   });
 });

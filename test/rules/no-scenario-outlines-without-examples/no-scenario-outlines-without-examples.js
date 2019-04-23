@@ -13,15 +13,24 @@ describe('No Scenario Outline Without Examples Rule', function() {
     runTest('no-scenario-outlines-without-examples/Violations.feature', {}, [{
       messageElements: {},
       rule: ruleName,
-      line: 9,
+      location: {
+        line: 9,
+        column: 3,
+      },
     }, {
       messageElements: {},
       rule: ruleName,
-      line: 12,
+      location: {
+        line: 12,
+        column: 1,
+      },
     }, {
       messageElements: {},
       rule: ruleName,
-      line: 16,
+      location: {
+        line: 16,
+        column: 4,
+      },
     }]);
   });
 });

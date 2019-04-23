@@ -10,7 +10,7 @@ function noDuplicateFeatureNames(feature, file) {
         type: 'rule',
         message: `Feature name is already used in: ${dupes}`,
         rule,
-        line: feature.location.line,
+        location: feature.location,
       }];
     } else {
       features[feature.name] = {files: [file.name]};

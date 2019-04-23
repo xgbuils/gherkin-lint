@@ -29,7 +29,10 @@ describe('No Duplicate Scenario Names Rule', function() {
         files: OTHER_FILE,
       },
       rule: ruleName,
-      line: 2,
+      location: {
+        line: 2,
+        column: 3,
+      },
     }]);
   });
 });

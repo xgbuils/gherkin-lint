@@ -1,6 +1,6 @@
 
 
-Feature:
+   Feature:
 Background:  
   Given I have a Background
 

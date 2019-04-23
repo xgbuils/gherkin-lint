@@ -1,5 +1,5 @@
 
-Feature: Feature with a name
+  Feature: Feature with a name
 
 Background:
   Given I have a Background

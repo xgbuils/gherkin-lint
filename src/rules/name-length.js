@@ -25,7 +25,7 @@ const test = (configuration) => (name, location, type) => {
     message: `${type} name is too long. Length of ${length} ` +
       `is longer than the maximum allowed: ${expectedLength}`,
     rule: rule,
-    line: location.line,
+    location,
   }] : [];
 };
 

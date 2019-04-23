@@ -8,7 +8,10 @@ const createError = ([lines, index]) => ({
   type: 'rule',
   message: 'Multiple empty lines are not allowed',
   rule: rule,
-  line: index + 2,
+  location: {
+    line: index + 2,
+    column: 1,
+  },
 });
 
 const noMulitpleEmptyLines = (unused, file) => {

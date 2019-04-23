@@ -1,6 +1,6 @@
 Feature: this is a feature name
 
-Background:
+ Background:
   Given I have a Background
 
 Scenario Outline: This is a Scenario Outline name

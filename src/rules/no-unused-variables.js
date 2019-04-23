@@ -7,43 +7,60 @@ const {filter, map} = require('../utils/transducers');
 const {getFeatureNodes} = require('../utils/selectors');
 const stepVariableRegex = /<([^>]*)>/gu;
 
-const collectVariables = (selector) => (variables, node) => {
+const calculateLocation = (lines) => (node, match) => {
+  const {line} = node.location;
+  return {
+    line,
+    column: lines[line - 1].indexOf(match.input) + match.index + 2,
+  };
+};
+
+const calculateDocStringLocation = (lines) => ({argument}, match) => {
+  const splittedContent = match.input.substring(0, match.index).split(/\r\n|\r|\n/);
+  const line = argument.location.line + splittedContent.length;
+  const matchLine = lines[line - 1];
+  const matchLinePrefix = splittedContent.slice(-1)[0];
+  const columnStartPos = matchLine.indexOf(matchLinePrefix) + matchLinePrefix.length;
+  return {
+    line,
+    column: matchLine.indexOf(match[0], columnStartPos) + 1,
+  };
+};
+
+const collectVariables = (selector, getLocation) => (variables, node) => {
   let match;
   while ((match = stepVariableRegex.exec(selector(node))) != null) {
-    variables[match[1]] = node.location.line;
+    variables[match[1]] = getLocation(node, match);
   }
   return variables;
 };
 
-const collectNameVariables = collectVariables(({name}) => name);
-
-const collectCellVariables = collectVariables(({value}) => value);
-
-const collectTableVariables = (variables, step) => {
+const collectTableVariables = (collectCellVariables) => (variables, step) => {
   return step.argument.rows.reduce((variables, row) => {
     return row.cells.reduce(collectCellVariables, variables);
   }, variables);
 };
 
-const collectDocStringVariables = collectVariables(({argument}) => {
-  return argument.content;
-});
-
-const collectStepArgumentVariables = (variables, step) => {
-  if (!step.argument) {
-    return variables;
-  } else if (step.argument.type == 'DataTable') {
-    return collectTableVariables(variables, step);
-  } else if (step.argument.type == 'DocString') {
-    return collectDocStringVariables(variables, step);
-  }
-  return variables;
+const collectArgumentVariables = (argCollectFunctions) => (variables, step) => {
+  const {argument = {}} = step;
+  const collectFunction = argCollectFunctions[argument.type];
+  return collectFunction ? collectFunction(variables, step) : variables;
 };
 
-const collectStepVariables = collectVariables((step) => step.text);
-
-const collectScenarioVariables = (scenario) => {
+const collectScenarioVariables = (getLocation, getDocStringLocation, scenario) => {
+  const collectNameVariables = collectVariables(({name}) => name, getLocation);
+  const collectCellVariables = collectVariables(({value}) => value, getLocation);
+  const collectDocStringVariables = collectVariables(
+    ({argument}) => argument.content,
+    getDocStringLocation
+  );
+  const collectStepArgumentVariables = collectArgumentVariables({
+    DataTable: collectTableVariables(collectCellVariables),
+    DocString: collectDocStringVariables,
+  });
+  const collectStepVariables = collectVariables(({text}) => text, getLocation);
   const variables = collectNameVariables({}, scenario);
+
   return scenario.steps.reduce(function(variables, step) {
     variables = collectStepArgumentVariables(variables, step);
     return collectStepVariables(variables, step);
@@ -51,7 +68,7 @@ const collectScenarioVariables = (scenario) => {
 };
 
 const appendExampleVariable = (variables, cell) => {
-  variables[cell.value] = cell.location.line;
+  variables[cell.value] = cell.location;
   return variables;
 };
 
@@ -66,7 +83,7 @@ const collectExampleVariables = reduce(compose(
   map(({tableHeader}) => tableHeader.cells)
 )(collectTableExampleVariables), {});
 
-function noUnusedVariables(feature) {
+function noUnusedVariables(feature, {lines}) {
   const children = getFeatureNodes(feature);
   const errors = [];
 
@@ -77,7 +94,11 @@ function noUnusedVariables(feature) {
     }
 
     const examplesVariables = collectExampleVariables(child.examples);
-    const scenarioVariables = collectScenarioVariables(child);
+    const scenarioVariables = collectScenarioVariables(
+      calculateLocation(lines),
+      calculateDocStringLocation(lines),
+      child
+    );
 
     for (const variable in examplesVariables) {
       if (!scenarioVariables[variable]) {
@@ -85,7 +106,7 @@ function noUnusedVariables(feature) {
           type: 'rule',
           message: `Examples table variable "${variable}" is not used in any step`,
           rule: rule,
-          line: examplesVariables[variable],
+          location: examplesVariables[variable],
         });
       }
     }
@@ -96,7 +117,7 @@ function noUnusedVariables(feature) {
           type: 'rule',
           message: `Step variable "${variable}" does not exist the in examples table`,
           rule: rule,
-          line: scenarioVariables[variable],
+          location: scenarioVariables[variable],
         });
       }
     }

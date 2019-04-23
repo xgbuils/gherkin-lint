@@ -25,7 +25,7 @@ const verifyTags = ({tags, location}) => {
       type: 'rule',
       message: `Duplicate tags are not allowed: ${tag.name}`,
       rule: rule,
-      line: tag.location.line,
+      location: tag.location,
     }))
   ))(tagsInfo);
 };

@@ -28,7 +28,10 @@ describe('New Line At EOF Rule', function() {
       runYesTest('new-line-at-eof/NoNewLineAtEOF.feature', 'yes', [{
         messageElements: {},
         rule: ruleName,
-        line: 7,
+        location: {
+          line: 7,
+          column: 1,
+        },
       }]);
     });
   });
@@ -38,7 +41,10 @@ describe('New Line At EOF Rule', function() {
       runNoTest('new-line-at-eof/NewLineAtEOF.feature', 'no', [{
         messageElements: {},
         rule: ruleName,
-        line: 8,
+        location: {
+          line: 8,
+          column: 1,
+        },
       }]);
     });
 

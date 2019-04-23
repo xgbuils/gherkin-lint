@@ -9,63 +9,108 @@ const runTest = ruleTestBase.createRuleTest(rule, ({element, expected, actual}) 
 const wrongIndenatationErrors = [{
   messageElements: {element: 'Feature', expected: 0, actual: 1},
   rule: ruleName,
-  line: 2,
+  location: {
+    line: 2,
+    column: 2,
+  },
 }, {
   messageElements: {element: 'feature tag', expected: 0, actual: 1},
   rule: ruleName,
-  line: 1,
+  location: {
+    line: 1,
+    column: 2,
+  },
 }, {
   messageElements: {element: 'Background', expected: 0, actual: 4},
   rule: ruleName,
-  line: 4,
+  location: {
+    line: 4,
+    column: 5,
+  },
 }, {
   messageElements: {element: 'Step', expected: 2, actual: 0},
   rule: ruleName,
-  line: 5,
+  location: {
+    line: 5,
+    column: 1,
+  },
 }, {
   messageElements: {element: 'Scenario', expected: 0, actual: 1},
   rule: ruleName,
-  line: 9,
+  location: {
+    line: 9,
+    column: 2,
+  },
 }, {
   messageElements: {element: 'scenario tag', expected: 0, actual: 1},
   rule: ruleName,
-  line: 7,
+  location: {
+    line: 7,
+    column: 2,
+  },
 }, {
   messageElements: {element: 'scenario tag', expected: 0, actual: 1},
   rule: ruleName,
-  line: 8,
+  location: {
+    line: 8,
+    column: 2,
+  },
 }, {
   messageElements: {element: 'Step', expected: 2, actual: 3},
   rule: ruleName,
-  line: 10,
+  location: {
+    line: 10,
+    column: 4,
+  },
 }, {
   messageElements: {element: 'Scenario', expected: 0, actual: 3},
   rule: ruleName,
-  line: 14,
+  location: {
+    line: 14,
+    column: 4,
+  },
 }, {
   messageElements: {element: 'Examples', expected: 0, actual: 2},
   rule: ruleName,
-  line: 16,
+  location: {
+    line: 16,
+    column: 3,
+  },
 }, {
   messageElements: {element: 'example', expected: 2, actual: 4},
   rule: ruleName,
-  line: 17,
+  location: {
+    line: 17,
+    column: 5,
+  },
 }, {
   messageElements: {element: 'example', expected: 2, actual: 4},
   rule: ruleName,
-  line: 18,
+  location: {
+    line: 18,
+    column: 5,
+  },
 }, {
   messageElements: {element: 'scenario tag', expected: 0, actual: 3},
   rule: ruleName,
-  line: 12,
+  location: {
+    line: 12,
+    column: 4,
+  },
 }, {
   messageElements: {element: 'scenario tag', expected: 0, actual: 4},
   rule: ruleName,
-  line: 13,
+  location: {
+    line: 13,
+    column: 5,
+  },
 }, {
   messageElements: {element: 'Step', expected: 2, actual: 3},
   rule: ruleName,
-  line: 15,
+  location: {
+    line: 15,
+    column: 4,
+  },
 }];
 
 describe('Indentation rule', () => {
@@ -97,63 +142,108 @@ describe('Indentation rule', () => {
     runTest('indentation/WrongIndentationDifferentLanguage.feature', {}, [{
       messageElements: {element: 'Feature', expected: 0, actual: 4},
       rule: ruleName,
-      line: 3,
+      location: {
+        line: 3,
+        column: 5,
+      },
     }, {
       messageElements: {element: 'feature tag', expected: 0, actual: 4},
       rule: ruleName,
-      line: 2,
+      location: {
+        line: 2,
+        column: 5,
+      },
     }, {
       messageElements: {element: 'Background', expected: 0, actual: 4},
       rule: ruleName,
-      line: 5,
+      location: {
+        line: 5,
+        column: 5,
+      },
     }, {
       messageElements: {element: 'Step', expected: 2, actual: 0},
       rule: ruleName,
-      line: 6,
+      location: {
+        line: 6,
+        column: 1,
+      },
     }, {
       messageElements: {element: 'Scenario', expected: 0, actual: 4},
       rule: ruleName,
-      line: 10,
+      location: {
+        line: 10,
+        column: 5,
+      },
     }, {
       messageElements: {element: 'scenario tag', expected: 0, actual: 4},
       rule: ruleName,
-      line: 8,
+      location: {
+        line: 8,
+        column: 5,
+      },
     }, {
       messageElements: {element: 'scenario tag', expected: 0, actual: 1},
       rule: ruleName,
-      line: 9,
+      location: {
+        line: 9,
+        column: 2,
+      },
     }, {
       messageElements: {element: 'Step', expected: 2, actual: 12},
       rule: ruleName,
-      line: 11,
+      location: {
+        line: 11,
+        column: 13,
+      },
     }, {
       messageElements: {element: 'Scenario', expected: 0, actual: 12},
       rule: ruleName,
-      line: 15,
+      location: {
+        line: 15,
+        column: 13,
+      },
     }, {
       messageElements: {element: 'Examples', expected: 0, actual: 7},
       rule: ruleName,
-      line: 17,
+      location: {
+        line: 17,
+        column: 8,
+      },
     }, {
       messageElements: {element: 'example', expected: 2, actual: 15},
       rule: ruleName,
-      line: 18,
+      location: {
+        line: 18,
+        column: 16,
+      },
     }, {
       messageElements: {element: 'example', expected: 2, actual: 15},
       rule: ruleName,
-      line: 19,
+      location: {
+        line: 19,
+        column: 16,
+      },
     }, {
       messageElements: {element: 'scenario tag', expected: 0, actual: 4},
       rule: ruleName,
-      line: 13,
+      location: {
+        line: 13,
+        column: 5,
+      },
     }, {
       messageElements: {element: 'scenario tag', expected: 0, actual: 1},
       rule: ruleName,
-      line: 14,
+      location: {
+        line: 14,
+        column: 2,
+      },
     }, {
       messageElements: {element: 'Step', expected: 2, actual: 11},
       rule: ruleName,
-      line: 16,
+      location: {
+        line: 16,
+        column: 12,
+      },
     }]);
   });
 

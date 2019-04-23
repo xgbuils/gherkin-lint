@@ -16,7 +16,7 @@ const createError = (node) => (tag) => ({
   type: 'rule',
   message: `Forbidden tag ${tag.name} on ${node.type}`,
   rule: rule,
-  line: tag.location.line,
+  location: tag.location,
 });
 
 const checkTags = (predicate) => (node) => {

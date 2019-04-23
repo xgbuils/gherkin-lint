@@ -15,7 +15,7 @@ const createError = (tags) => {
     type: 'rule',
     message: `${SUPERFLUOUS_TAGS_MESSAGE}: ${superfluousTagsReport}`,
     rule: rule,
-    line: tags[0].location.line,
+    location: tags[0].location,
   };
 };
 

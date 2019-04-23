@@ -13,22 +13,34 @@ describe('No unused variables rule', function() {
       `Step variable "${variable}" does not exist the in examples table`);
 
     runTest('no-unused-variables/UnusedStepVariables.feature', {}, [{
-      line: 5,
+      location: {
+        line: 5,
+        column: 24,
+      },
       rule: ruleName,
       messageElements: {variable: 'b'},
     },
     {
-      line: 11,
+      location: {
+        line: 11,
+        column: 108,
+      },
       rule: ruleName,
       messageElements: {variable: 'b'},
     },
     {
-      line: 23,
+      location: {
+        line: 23,
+        column: 8,
+      },
       rule: ruleName,
       messageElements: {variable: 'b'},
     },
     {
-      line: 34,
+      location: {
+        line: 38,
+        column: 10,
+      },
       rule: ruleName,
       messageElements: {variable: 'b'},
     }]);
@@ -39,26 +51,41 @@ describe('No unused variables rule', function() {
       `Examples table variable "${variable}" is not used in any step`);
 
     runTest('no-unused-variables/UnusedExampleVariables.feature', {}, [{
-      line: 7,
+      location: {
+        line: 7,
+        column: 11,
+      },
       rule: ruleName,
       messageElements: {variable: 'b'},
     }, {
-      line: 19,
+      location: {
+        line: 19,
+        column: 7,
+      },
       rule: ruleName,
       messageElements: {variable: 'b'},
     },
     {
-      line: 28,
+      location: {
+        line: 28,
+        column: 11,
+      },
       rule: ruleName,
       messageElements: {variable: 'b'},
     },
     {
-      line: 42,
+      location: {
+        line: 42,
+        column: 7,
+      },
       rule: ruleName,
       messageElements: {variable: 'b'},
     },
     {
-      line: 54,
+      location: {
+        line: 54,
+        column: 11,
+      },
       rule: ruleName,
       messageElements: {variable: 'b'},
     }]);

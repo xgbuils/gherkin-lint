@@ -20,7 +20,10 @@ describe('No Duplicate Scenario Names Rule', function() {
         ].join(','),
       },
       rule: ruleName,
-      line: 10,
+      location: {
+        line: 10,
+        column: 3,
+      },
     },
     {
       messageElements: {
@@ -30,7 +33,10 @@ describe('No Duplicate Scenario Names Rule', function() {
         ].join(', '),
       },
       rule: ruleName,
-      line: 16,
+      location: {
+        line: 16,
+        column: 1,
+      },
     }, {
       messageElements: {
         files: [
@@ -40,7 +46,10 @@ describe('No Duplicate Scenario Names Rule', function() {
         ].join(', '),
       },
       rule: ruleName,
-      line: 19,
+      location: {
+        line: 19,
+        column: 1,
+      },
     }]);
   });
 });

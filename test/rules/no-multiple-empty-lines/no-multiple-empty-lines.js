@@ -11,19 +11,31 @@ describe('No multiple empty lines', function() {
 
   it('detects errors there are multiple empty lines', function() {
     runTest('no-multiple-empty-lines/Violations.feature', {}, [{
-      line: 2,
+      location: {
+        line: 2,
+        column: 1,
+      },
       rule: ruleName,
       messageElements: {},
     }, {
-      line: 9,
+      location: {
+        line: 9,
+        column: 1,
+      },
       rule: ruleName,
       messageElements: {},
     }, {
-      line: 10,
+      location: {
+        line: 10,
+        column: 1,
+      },
       rule: ruleName,
       messageElements: {},
     }, {
-      line: 22,
+      location: {
+        line: 22,
+        column: 1,
+      },
       rule: ruleName,
       messageElements: {},
     }]);

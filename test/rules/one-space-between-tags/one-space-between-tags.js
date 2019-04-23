@@ -11,23 +11,38 @@ describe('One space between tags rule', function() {
 
   it('detects errors for tags on features, scenarios, and scenario outlines', function() {
     runTest('one-space-between-tags/Violations.feature', {}, [{
-      line: 1,
+      location: {
+        line: 1,
+        column: 13,
+      },
       rule: ruleName,
       messageElements: {left: '@featuretag1', right: '@featuretag2'},
     }, {
-      line: 9,
+      location: {
+        line: 9,
+        column: 14,
+      },
       rule: ruleName,
       messageElements: {left: '@scenariotag3', right: '@scenariotag4'},
     }, {
-      line: 9,
+      location: {
+        line: 9,
+        column: 30,
+      },
       rule: ruleName,
       messageElements: {left: '@scenariotag4', right: '@scenariotag5'},
     }, {
-      line: 13,
+      location: {
+        line: 13,
+        column: 14,
+      },
       rule: ruleName,
       messageElements: {left: '@scenariotag5', right: '@scenariotag6'},
     }, {
-      line: 22,
+      location: {
+        line: 22,
+        column: 13,
+      },
       rule: ruleName,
       messageElements: {left: '@exampletag6', right: '@exampletag7'},
     }]);

@@ -34,7 +34,10 @@ describe('Max Scenarios per File rule', function() {
           variable: 11,
         },
         rule: ruleName,
-        line: 0,
+        location: {
+          line: 0,
+          column: 1,
+        },
       }]);
     });
   });
@@ -48,7 +51,10 @@ describe('Max Scenarios per File rule', function() {
           variable: 11,
         },
         rule: ruleName,
-        line: 0,
+        location: {
+          line: 0,
+          column: 1,
+        },
       }]);
     });
   });

@@ -19,7 +19,10 @@ const newLineAtEOF = (unused, file, configuration) => {
     type: 'rule',
     message: errormsg,
     rule: rule,
-    line: file.lines.length,
+    location: {
+      line: file.lines.length,
+      column: 1,
+    },
   }] : [];
 };
 

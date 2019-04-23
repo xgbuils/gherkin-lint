@@ -11,23 +11,38 @@ describe('No partially commented tag lines Rule', function() {
 
   it('detects errors there are multiple empty lines', function() {
     runTest('no-partially-commented-tag-lines/Violations.feature', {}, [{
-      line: 6,
+      location: {
+        line: 6,
+        column: 13,
+      },
       rule: ruleName,
       messageElements: {},
     }, {
-      line: 10,
+      location: {
+        line: 10,
+        column: 7,
+      },
       rule: ruleName,
       messageElements: {},
     }, {
-      line: 13,
+      location: {
+        line: 13,
+        column: 12,
+      },
       rule: ruleName,
       messageElements: {},
     }, {
-      line: 17,
+      location: {
+        line: 17,
+        column: 7,
+      },
       rule: ruleName,
       messageElements: {},
     }, {
-      line: 23,
+      location: {
+        line: 23,
+        column: 8,
+      },
       rule: ruleName,
       messageElements: {},
     }]);

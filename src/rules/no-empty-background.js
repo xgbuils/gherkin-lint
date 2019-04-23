@@ -6,7 +6,7 @@ const createError = (background) => ({
   type: 'rule',
   message: 'Empty backgrounds are not allowed.',
   rule: rule,
-  line: background.location.line,
+  location: background.location,
 });
 
 const noEmptyBackground = (feature) => {

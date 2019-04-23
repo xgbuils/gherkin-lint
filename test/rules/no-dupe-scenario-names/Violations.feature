@@ -7,7 +7,7 @@ Background:
 Scenario: This is a Scenario
   Then this is a then step
 
-Scenario Outline: This is a Scenario
+  Scenario Outline: This is a Scenario
   Then this is a then step <foo>
 Examples:
   | foo |

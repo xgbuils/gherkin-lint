@@ -1,7 +1,7 @@
 @featuretag @featuretag1 @anothertag
 Feature: Feature with multiple duplicate tags
 
-Background:
+ Background:
 
 @scenariotag @scenariotag1 @scenariotag2 @anothertag
 Scenario: This is a Scenario with three duplicate tags

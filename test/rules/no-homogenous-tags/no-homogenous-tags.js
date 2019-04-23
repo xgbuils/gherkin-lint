@@ -12,7 +12,10 @@ describe('No Homogenous Tags Rule', function() {
 
   it('detects errors for scenarios, and scenario outlines', function() {
     runTest('no-homogenous-tags/Violations.feature', {}, [{
-      line: 1,
+      location: {
+        line: 1,
+        column: 1,
+      },
       rule: ruleName,
       messageElements: {tags: '@tag1, @tag2'},
     }]);

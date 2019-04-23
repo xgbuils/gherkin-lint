@@ -5,7 +5,10 @@ const noEmptyFiles = (feature) => {
     type: 'rule',
     message: 'Empty feature files are disallowed',
     rule: rule,
-    line: 1,
+    location: {
+      line: 1,
+      column: 1,
+    },
   }];
 };
 

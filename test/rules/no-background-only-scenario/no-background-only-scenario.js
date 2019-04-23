@@ -19,7 +19,10 @@ describe('No Background Only Scenario Rule', function() {
 
   it('detects errors when there are violations with Scenario', function() {
     runTest('no-background-only-scenario/ViolationsScenario.feature', {}, [{
-      line: 4,
+      location: {
+        line: 4,
+        column: 1,
+      },
       rule: ruleName,
       messageElements: {},
     }]);
@@ -27,7 +30,10 @@ describe('No Background Only Scenario Rule', function() {
 
   it('detects errors when there are violations with Scenario Outline', function() {
     runTest('no-background-only-scenario/ViolationsOutline.feature', {}, [{
-      line: 3,
+      location: {
+        line: 3,
+        column: 2,
+      },
       rule: ruleName,
       messageElements: {},
     }]);

@@ -34,7 +34,7 @@ const noHomogenousTags = (feature) => {
     message: 'All Scenarios on this Feature have the same tag(s), they' +
       ` should be defined on the Feature instead: ${homogenousTagsReport}`,
     rule: rule,
-    line: feature.location.line,
+    location: feature.location,
   }] : [];
 };
 

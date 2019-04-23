@@ -28,7 +28,7 @@ function maxScenariosPerFile(feature, unused, config) {
     type: 'rule',
     message: `Number of scenarios exceeds maximum: ${count}/${maxScenarios}`,
     rule,
-    line: 0,
+    location: {line: 0, column: 1},
   }] : [];
 }
 

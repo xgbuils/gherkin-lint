@@ -3,8 +3,8 @@ Feature: Feature with description
 Background:
   Given I have a Background
 
-Scenario:  
+ Scenario:  
   Then this is a then step
 
-Scenario Outline:
+      Scenario Outline:
   Then this is a then step

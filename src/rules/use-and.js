@@ -7,7 +7,7 @@ const createError = ({keyword, location, text}) => ({
   type: 'rule',
   message: `Step "${keyword}${text}" should use And instead of ${keyword}`,
   rule: rule,
-  line: location.line,
+  location: location,
 });
 
 const appendErrors = (track, step) => {

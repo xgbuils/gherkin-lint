@@ -5,7 +5,7 @@ const noUnNamedFeatures = ({name, location}) => {
     type: 'rule',
     message: 'Missing Feature name',
     rule: rule,
-    line: location.line,
+    location: location,
   }] : [];
 };
 

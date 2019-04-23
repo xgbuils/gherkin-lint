@@ -9,7 +9,7 @@ const appendError = (dupeLocationTrace) => ({scenarios, errors}, scenario) => {
     type: 'rule',
     message: `Scenario name is already used in: ${dupes}`,
     rule: rule,
-    line: scenario.location.line,
+    location: scenario.location,
   });
   scenarios[scenario.name] += `, ${dupeLocationTrace(scenario)}`;
   return {scenarios, errors};

@@ -4,35 +4,47 @@ const rule = require('../../../src/rules/no-duplicate-tags.js');
 const runTest = ruleTestBase.createRuleTest(rule, ({tags}) =>
   `Duplicate tags are not allowed: ${tags}`);
 
-describe('No Duplicate Tags Rule', function() {
-  it('doesn\'t raise errors when there are no tags', function() {
+describe('No Duplicate Tags Rule', () => {
+  it('doesn\'t raise errors when there are no tags', () => {
     runTest('no-duplicate-tags/NoTags.feature', {}, []);
   });
 
-  it('doesn\'t raise errors when there are no tags violations', function() {
+  it('doesn\'t raise errors when there are no duplicated tags', () => {
     runTest('no-duplicate-tags/NoViolations.feature', {}, []);
   });
 
-  it('detects errors for features, scenarios, and scenario outlines', function() {
+  it('detects errors for features, scenarios, and scenario outlines when there are duplications', () => {
     runTest('no-duplicate-tags/Violations.feature', {}, [{
       messageElements: {tags: '@featuretag'},
       rule: ruleName,
-      line: 1,
+      location: {
+        line: 1,
+        column: 1,
+      },
     },
     {
       messageElements: {tags: '@scenariotag'},
       rule: ruleName,
-      line: 7,
+      location: {
+        line: 7,
+        column: 1,
+      },
     },
     {
       messageElements: {tags: '@scenariotag'},
       rule: ruleName,
-      line: 11,
+      location: {
+        line: 11,
+        column: 1,
+      },
     },
     {
       messageElements: {tags: '@exampletag'},
       rule: ruleName,
-      line: 14,
+      location: {
+        line: 14,
+        column: 3,
+      },
     }]);
   });
 });

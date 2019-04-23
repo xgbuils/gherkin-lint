@@ -10,7 +10,10 @@ describe('No Unnamed Features Rule', function() {
 
   it('detects errors for scenarios, and scenario outlines', function() {
     runTest('no-unnamed-features/Violations.feature', {}, [{
-      line: 3,
+      location: {
+        line: 3,
+        column: 4,
+      },
       rule: ruleName,
       messageElements: {},
     }]);

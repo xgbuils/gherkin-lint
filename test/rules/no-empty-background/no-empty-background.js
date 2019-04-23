@@ -15,7 +15,10 @@ describe('No empty Backgrounds Rule', function() {
 
   it('detects errors for scenarios, and scenario outlines', function() {
     runTest('no-empty-background/Violations.feature', {}, [{
-      line: 4,
+      location: {
+        line: 4,
+        column: 2,
+      },
       rule: ruleName,
       messageElements: {},
     }]);

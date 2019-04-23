@@ -11,7 +11,7 @@ const createError = (scenario) => ({
   type: 'rule',
   message: 'Scenario Outline does not have any Examples',
   rule: rule,
-  line: scenario.location.line,
+  location: scenario.location,
 });
 
 const noScenarioOutlinesWithoutExamples = (feature) => {

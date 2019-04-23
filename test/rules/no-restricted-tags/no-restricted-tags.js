@@ -38,42 +38,66 @@ describe('No Restricted Tags Rule', function() {
     }, [{
       messageElements: {tags: '@featuretag1', nodeType: 'Feature'},
       rule: ruleName,
-      line: 1,
+      location: {
+        line: 1,
+        column: 13,
+      },
     },
     {
       messageElements: {tags: '@anothertag', nodeType: 'Feature'},
       rule: ruleName,
-      line: 1,
+      location: {
+        line: 1,
+        column: 26,
+      },
     },
     {
       messageElements: {tags: '@scenariotag1', nodeType: 'Scenario'},
       rule: ruleName,
-      line: 7,
+      location: {
+        line: 7,
+        column: 14,
+      },
     },
     {
       messageElements: {tags: '@scenariotag2', nodeType: 'Scenario'},
       rule: ruleName,
-      line: 7,
+      location: {
+        line: 7,
+        column: 28,
+      },
     },
     {
       messageElements: {tags: '@anothertag', nodeType: 'Scenario'},
       rule: ruleName,
-      line: 7,
+      location: {
+        line: 7,
+        column: 42,
+      },
     },
     {
       messageElements: {tags: '@scenariotag1', nodeType: 'ScenarioOutline'},
       rule: ruleName,
-      line: 11,
+      location: {
+        line: 11,
+        column: 14,
+      },
     },
     {
       messageElements: {tags: '@exampletag1', nodeType: 'Examples'},
       rule: ruleName,
-      line: 20,
+      location: {
+        line: 20,
+        column: 1,
+      },
     },
     {
       messageElements: {tags: '@exampletag2', nodeType: 'Examples'},
       rule: ruleName,
-      line: 24,
+      location: {
+        line: 24,
+        column: 5,
+      },
     }]);
   });
 });

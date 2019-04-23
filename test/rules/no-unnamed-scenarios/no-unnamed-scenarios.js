@@ -10,11 +10,17 @@ describe('No Unnamed Scenarios Rule', function() {
 
   it('detects errors for scenarios, and scenario outlines', function() {
     runTest('no-unnamed-scenarios/Violations.feature', {}, [{
-      line: 6,
+      location: {
+        line: 6,
+        column: 2,
+      },
       rule: ruleName,
       messageElements: {},
     }, {
-      line: 9,
+      location: {
+        line: 9,
+        column: 7,
+      },
       rule: ruleName,
       messageElements: {},
     }]);

@@ -5,7 +5,7 @@ const createError = (background) => ({
   type: 'rule',
   message: 'Backgrounds are not allowed when there is just one scenario.',
   rule: rule,
-  line: background.location.line,
+  location: background.location,
 });
 
 const noBackgroundEmptyScenario = (feature) => {

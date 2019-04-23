@@ -14,6 +14,6 @@ Scenario Outline: This is a Scenario Outline with two duplicate tags
 @exampletag1
 Examples:
   | foo |
-@exampletag2
+ @exampletag2
 Examples:
   | bar |

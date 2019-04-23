@@ -5,7 +5,7 @@ const createError = ({name, location}) => name ? [] : [{
   type: 'rule',
   message: 'Missing Scenario name',
   rule: rule,
-  line: location.line,
+  location: location,
 }];
 
 const noUnNamedScenarios = flatMapScenarios(createError);

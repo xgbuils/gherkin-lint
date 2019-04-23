@@ -11,11 +11,17 @@ describe('No Superfluous Tags Rule', function() {
 
   it('detects errors for scenarios, and scenario outlines', function() {
     runTest('no-superfluous-tags/Violations.feature', {}, [{
-      line: 7,
+      location: {
+        line: 7,
+        column: 3,
+      },
       rule: ruleName,
       messageElements: {tags: '@superfluoustag1'},
     }, {
-      line: 11,
+      location: {
+        line: 11,
+        column: 2,
+      },
       rule: ruleName,
       messageElements: {tags: '@superfluoustag1, @superfluoustag2'},
     }]);
