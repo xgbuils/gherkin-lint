@@ -43,6 +43,14 @@ describe('No unused variables rule', function() {
       },
       rule: ruleName,
       messageElements: {variable: 'b'},
+    },
+    {
+      location: {
+        line: 39,
+        column: 16,
+      },
+      message: 'Step variable "b" does not exist the in examples table',
+      rule: ruleName,
     }]);
   });
 
@@ -68,6 +76,14 @@ describe('No unused variables rule', function() {
     {
       location: {
         line: 28,
+        column: 11,
+      },
+      rule: ruleName,
+      messageElements: {variable: 'b'},
+    },
+    {
+      location: {
+        line: 38,
         column: 11,
       },
       rule: ruleName,
