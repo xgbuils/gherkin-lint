@@ -30,7 +30,10 @@ const calculateDocStringLocation = (lines) => ({argument}, match) => {
 const collectVariables = (selector, getLocation) => (variables, node) => {
   let match;
   while ((match = stepVariableRegex.exec(selector(node))) != null) {
-    variables[match[1]] = getLocation(node, match);
+    variables.push({
+      name: match[1],
+      location: getLocation(node, match),
+    });
   }
   return variables;
 };
@@ -59,7 +62,7 @@ const collectScenarioVariables = (getLocation, getDocStringLocation, scenario) =
     DocString: collectDocStringVariables,
   });
   const collectStepVariables = collectVariables(({text}) => text, getLocation);
-  const variables = collectNameVariables({}, scenario);
+  const variables = collectNameVariables([], scenario);
 
   return scenario.steps.reduce(function(variables, step) {
     variables = collectStepArgumentVariables(variables, step);
@@ -68,7 +71,10 @@ const collectScenarioVariables = (getLocation, getDocStringLocation, scenario) =
 };
 
 const appendExampleVariable = (variables, cell) => {
-  variables[cell.value] = cell.location;
+  variables.push({
+    name: cell.value,
+    location: cell.location,
+  });
   return variables;
 };
 
@@ -78,10 +84,14 @@ const collectTableExampleVariables = (variables, cells) => reduce(
 )(cells);
 
 
-const collectExampleVariables = reduce(compose(
+const collectExampleVariables = (examples) => reduce(compose(
   filter(({tableHeader}) => tableHeader),
   map(({tableHeader}) => tableHeader.cells)
-)(collectTableExampleVariables), {});
+)(collectTableExampleVariables), [])(examples);
+
+const getVariableNames = (variables) => variables.reduce((names, variable) => {
+  return names.add(variable.name);
+}, new Set());
 
 function noUnusedVariables(feature, {lines}) {
   const children = getFeatureNodes(feature);
@@ -99,25 +109,27 @@ function noUnusedVariables(feature, {lines}) {
       calculateDocStringLocation(lines),
       child
     );
+    const examplesVariablesNames = getVariableNames(examplesVariables);
+    const scenarioVariablesNames = getVariableNames(scenarioVariables);
 
-    for (const variable in examplesVariables) {
-      if (!scenarioVariables[variable]) {
+    for (const {name, location} of examplesVariables) {
+      if (!scenarioVariablesNames.has(name)) {
         errors.push({
           type: 'rule',
-          message: `Examples table variable "${variable}" is not used in any step`,
+          message: `Examples table variable "${name}" is not used in any step`,
           rule: rule,
-          location: examplesVariables[variable],
+          location,
         });
       }
     }
 
-    for (const variable in scenarioVariables) {
-      if (!examplesVariables[variable]) {
+    for (const {name, location} of scenarioVariables) {
+      if (!examplesVariablesNames.has(name)) {
         errors.push({
           type: 'rule',
-          message: `Step variable "${variable}" does not exist the in examples table`,
+          message: `Step variable "${name}" does not exist the in examples table`,
           rule: rule,
-          location: scenarioVariables[variable],
+          location,
         });
       }
     }

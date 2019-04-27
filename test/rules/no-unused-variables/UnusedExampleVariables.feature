@@ -35,8 +35,8 @@ Scenario Outline: Examples variable is in a step table
   When I do that
   Then something should happen
   Examples:
-    | a |
-    | 1 |
+    | a | b |
+    | 1 | 3 |
 
   Examples:
     | b |

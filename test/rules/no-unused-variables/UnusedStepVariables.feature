@@ -36,7 +36,7 @@ Scenario Outline: Examples variable is in a step string
       other
       content
       <a><b>
-      and more
+      and more <b>
     """
   Examples:
     | a |
