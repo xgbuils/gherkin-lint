@@ -11,96 +11,176 @@ const createFile = (fileName) => ({
   ),
 });
 
+const parsedFeature = {
+  name: 'feature name',
+  children: [],
+};
+
+const successfulParser = {
+  parse() {
+    return {
+      feature: parsedFeature,
+    };
+  },
+};
+
 describe('No Configurable File Linter', function() {
   it('detects up-to-one-background-per-file violations', function() {
-    const actual = linter.lint(createFile('MultipleBackgrounds.feature'));
+    const result = linter.lint(createFile('MultipleBackgrounds.feature'));
     const expected = [{
-      'location': {
+      location: {
         line: 9,
         column: 1,
       },
-      'message': 'Multiple "Background" definitions in the same file are disallowed',
-      'rule': 'up-to-one-background-per-file',
+      message: 'Multiple "Background" definitions in the same file are disallowed',
+      rule: 'up-to-one-background-per-file',
     }];
-    assert.deepEqual(actual.getFailures(), expected);
+    assert.deepEqual(result.getFailures(), expected);
   });
 
   it('detects no-tags-on-backgrounds violations', function() {
-    const actual = linter.lint(createFile('TagOnBackground.feature'));
+    const result = linter.lint(createFile('TagOnBackground.feature'));
     const expected = [{
-      'location': {
+      location: {
         line: 4,
         column: 1,
       },
-      'message': 'Tags on Backgrounds are dissallowed',
-      'rule': 'no-tags-on-backgrounds',
+      message: 'Tags on Backgrounds are dissallowed',
+      rule: 'no-tags-on-backgrounds',
     }];
-    assert.deepEqual(actual.getFailures(), expected);
+    assert.deepEqual(result.getFailures(), expected);
   });
 
   it('detects one-feature-per-file violations', function() {
-    const actual = linter.lint(createFile('MultipleFeatures.feature'));
+    const result = linter.lint(createFile('MultipleFeatures.feature'));
     const expected = [{
-      'location': {
+      location: {
         line: 7,
         column: 1,
       },
-      'message': 'Multiple "Feature" definitions in the same file are disallowed',
-      'rule': 'one-feature-per-file',
+      message: 'Multiple "Feature" definitions in the same file are disallowed',
+      rule: 'one-feature-per-file',
     }];
-    assert.deepEqual(actual.getFailures(), expected);
+    assert.deepEqual(result.getFailures(), expected);
   });
 
   it('detects no-multiline-steps violations', function() {
-    const actual = linter.lint(createFile('MultilineStep.feature'));
+    const result = linter.lint(createFile('MultilineStep.feature'));
     const expected = [{
-      'location': {
+      location: {
         line: 9,
         column: 6,
       },
-      'message': 'Steps should begin with "Given", "When", "Then", "And" or "But". Multiline steps are dissallowed',
-      'rule': 'no-multiline-steps',
+      message: 'Steps should begin with "Given", "When", "Then", "And" or "But". Multiline steps are dissallowed',
+      rule: 'no-multiline-steps',
     }];
-    assert.deepEqual(actual.getFailures(), expected);
+    assert.deepEqual(result.getFailures(), expected);
   });
 
   it('detects no-multiline-steps violations in backgrounds', function() {
-    const actual = linter.lint(createFile('MultilineBackgroundStep.feature'));
+    const result = linter.lint(createFile('MultilineBackgroundStep.feature'));
     const expected = [{
-      'location': {
+      location: {
         line: 5,
         column: 5,
       },
-      'message': 'Steps should begin with "Given", "When", "Then", "And" or "But". Multiline steps are dissallowed',
-      'rule': 'no-multiline-steps',
+      message: 'Steps should begin with "Given", "When", "Then", "And" or "But". Multiline steps are dissallowed',
+      rule: 'no-multiline-steps',
     }];
-    assert.deepEqual(actual.getFailures(), expected);
+    assert.deepEqual(result.getFailures(), expected);
   });
 
   it('detects no-multiline-steps violations in scenario outlines', function() {
-    const actual = linter.lint(createFile('MultilineScenarioOutlineStep.feature'));
+    const result = linter.lint(createFile('MultilineScenarioOutlineStep.feature'));
     const expected = [{
-      'location': {
+      location: {
         line: 9,
         column: 6,
       },
-      'message': 'Steps should begin with "Given", "When", "Then", "And" or "But". Multiline steps are dissallowed',
-      'rule': 'no-multiline-steps',
+      message: 'Steps should begin with "Given", "When", "Then", "And" or "But". Multiline steps are dissallowed',
+      rule: 'no-multiline-steps',
     }];
-    assert.deepEqual(actual.getFailures(), expected);
+    assert.deepEqual(result.getFailures(), expected);
+  });
+
+  it('detects multiline scenario and multiple features errors', function() {
+    const result = linter.lint(createFile('MultilineStepAndTwoFeatures.feature'));
+    const expected = [{
+      location: {
+        line: 9,
+        column: 5,
+      },
+      message: 'Steps should begin with "Given", "When", "Then", "And" or "But". Multiline steps are dissallowed',
+      rule: 'no-multiline-steps',
+    }, {
+      location: {
+        line: 15,
+        column: 1,
+      },
+      message: 'Multiple "Feature" definitions in the same file are disallowed',
+      rule: 'one-feature-per-file',
+    }];
+    assert.deepEqual(result.getFailures(), expected);
   });
 
   it('detects no-examples-in-scenarios violations', function() {
-    const actual = linter.lint(createFile('ExampleInScenario.feature'));
+    const result = linter.lint(createFile('ExampleInScenario.feature'));
     const expected = [{
-      'location': {
+      location: {
         line: 6,
         column: 1,
       },
-      'message': 'Cannot use "Examples" in a "Scenario", use a "Scenario Outline" instead',
-      'rule': 'no-examples-in-scenarios',
+      message: 'Cannot use "Examples" in a "Scenario", use a "Scenario Outline" instead',
+      rule: 'no-examples-in-scenarios',
     }];
-    assert.deepEqual(actual.getFailures(), expected);
+    assert.deepEqual(result.getFailures(), expected);
+  });
+
+  it('detects additional violations that happen after the "no-tags-on-backgrounds" rule', function() {
+    const result = linter.lint(createFile('TagOnBackgroundAndMultilineStep.feature'));
+    const expected = [{
+      location: {
+        line: 4,
+        column: 3,
+      },
+      message: 'Tags on Backgrounds are dissallowed',
+      rule: 'no-tags-on-backgrounds',
+    }, {
+      location: {
+        line: 13,
+        column: 6,
+      },
+      message: 'Steps should begin with "Given", "When", "Then", "And" or "But". Multiline steps are dissallowed',
+      rule: 'no-multiline-steps',
+    }];
+    assert.deepEqual(result.getFailures(), expected);
+  });
+
+  it('detects additional violations that happen after the "one-feature-per-file violations" rule', function() {
+    const result = linter.lint(createFile('MultipleBackgroundsWithTags.feature'));
+    const expected = [{
+      location: {
+        line: 4,
+        column: 3,
+      },
+      message: 'Tags on Backgrounds are dissallowed',
+      rule: 'no-tags-on-backgrounds',
+    }];
+    assert.deepEqual(result.getFailures(), expected);
+  });
+
+  it('correctly parses files that have the correct Gherkin format', function() {
+    const noConfigurableLinter = new NoConfigurableLinter(successfulParser);
+    const file = {
+      filePath: 'path/to/file',
+      content: '',
+    };
+    const result = noConfigurableLinter.lint(file);
+    assert.equal(result.isSuccess(), true);
+    assert.deepEqual(result.getSuccesses(), [{
+      feature: parsedFeature,
+      file,
+    }]);
   });
 
   it('parser throws an error with unexpected error message', () => {
@@ -116,8 +196,8 @@ describe('No Configurable File Linter', function() {
       },
     };
     const wrongLinter = new NoConfigurableLinter(wrongParser);
-    const actual = wrongLinter.lint(createFile('ExampleInScenario.feature'));
-    assert.deepEqual(actual.getFailures(), [{
+    const result = wrongLinter.lint(createFile('ExampleInScenario.feature'));
+    assert.deepEqual(result.getFailures(), [{
       rule: 'unexpected-error',
       message: error.message,
       location: {},

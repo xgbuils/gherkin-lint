@@ -57,13 +57,13 @@ function getFormatedTaggedBackgroundError(errors) {
     index = 2;
     for (let i = 2; i < errors.length; i++) {
       if (errors[i].message.indexOf('expected: #TagLine, #ScenarioLine, #ScenarioOutlineLine, #Comment, #Empty') > -1) {
-        index = i;
+        index = i + 1;
       } else {
         break;
       }
     }
   }
-  return {errors: errors.slice(index, errors.length), errorMsgs: errorMsgs};
+  return {errors: errors.slice(index), errorMsgs: errorMsgs};
 }
 
 function getFormattedFatalError(error) {
