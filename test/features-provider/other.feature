@@ -1,1 +1,1 @@
-other content
+Feature: other

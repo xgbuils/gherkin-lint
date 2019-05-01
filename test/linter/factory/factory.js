@@ -6,7 +6,7 @@ const pathToDefaultRules = path.resolve(__dirname, '..', '..', '..', 'src', 'rul
 const pathToLocalRules = path.join(__dirname, 'rules'); // absolute path;
 const pathToOtherRules = path.join('test', 'linter', 'factory', 'other_rules'); // relative path from root
 
-describe('factory', function() {
+describe('Linter Factory', function() {
   it('linter that fails', function() {
     const featureFile = 'failure.feature';
     const linter = linterFactory({
@@ -18,13 +18,14 @@ describe('factory', function() {
       args: [featureFile],
     }, __dirname);
     const result = linter.lint();
-
     expect(result.logType).to.be.equal('error');
     expect(result.exit).to.be.equal(1);
     expect(result.errorLines[0]).to.include('failure.feature');
+
     expect(result.errorLines[1]).to.include('Wrong indentation for "Feature", expected indentation level of 0, but got 4');
     expect(result.errorLines[2]).to.include('Another custom-list error');
     expect(result.errorLines[3]).to.include('Custom error');
+
     expect(result.errorLines[4]).to.include('Another custom error');
     expect(result.errorLines[5]).to.include('\n');
     expect(result.errorLines.length).to.be.equal(6);

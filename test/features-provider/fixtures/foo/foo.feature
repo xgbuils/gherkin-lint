@@ -1,2 +1,2 @@
-two
-lines
+Feature: foo
+Scenario:

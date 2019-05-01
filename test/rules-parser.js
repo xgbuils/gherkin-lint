@@ -30,11 +30,11 @@ const hasErrors = function(rulesOrErrors, expectedErrors) {
   if (rulesOrErrors.isSuccess()) {
     assert.fail('Expected errors but not found');
   }
-  assert.deepEqual(rulesOrErrors.getFailures(), [{
+  assert.deepEqual(rulesOrErrors.getFailures(), {
     type: 'config-error',
     message: 'Error(s) in configuration file:',
     errors: expectedErrors,
-  }]);
+  });
 };
 
 describe('Rule Parser', function() {

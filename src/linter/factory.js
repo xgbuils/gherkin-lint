@@ -30,10 +30,11 @@ const linterFactory = ({format, ignore, config, rulesDirs, args}) => {
       const results = linter.lint();
       const successful = results.isSuccess();
       const failures = successful ? results.getSuccesses() : results.getFailures();
+      const errorLines = formatter.format(failures);
       return {
         logType: successful ? 'log' : 'error',
-        errorLines: formatter.format(failures),
-        exit: failures.length > 0 ? 1 : 0,
+        errorLines,
+        exit: errorLines.length > 0 ? 1 : 0,
       };
     },
   };

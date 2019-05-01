@@ -1,2 +1,2 @@
-three
-lines
+Feature: bar
+Scenario:

@@ -7,11 +7,10 @@ const secondNameFeature = 'second.feature';
 const pathToFirstFeature = `path/to/${firstNameFeature}`;
 const pathToSecondFeature = `path/to/${secondNameFeature}`;
 
-const configProviderFailures = [{
-  message: 'config error 1',
-}, {
-  message: 'config error 2',
-}];
+const configProviderFailure = {
+  type: 'config-error',
+  message: 'config error',
+};
 
 const successfulConfigProvider = {
   provide() {
@@ -21,13 +20,17 @@ const successfulConfigProvider = {
 
 const failedConfigProvider = {
   provide() {
-    return Failures.of(configProviderFailures);
+    return Failures.of(configProviderFailure);
   },
 };
 
-const rulesParserFailures = [{
-  message: 'rule error',
-}];
+const rulesParserFailure = {
+  type: 'config-error',
+  message: 'Error in configuration file:',
+  errors: [{
+    message: 'one error',
+  }],
+};
 
 const successfulRulesParser = {
   parse() {
@@ -37,13 +40,13 @@ const successfulRulesParser = {
 
 const failedRulesParser = {
   parse() {
-    return Failures.of(rulesParserFailures);
+    return Failures.of(rulesParserFailure);
   },
 };
 
-const featureFinderFailures = [{
+const featureFinderFailure = {
   message: 'feature not found',
-}];
+};
 
 const firstFile = {
   name: firstNameFeature,
@@ -63,7 +66,7 @@ const successfulFeatureFinder = {
 
 const failedFeatureFinder = {
   provide() {
-    return Failures.of(featureFinderFailures);
+    return Failures.of(featureFinderFailure);
   },
 };
 
@@ -86,7 +89,7 @@ describe('Linter', () => {
 
         const result = linter.lint();
         expect(result.isSuccess()).to.be.equal(false);
-        expect(result.getFailures()).to.be.equal(configProviderFailures);
+        expect(result.getFailures()).to.be.equal(configProviderFailure);
       });
     });
 
@@ -101,7 +104,7 @@ describe('Linter', () => {
 
         const result = linter.lint();
         expect(result.isSuccess()).to.be.equal(false);
-        expect(result.getFailures()).to.be.equal(rulesParserFailures);
+        expect(result.getFailures()).to.be.equal(rulesParserFailure);
       });
     });
 
@@ -116,7 +119,7 @@ describe('Linter', () => {
 
         const result = linter.lint();
         expect(result.isSuccess()).to.be.equal(false);
-        expect(result.getFailures()).to.be.equal(featureFinderFailures);
+        expect(result.getFailures()).to.be.equal(featureFinderFailure);
       });
     });
 
@@ -140,11 +143,13 @@ describe('Linter', () => {
 
         const result = linter.lint();
         expect(result.isSuccess()).to.be.equal(false);
-        expect(result.getFailures()).to.be.deep.equal([{
-          errors: errorsFirstFeature,
-          message: firstFile.path,
-          type: 'lint-failures',
-        }]);
+        expect(result.getFailures()).to.be.deep.equal({
+          type: 'lint-errors',
+          errors: [{
+            message: firstFile.path,
+            errors: errorsFirstFeature,
+          }],
+        });
       });
     });
 
@@ -162,7 +167,7 @@ describe('Linter', () => {
 
         const result = linter.lint();
         expect(result.isSuccess()).to.be.equal(true);
-        expect(result.getSuccesses()).to.be.deep.equal([]);
+        expect(result.getSuccesses()).to.be.deep.equal({});
       });
     });
   });

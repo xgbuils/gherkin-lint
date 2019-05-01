@@ -45,10 +45,10 @@ const getIgnorePatterns = (ignore, cwd) => {
 };
 
 const reportFailure = (pattern) => {
-  return Failures.of([{
+  return Failures.of({
     type: 'feature-pattern-error',
     message: `${invalidFormatMessage(pattern)}${USE_EXISTING_FEATURE}`,
-  }]);
+  });
 };
 
 class FeatureProvider {

@@ -23,37 +23,37 @@ const noFilesFailure = (pattern) => ({
 
 const expectedFiles = {
   'other.feature': {
-    content: 'other content',
+    content: 'Feature: other',
     lines: [
-      'other content',
+      'Feature: other',
     ],
     name: 'other.feature',
     path: expectedPath('other.feature'),
   },
   'fixtures': {
     'a.feature': {
-      content: 'content',
+      content: 'Feature:',
       lines: [
-        'content',
+        'Feature:',
       ],
       name: 'fixtures/a.feature',
       path: expectedPath('fixtures/a.feature'),
     },
     'foo': {
       'foo.feature': {
-        content: 'two\nlines',
+        content: 'Feature: foo\nScenario:',
         lines: [
-          'two',
-          'lines',
+          'Feature: foo',
+          'Scenario:',
         ],
         name: 'fixtures/foo/foo.feature',
         path: expectedPath('fixtures/foo/foo.feature'),
       },
       'bar.feature': {
-        content: 'three\nlines\n',
+        content: 'Feature: bar\nScenario:\n',
         lines: [
-          'three',
-          'lines',
+          'Feature: bar',
+          'Scenario:',
           '',
         ],
         name: 'fixtures/foo/bar.feature',
@@ -132,7 +132,7 @@ describe('Feature Provider', () => {
       ], noIgnore);
       const result = featureFinder.provide();
       assert.equal(result.isSuccess(), false);
-      assert.deepEqual(result.getFailures(), [noFilesFailure('/foo')]);
+      assert.deepEqual(result.getFailures(), noFilesFailure('/foo'));
     });
   });
 
@@ -154,7 +154,7 @@ describe('Feature Provider', () => {
       ], customIgnore);
       const result = featureFinder.provide();
       assert.equal(result.isSuccess(), false);
-      assert.deepEqual(result.getFailures(), [noFilesFailure('fixtures/foo')]);
+      assert.deepEqual(result.getFailures(), noFilesFailure('fixtures/foo'));
     });
 
     it('complex pattern', () => {
@@ -174,7 +174,7 @@ describe('Feature Provider', () => {
       ], customIgnore);
       const result = featureFinder.provide();
       assert.equal(result.isSuccess(), false);
-      assert.deepEqual(result.getFailures(), [noFilesFailure('fixtures/f*/b*.feature')]);
+      assert.deepEqual(result.getFailures(), noFilesFailure('fixtures/f*/b*.feature'));
     });
   });
 
@@ -194,7 +194,7 @@ describe('Feature Provider', () => {
       ]);
       const result = featureFinder.provide();
       assert.equal(result.isSuccess(), false);
-      assert.deepEqual(result.getFailures(), [noFilesFailure('fixtures/f*/b*.feature')]);
+      assert.deepEqual(result.getFailures(), noFilesFailure('fixtures/f*/b*.feature'));
     });
   });
 
@@ -205,7 +205,7 @@ describe('Feature Provider', () => {
       ]);
       const result = featureFinder.provide();
       assert.equal(result.isSuccess(), false);
-      assert.deepEqual(result.getFailures(), [noFilesFailure('no_features')]);
+      assert.deepEqual(result.getFailures(), noFilesFailure('no_features'));
     });
   });
 });

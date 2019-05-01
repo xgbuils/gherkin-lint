@@ -8,7 +8,7 @@ describe('Max Scenarios per File rule', function() {
   it('detects an error when property is not "maxScenarios"', function() {
     runTest('max-scenarios-per-file/CorrectNumber.feature', {
       'foobar': 20,
-    }, [{
+    }, {
       type: 'config-error',
       message: 'Error(s) in configuration file:',
       errors: [{
@@ -16,7 +16,7 @@ describe('Max Scenarios per File rule', function() {
         rule: ruleName,
         message: 'The rule does not have the specified configuration option "foobar"',
       }],
-    }]);
+    });
   });
 
   it('doesn\'t raise errors when the default configuration is used and there are correct number of scenarios', function() {

@@ -8,7 +8,7 @@ const runNoTest = ruleTestBase.createRuleTest(rule, () =>
 
 describe('New Line At EOF Rule', function() {
   it('detects an error when property is not "yes" or "no"', function() {
-    runYesTest('new-line-at-eof/NewLineAtEOF.feature', 'maybe', [{
+    runYesTest('new-line-at-eof/NewLineAtEOF.feature', 'maybe', {
       message: 'Error(s) in configuration file:',
       type: 'config-error',
       errors: [{
@@ -16,7 +16,7 @@ describe('New Line At EOF Rule', function() {
         rule: ruleName,
         message: 'The rule does not have the specified configuration option "maybe"',
       }],
-    }]);
+    });
   });
 
   context('"yes" configuration', () => {

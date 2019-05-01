@@ -71,11 +71,11 @@ RuleParser.prototype.parse = function(config) {
   }, Successes.of([]));
   return result.isSuccess()
     ? result
-    : Failures.of([{
+    : Failures.of({
       type: 'config-error',
       message: 'Error(s) in configuration file:',
       errors: result.getFailures(),
-    }]);
+    });
 };
 
 module.exports = RuleParser;

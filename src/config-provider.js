@@ -21,19 +21,19 @@ class ConfigProvider {
     const {fileName, message, cwd} = this;
     const configPath = getPath(cwd, fileName);
     if (!fs.existsSync(configPath)) {
-      return Failures.of([{
+      return Failures.of({
         type: 'config-error',
         message,
-      }]);
+      });
     }
 
     try {
       return Successes.of(JSON.parse(fs.readFileSync(configPath)));
     } catch (e) {
-      return Failures.of([{
+      return Failures.of({
         type: 'config-error',
         message: e.toString(),
-      }]);
+      });
     }
   }
 }

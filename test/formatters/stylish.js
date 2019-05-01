@@ -27,25 +27,4 @@ describe('Stylish formatter', function() {
       '\n',
     ]);
   });
-
-  it('formats config rule errors', function() {
-    const actual = format([{
-      type: 'config-errors',
-      message: 'error title',
-      errors: [{
-        type: 'config-rule-error',
-        message: 'field not needed',
-        rule: 'rule-name',
-      }, {
-        type: 'undefined-rule',
-        message: 'rule does not exist',
-        rule: 'another-rule',
-      }],
-    }]);
-    assert.deepEqual(actual, [
-      '\u001b[31m\u001b[1merror title\u001b[0m',
-      '\u001b[31m- Invalid rule configuration for "rule-name" - field not needed\u001b[0m',
-      '\u001b[31m- rule does not exist\u001b[0m',
-    ]);
-  });
 });

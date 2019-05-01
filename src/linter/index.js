@@ -10,7 +10,6 @@ const lintFiles = (files, rules, fileLinter) => {
     const errors = fileLinter.lint(file, rules);
     if (errors.length > 0) {
       const fileBlob = {
-        type: 'lint-failures',
         message: file.path,
         errors: sortByLine(errors),
       };
@@ -19,8 +18,11 @@ const lintFiles = (files, rules, fileLinter) => {
   });
 
   return output.length > 0
-    ? Failures.of(output)
-    : Successes.of([]);
+    ? Failures.of({
+      type: 'lint-errors',
+      errors: output,
+    })
+    : Successes.of({});
 };
 
 class Linter {

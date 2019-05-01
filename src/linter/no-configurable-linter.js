@@ -1,5 +1,13 @@
 const {Successes, Failures} = require('../successes-failures');
 
+const getLocation = (lineContent) => {
+  const [, line, column] = lineContent.match(/\((\d+):(\d+).*/) || [];
+  return column === undefined ? {} : {
+    line: parseInt(line),
+    column: parseInt(column),
+  };
+};
+
 class NoConfigurableLinter {
   constructor(parser) {
     this.parser = parser;
@@ -43,7 +51,7 @@ function getFormatedTaggedBackgroundError(errors) {
     errorMsgs.push({
       message: 'Tags on Backgrounds are dissallowed',
       rule: 'no-tags-on-backgrounds',
-      line: errors[0].message.match(/\((\d+):.*/)[1],
+      location: getLocation(errors[0].message),
     });
 
     index = 2;
@@ -59,7 +67,7 @@ function getFormatedTaggedBackgroundError(errors) {
 }
 
 function getFormattedFatalError(error) {
-  const [, errorLine] = error.message.match(/\((\d+):.*/) || [];
+  const location = getLocation(error.message);
   let errorMsg;
   let rule;
   if (error.message.indexOf('got \'Background') > -1) {
@@ -79,9 +87,11 @@ function getFormattedFatalError(error) {
     errorMsg = error.message;
     rule = 'unexpected-error';
   }
-  return {message: errorMsg,
+  return {
+    message: errorMsg,
     rule: rule,
-    line: errorLine};
+    location,
+  };
 }
 
 module.exports = NoConfigurableLinter;

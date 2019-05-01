@@ -1,18 +1,6 @@
 const {compose, intoArray} = require('../utils/generic');
 const {flatMap} = require('../utils/transducers');
-const style = require('./style');
-
-const stylizeConfigError = ({errors = [], message}) => {
-  return [
-    [style.boldError(message)],
-    errors.map(({rule, message, type}) => {
-      const wrongConfigMessage = type === 'config-rule-error'
-        ? `Invalid rule configuration for "${rule}" - `
-        : '';
-      return style.error(`- ${wrongConfigMessage}${message}`);
-    }),
-  ];
-};
+const style = require('./helpers/style');
 
 const stylizeRuleErrorWith = (maxErrorMsgLength, maxLineChars) => (error) => {
   let str = '  '; // indent 2 spaces so it looks pretty
@@ -50,7 +38,7 @@ function stylizeFilePath(filePath) {
 
 function getMaxLengthOfField(results, field) {
   let length = 0;
-  results.forEach(function({errors = []}) {
+  results.forEach(function({errors}) {
     errors
       .filter((error) => error[field])
       .forEach(function(error) {
@@ -64,15 +52,12 @@ function getMaxLengthOfField(results, field) {
 }
 
 const stylizeResult = (result, stylizeRuleError) => {
-  const {errors = []} = result;
-  if (result.type === 'lint-failures') {
-    return [
-      [stylizeFilePath(result.message)],
-      errors.map(stylizeRuleError),
-      ['\n'],
-    ];
-  }
-  return stylizeConfigError(result);
+  const {errors} = result;
+  return [
+    [stylizeFilePath(result.message)],
+    errors.map(stylizeRuleError),
+    ['\n'],
+  ];
 };
 
 function format(results) {

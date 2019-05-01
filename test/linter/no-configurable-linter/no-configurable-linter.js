@@ -11,11 +11,14 @@ const createFile = (fileName) => ({
   ),
 });
 
-describe('Linter', function() {
+describe('No Configurable File Linter', function() {
   it('detects up-to-one-background-per-file violations', function() {
     const actual = linter.lint(createFile('MultipleBackgrounds.feature'));
     const expected = [{
-      'line': '9',
+      'location': {
+        line: 9,
+        column: 1,
+      },
       'message': 'Multiple "Background" definitions in the same file are disallowed',
       'rule': 'up-to-one-background-per-file',
     }];
@@ -25,7 +28,10 @@ describe('Linter', function() {
   it('detects no-tags-on-backgrounds violations', function() {
     const actual = linter.lint(createFile('TagOnBackground.feature'));
     const expected = [{
-      'line': '4',
+      'location': {
+        line: 4,
+        column: 1,
+      },
       'message': 'Tags on Backgrounds are dissallowed',
       'rule': 'no-tags-on-backgrounds',
     }];
@@ -35,7 +41,10 @@ describe('Linter', function() {
   it('detects one-feature-per-file violations', function() {
     const actual = linter.lint(createFile('MultipleFeatures.feature'));
     const expected = [{
-      'line': '7',
+      'location': {
+        line: 7,
+        column: 1,
+      },
       'message': 'Multiple "Feature" definitions in the same file are disallowed',
       'rule': 'one-feature-per-file',
     }];
@@ -45,7 +54,10 @@ describe('Linter', function() {
   it('detects no-multiline-steps violations', function() {
     const actual = linter.lint(createFile('MultilineStep.feature'));
     const expected = [{
-      'line': '9',
+      'location': {
+        line: 9,
+        column: 6,
+      },
       'message': 'Steps should begin with "Given", "When", "Then", "And" or "But". Multiline steps are dissallowed',
       'rule': 'no-multiline-steps',
     }];
@@ -55,7 +67,10 @@ describe('Linter', function() {
   it('detects no-multiline-steps violations in backgrounds', function() {
     const actual = linter.lint(createFile('MultilineBackgroundStep.feature'));
     const expected = [{
-      'line': '5',
+      'location': {
+        line: 5,
+        column: 5,
+      },
       'message': 'Steps should begin with "Given", "When", "Then", "And" or "But". Multiline steps are dissallowed',
       'rule': 'no-multiline-steps',
     }];
@@ -65,7 +80,10 @@ describe('Linter', function() {
   it('detects no-multiline-steps violations in scenario outlines', function() {
     const actual = linter.lint(createFile('MultilineScenarioOutlineStep.feature'));
     const expected = [{
-      'line': '9',
+      'location': {
+        line: 9,
+        column: 6,
+      },
       'message': 'Steps should begin with "Given", "When", "Then", "And" or "But". Multiline steps are dissallowed',
       'rule': 'no-multiline-steps',
     }];
@@ -75,7 +93,10 @@ describe('Linter', function() {
   it('detects no-examples-in-scenarios violations', function() {
     const actual = linter.lint(createFile('ExampleInScenario.feature'));
     const expected = [{
-      'line': '6',
+      'location': {
+        line: 6,
+        column: 1,
+      },
       'message': 'Cannot use "Examples" in a "Scenario", use a "Scenario Outline" instead',
       'rule': 'no-examples-in-scenarios',
     }];
@@ -99,7 +120,7 @@ describe('Linter', function() {
     assert.deepEqual(actual.getFailures(), [{
       rule: 'unexpected-error',
       message: error.message,
-      line: undefined,
+      location: {},
     }]);
   });
 
