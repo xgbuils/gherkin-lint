@@ -20,7 +20,7 @@ const createError = (tags) => {
 };
 
 const noSuperfluousTags = (feature) => {
-  const featureTags = new Set((feature.tags || []).map(getTagName));
+  const featureTags = new Set((feature.tags).map(getTagName));
   return intoArray(compose(
     filterScenarios,
     map(({tags}) => tags.filter(({name}) => featureTags.has(name))),
