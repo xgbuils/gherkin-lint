@@ -81,7 +81,7 @@
     "pickle-lint": "src/main.js"
   },
   "scripts": {
-    "demo": "node ./src/main.js . -c ./test-data-wip/.gherkin-lintrc -f json",
+    "demo": "node ./src/main.js . -c ./test-data-wip/.gherkin-lintrc",
     "lint": "eslint ./src ./test",
     "lint-fix": "eslint ./src ./test --fix",
     "test-only": "mocha --recursive",
