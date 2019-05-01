@@ -19,8 +19,12 @@ const noViolationTest = ruleTestBase.createRuleTest(rule, errorMessage);
 const violationTest = ruleTestBase.createRuleTest(ruleWithAnotherFile, errorMessage);
 
 describe('No Duplicate Scenario Names Rule', function() {
-  it('doesn\'t raise errors when there are no violations', function() {
+  it('does not raise errors when there are no violations', function() {
     noViolationTest(EXAMPLE_FILE, {}, []);
+  });
+
+  it('does not raise errors when there are no violations', function() {
+    noViolationTest('Empty.feature', {}, []);
   });
 
   it('detects errors for features, scenarios, and scenario outlines', function() {
