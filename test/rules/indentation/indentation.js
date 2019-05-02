@@ -6,7 +6,7 @@ const runTest = ruleTestBase.createRuleTest(rule, ({element, expected, actual}) 
       `${expected}, but got ${actual}`;
 });
 
-const wrongIndenatationErrors = [{
+const wrongIndentationErrors = [{
   messageElements: {element: 'Feature', expected: 0, actual: 1},
   rule: ruleName,
   location: {
@@ -131,11 +131,11 @@ describe('Indentation rule', () => {
   });
 
   it('detects errors for features, backgrounds, scenarios, scenario outlines and steps (spaces)', function() {
-    runTest('indentation/WrongIndentationSpaces.feature', {}, wrongIndenatationErrors);
+    runTest('indentation/WrongIndentationSpaces.feature', {}, wrongIndentationErrors);
   });
 
   it('detects errors for features, backgrounds, scenarios, scenario outlines and steps (tabs)', function() {
-    runTest('indentation/WrongIndentationTabs.feature', {}, wrongIndenatationErrors);
+    runTest('indentation/WrongIndentationTabs.feature', {}, wrongIndentationErrors);
   });
 
   it('detects errors for features, backgrounds, scenarios, scenario outlines and steps in other languages', function() {
@@ -258,6 +258,31 @@ describe('Indentation rule', () => {
     runTest('indentation/CorrectIndentationWithScenarioTagOverrides.feature', {
       'scenario tag': 3,
     }, []);
+  });
+
+  it('Wrong "then" step in customized configuration', function() {
+    runTest('indentation/WrongSteps.feature', {
+      Feature: 1,
+      Background: 4,
+      Scenario: 1,
+      Examples: 2,
+      example: 4,
+      then: 0,
+    }, [{
+      messageElements: {element: 'then', expected: 0, actual: 3},
+      rule: ruleName,
+      location: {
+        line: 7,
+        column: 4,
+      },
+    }, {
+      messageElements: {element: 'then', expected: 0, actual: 5},
+      rule: ruleName,
+      location: {
+        line: 12,
+        column: 6,
+      },
+    }]);
   });
 
   /* TODO: add tests for partial configurations and fallbacks

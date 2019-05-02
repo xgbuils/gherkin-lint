@@ -69,7 +69,7 @@ const checkNodeIndentation = (mergedConfiguration) => (type) => (node) => {
 
 const checkTags = (testNode) => (node) => {
   const tagsPerLine = groupTagsPerLine(node.tags);
-  const getFirstTag = ([tag])=> tag;
+  const getFirstTag = ([tag]) => tag;
   return flatMap(compose(testNode, getFirstTag))(tagsPerLine);
 };
 
