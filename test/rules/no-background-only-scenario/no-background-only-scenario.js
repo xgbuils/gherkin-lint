@@ -5,16 +5,20 @@ const runTest = ruleTestBase.createRuleTest(rule,
   () => 'Backgrounds are not allowed when there is just one scenario.');
 
 describe('No Background Only Scenario Rule', function() {
-  it('doesn\'t raise errors when there are no background', function() {
+  it('does not raise errors when there are no background', function() {
     runTest('no-background-only-scenario/NoBackground.feature', {}, []);
   });
 
-  it('doesn\'t raise errors when there are more than one scenario', function() {
+  it('does not raise errors when there are more than one scenario', function() {
     runTest('no-background-only-scenario/NoViolationsTwoScenarios.feature', {}, []);
   });
 
-  it('doesn\'t raise errors when there are zero scenarios', function() {
+  it('does not raise errors when there are zero scenarios', function() {
     runTest('no-background-only-scenario/NoViolationsZeroScenarios.feature', {}, []);
+  });
+
+  it('does not raise errors with empty file', function() {
+    runTest('Empty.feature', {}, []);
   });
 
   it('detects errors when there are violations with Scenario', function() {
