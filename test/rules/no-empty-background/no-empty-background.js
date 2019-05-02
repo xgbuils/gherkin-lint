@@ -5,12 +5,16 @@ const runTest = ruleTestBase.createRuleTest(rule,
   () => 'Empty backgrounds are not allowed.');
 
 describe('No empty Backgrounds Rule', function() {
-  it('doesn\'t raise errors when there are no background', function() {
+  it('does not raise errors when there are no background', function() {
     runTest('no-empty-background/NoBackground.feature', {}, []);
   });
 
-  it('doesn\'t raise errors when there are no violations', function() {
+  it('does not raise errors when there are no violations', function() {
     runTest('no-empty-background/NoViolations.feature', {}, []);
+  });
+
+  it('does not raise errors whith an empty file', function() {
+    runTest('Empty.feature', {}, []);
   });
 
   it('detects errors for scenarios, and scenario outlines', function() {
