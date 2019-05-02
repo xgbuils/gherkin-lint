@@ -20,8 +20,12 @@ describe('Name length rule', function() {
     });
   });
 
-  it('doesn\'t raise errors when the default configuration is used and there are no length violations', function() {
+  it('does not raise errors when the default configuration is used and there are no length violations', function() {
     runTest('name-length/CorrectLength.feature', {}, []);
+  });
+
+  it('does not raise errors with empty file', function() {
+    runTest('Empty.feature', {}, []);
   });
 
   it('detects errors for features, scenarios, scenario outlines and steps', function() {
