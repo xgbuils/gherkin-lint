@@ -19,7 +19,7 @@ describe('No Duplicate Tags Rule', () => {
       rule: ruleName,
       location: {
         line: 1,
-        column: 1,
+        column: 13,
       },
     },
     {
@@ -27,7 +27,15 @@ describe('No Duplicate Tags Rule', () => {
       rule: ruleName,
       location: {
         line: 7,
-        column: 1,
+        column: 14,
+      },
+    },
+    {
+      messageElements: {tags: '@scenariotag'},
+      rule: ruleName,
+      location: {
+        line: 7,
+        column: 27,
       },
     },
     {
@@ -35,7 +43,7 @@ describe('No Duplicate Tags Rule', () => {
       rule: ruleName,
       location: {
         line: 11,
-        column: 1,
+        column: 14,
       },
     },
     {
@@ -43,7 +51,15 @@ describe('No Duplicate Tags Rule', () => {
       rule: ruleName,
       location: {
         line: 14,
-        column: 3,
+        column: 15,
+      },
+    },
+    {
+      messageElements: {tags: '@exampletag'},
+      rule: ruleName,
+      location: {
+        line: 14,
+        column: 27,
       },
     }]);
   });

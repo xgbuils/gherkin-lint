@@ -1,33 +1,27 @@
 const rule = 'no-duplicate-tags';
-const {compose, intoArray} = require('../utils/generic');
-const {filter, map} = require('../utils/transducers');
 const {flatMapNodeTags} = require('../utils/gherkin');
 
-const collectTagsInfo = (tags, {name, location}) => {
-  const info = tags[name];
-  if (info) {
-    info.count++;
+const appendErrors = (track, tag) => {
+  if (track.names.has(tag.name)) {
+    track.errors.push(createError(tag));
   } else {
-    tags[name] = {
-      count: 1,
-      location,
-      name,
-    };
+    track.names.add(tag.name);
   }
-  return tags;
+  return track;
 };
 
+const createError = (tag) => ({
+  type: 'rule',
+  message: `Duplicate tags are not allowed: ${tag.name}`,
+  rule: rule,
+  location: tag.location,
+});
+
 const verifyTags = ({tags, location}) => {
-  const tagsInfo = tags.reduce(collectTagsInfo, {});
-  return intoArray(compose(
-    filter(({count}) => count > 1),
-    map((tag) => ({
-      type: 'rule',
-      message: `Duplicate tags are not allowed: ${tag.name}`,
-      rule: rule,
-      location: tag.location,
-    }))
-  ))(tagsInfo);
+  return tags.reduce(appendErrors, {
+    names: new Set(),
+    errors: [],
+  }).errors;
 };
 
 module.exports = {
