@@ -1,30 +1,26 @@
 const rule = 'no-superfluous-tags';
 const {compose, intoArray} = require('../utils/generic');
-const {filter, map} = require('../utils/transducers');
+const {filter, flatMap, map} = require('../utils/transducers');
 const {getFeatureNodes} = require('../utils/selectors');
 const {filterScenarios} = require('../utils/gherkin');
 
-const SUPERFLUOUS_TAGS_MESSAGE =
-  'Tag(s) duplicated on a Feature and a Scenario in that Feature';
-
 const getTagName = ({name}) => name;
 
-const createError = (tags) => {
-  const superfluousTagsReport = tags.map(getTagName).join(', ');
+const createError = (tag) => {
   return {
     type: 'rule',
-    message: `${SUPERFLUOUS_TAGS_MESSAGE}: ${superfluousTagsReport}`,
+    message: `${tag.name} tag is already used at Feature level`,
     rule: rule,
-    location: tags[0].location,
+    location: tag.location,
   };
 };
 
 const noSuperfluousTags = (feature) => {
-  const featureTags = new Set((feature.tags).map(getTagName));
+  const featureTags = new Set(feature.tags.map(getTagName));
   return intoArray(compose(
     filterScenarios,
-    map(({tags}) => tags.filter(({name}) => featureTags.has(name))),
-    filter((tags) => tags.length > 0),
+    flatMap(({tags}) => tags),
+    filter(({name}) => featureTags.has(name)),
     map(createError)
   ))(getFeatureNodes(feature));
 };
