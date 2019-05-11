@@ -1,10 +1,12 @@
 const rule = 'no-homogenous-tags';
 const {
+  applyOver,
   compose,
   intoArray,
 } = require('../utils/generic');
 const {filter, map} = require('../utils/transducers');
-const {getScenarios} = require('../utils/selectors');
+const {getExamples, getScenarios} = require('../utils/selectors');
+const {flatMapScenarios} = require('../utils/gherkin');
 
 const groupTagsByName = (tags) => {
   return tags.reduce((set, {name}) => set.add(name), new Set());
@@ -17,19 +19,19 @@ const collectScenarioTagInfo = (info, {tags}) => {
   }, info);
 };
 
-const createErrorByFeature = (feature) => ([name, tagsInfo]) => {
+const createErrorByFeature = (feature, [parent, children]) => ([name, tagsInfo]) => {
   return {
     type: 'rule',
-    message: `${name} tag is declared in each scenario.` +
-      ' It could be defined at feature level.',
+    message: `${name} tag is declared in each ${children}.` +
+      ` It could be defined at ${parent} level.`,
     rule: rule,
     location: feature.location,
   };
 };
 
-const noHomogenousTags = (feature) => {
-  const createError = createErrorByFeature(feature);
-  const scenarios = getScenarios(feature);
+const noHomogenousTags = (getNodes, labels) => (feature) => {
+  const createError = createErrorByFeature(feature, labels);
+  const scenarios = getNodes(feature);
   const tagsInfo = scenarios.reduce(collectScenarioTagInfo, new Map());
   const {length} = scenarios;
   return intoArray(compose(
@@ -38,8 +40,13 @@ const noHomogenousTags = (feature) => {
   ))([...tagsInfo]);
 };
 
+const run = applyOver([
+  noHomogenousTags(getScenarios, ['feature', 'scenario']),
+  flatMapScenarios(noHomogenousTags(getExamples, ['scenario', 'example'])),
+]);
+
 module.exports = {
   name: rule,
-  run: noHomogenousTags,
+  run,
   isValidConfig: () => [],
 };
