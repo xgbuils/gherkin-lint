@@ -1,9 +1,8 @@
 const ruleName = 'no-homogenous-tags';
 const ruleTestBase = require('../rule-test-base');
 const rule = require('../../../src/rules/no-homogenous-tags.js');
-const runTest = ruleTestBase.createRuleTest(rule, ({tags}) =>
-  'All Scenarios on this Feature have the same tag(s), ' +
-  `they should be defined on the Feature instead: ${tags}`);
+const runTest = ruleTestBase.createRuleTest(rule, ({tag}) =>
+  `${tag} tag is declared in each scenario. It could be defined at feature level.`);
 
 describe('No Homogenous Tags Rule', function() {
   it('doesn\'t raise errors when there are no violations', function() {
@@ -17,7 +16,14 @@ describe('No Homogenous Tags Rule', function() {
         column: 1,
       },
       rule: ruleName,
-      messageElements: {tags: '@tag1, @tag2'},
+      messageElements: {tag: '@tag1'},
+    }, {
+      location: {
+        line: 1,
+        column: 1,
+      },
+      rule: ruleName,
+      messageElements: {tag: '@tag2'},
     }]);
   });
 });
