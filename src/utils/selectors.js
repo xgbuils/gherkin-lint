@@ -1,7 +1,11 @@
+const isScenario = ({type}) => ['Scenario', 'ScenarioOutline'].indexOf(type) !== -1;
+const getFeatureNodes = ({children}) => children || [];
+
 module.exports = {
-  isScenario: ({type}) => ['Scenario', 'ScenarioOutline'].indexOf(type) !== -1,
+  isScenario,
   getType: ({type}) => type,
-  getFeatureNodes: ({children}) => children || [],
+  getFeatureNodes,
+  getScenarios: (feature) => getFeatureNodes(feature).filter(isScenario),
   getSteps: ({steps}) => steps,
   getExamples: ({examples = []}) => examples,
   getTableBody: ({tableBody}) => tableBody,
