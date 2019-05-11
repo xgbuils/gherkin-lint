@@ -1,4 +1,4 @@
-Feature: Feature with homogenous tags
+Feature: Feature with scenario homogenous tags
 
 Background:
   Given I have a Background
