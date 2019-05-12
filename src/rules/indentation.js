@@ -34,19 +34,43 @@ const defaultConfig = {
   'then': 2,
   'and': 2,
   'but': 2,
+  'DocString': 4,
 };
 
 const availableConfigs = Object.assign({}, defaultConfig, {
   // The values here are unused by the config parsing logic.
   'feature tag': -1,
   'scenario tag': -1,
+  'DocString line': -1,
 });
+
+const parseDocString = (lines) => (docString) => {
+  if (!docString) {
+    return;
+  }
+  const {line} = docString.location;
+  const docStringLines = docString.content.split(/\r\n|\r|\n/);
+  const rawDocStringLines = lines.slice(line, line + docStringLines.length);
+  return Object.assign({}, docString, {
+    lines: rawDocStringLines.map((rawLine, index) => {
+      const column = rawLine.indexOf(docStringLines[index]) + 1;
+      return {
+        content: docStringLines[index],
+        location: {
+          line: line + index + 1,
+          column,
+        },
+      };
+    }),
+  });
+};
 
 const mergeConfiguration = (configuration) => {
   const mergedConfiguration = Object.assign({}, defaultConfig, configuration);
   return Object.assign({
     'feature tag': mergedConfiguration['Feature'],
     'scenario tag': mergedConfiguration['Scenario'],
+    'DocString line': mergedConfiguration['DocString'],
   }, mergedConfiguration);
 };
 
@@ -77,13 +101,30 @@ const findKey = (obj, predicate) => {
   return Object.keys(obj).find((key) => predicate(obj[key]));
 };
 
-const testStep = (feature, configuration, testNode) => (step) => {
+const testDocString = (parseDocString, test) => (step) => {
+  const docString = parseDocString(step.argument);
+  const getLines = (docString) => (docString || {lines: []}).lines;
+  const docStringErrors = test('DocString')(docString);
+  if (docStringErrors.length > 0) {
+    return docStringErrors;
+  }
+  return getLines(docString).map(test('DocString line'));
+};
+
+const getStepType = (feature, configuration) => (step) => {
   const keyword = step.keyword;
-  let stepType = findKey(languageMapping[feature.language], (values) => {
+  const stepType = findKey(languageMapping[feature.language], (values) => {
     return values instanceof Array && values.indexOf(keyword) !== -1;
   });
-  stepType = stepType in configuration ? stepType : 'Step';
-  return testNode(stepType)(step);
+  return stepType in configuration ? stepType : 'Step';
+};
+
+const testStep = (getStepType, testDocstring, testNode) => (step) => {
+  const stepType = getStepType(step);
+  return applyOver([
+    testNode(stepType),
+    testDocstring,
+  ])(step);
 };
 
 const testFeature = (testStep, test) => {
@@ -120,14 +161,18 @@ const testFeature = (testStep, test) => {
   ]);
 };
 
-const run = (feature, unused, configuration) => {
+const run = (feature, {lines}, configuration) => {
   if (Object.keys(feature).length === 0) {
     return [];
   }
   const test = checkNodeIndentation(mergeConfiguration(configuration));
 
   return testFeature(
-    testStep(feature, configuration, test),
+    testStep(
+      getStepType(feature, configuration),
+      testDocString(parseDocString(lines), test),
+      test
+    ),
     test
   )(feature);
 };
