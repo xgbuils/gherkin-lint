@@ -285,8 +285,31 @@ describe('Indentation rule', () => {
     }]);
   });
 
-  /* TODO: add tests for partial configurations and fallbacks
-   * (eg rule for Step is used for Given, Then etc is rule for Given, Then, etc
-   * has not been specified)
-   */
+  context('DocString', () => {
+    it('Correct indentation', function() {
+      runTest('indentation/CorrectIndentationDocStrings.feature', {
+        DocString: 4,
+      }, []);
+    });
+
+    it('Wrong indentation', function() {
+      runTest('indentation/WrongIndentationDocStrings.feature', {
+        DocString: 4,
+      }, [{
+        messageElements: {element: 'DocString', expected: 4, actual: 2},
+        rule: ruleName,
+        location: {
+          line: 5,
+          column: 3,
+        },
+      }, {
+        messageElements: {element: 'DocString line', expected: 4, actual: 2},
+        rule: ruleName,
+        location: {
+          line: 14,
+          column: 3,
+        },
+      }]);
+    });
+  });
 });
