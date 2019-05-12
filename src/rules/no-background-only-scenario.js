@@ -8,7 +8,7 @@ const createError = (background) => ({
   location: background.location,
 });
 
-const noBackgroundEmptyScenario = (feature) => {
+const noBackgroundEmptyScenario = ({feature}) => {
   const children = getFeatureNodes(feature);
   const firstChild = children[0] || {};
 

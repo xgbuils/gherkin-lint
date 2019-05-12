@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const program = require('commander');
 const path = require('path');
+const Gherkin = require('gherkin');
 const linterFactory = require('./linter/factory');
 const defaults = require('./defaults');
 
@@ -29,7 +30,7 @@ const linter = linterFactory({
   config: program.config,
   rulesDirs: [path.resolve(__dirname, defaultRulesDir)].concat(program.rulesdir || []),
   args: program.args,
-}, process.cwd());
+}, Gherkin);
 const {
   logType,
   errorLines,

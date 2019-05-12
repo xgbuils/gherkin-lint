@@ -47,6 +47,6 @@ const run = applyOver([
 
 module.exports = {
   name: rule,
-  run,
+  run: ({feature}) => run(feature),
   isValidConfig: () => [],
 };

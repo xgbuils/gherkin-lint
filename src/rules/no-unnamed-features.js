@@ -1,6 +1,6 @@
 const rule = 'no-unnamed-features';
 
-const noUnNamedFeatures = ({name, location}) => {
+const noUnNamedFeatures = ({feature: {name, location}}) => {
   return !name && location ? [{
     type: 'rule',
     message: 'Missing Feature name',

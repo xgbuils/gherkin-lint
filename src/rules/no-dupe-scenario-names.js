@@ -26,7 +26,7 @@ const collectErrors = (appendError, dupeLocationTrace) => (track, scenario) => {
   return {scenarios, errors};
 };
 
-const noDuplicateScenarioNames = function(feature, file) {
+const noDuplicateScenarioNames = function({feature, file}) {
   const {scenarios} = this.options;
   const dupeLocationTrace = locationTrace(file);
   const collectScenarioErrors = collectErrors(

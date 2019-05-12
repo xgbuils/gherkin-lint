@@ -14,7 +14,7 @@ const createError = ([lines, index]) => ({
   },
 });
 
-const noMulitpleEmptyLines = (unused, file) => {
+const noMulitpleEmptyLines = ({file}) => {
   const {lines} = file;
   return lines.map((unused, index) => [lines, index])
     .filter(isMultipleEmptyLines)

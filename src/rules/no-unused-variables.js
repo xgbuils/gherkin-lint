@@ -93,7 +93,8 @@ const getVariableNames = (variables) => variables.reduce((names, variable) => {
   return names.add(variable.name);
 }, new Set());
 
-function noUnusedVariables(feature, {lines}) {
+function noUnusedVariables({feature, file}) {
+  const {lines} = file;
   const children = getFeatureNodes(feature);
   const errors = [];
 

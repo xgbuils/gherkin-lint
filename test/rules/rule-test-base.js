@@ -2,11 +2,12 @@ const assert = require('chai').assert;
 const Gherkin = require('gherkin');
 const fs = require('fs');
 const RulesParser = require('../../src/rules-parser');
+const ParserAdapter = require('../../src/parser-adapter');
 const NoConfigurableLinter = require('../../src/linter/no-configurable-linter');
 const ConfigurableLinter = require('../../src/linter/configurable-linter');
 
 const lintFile = (rule, config, file) => {
-  const parser = new Gherkin.Parser();
+  const parser = ParserAdapter(Gherkin);
   const noConfigurableLinter = new NoConfigurableLinter(parser);
   const ruleName = rule.name;
   const rawRules = {};

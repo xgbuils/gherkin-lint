@@ -1,6 +1,6 @@
 const rule = 'no-dupe-feature-names';
 
-function noDuplicateFeatureNames(feature, file) {
+function noDuplicateFeatureNames({feature, file}) {
   const {features} = this.options;
   if (feature.name) {
     if (feature.name in features) {

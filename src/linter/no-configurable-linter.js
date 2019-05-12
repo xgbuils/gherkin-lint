@@ -15,9 +15,10 @@ class NoConfigurableLinter {
 
   lint(file) {
     try {
-      const {feature} = this.parser.parse(file.content);
+      const {feature, languageKeywords} = this.parser.parse(file.content);
       return Successes.of([{
         feature,
+        languageKeywords,
         file,
       }]);
     } catch (e) {

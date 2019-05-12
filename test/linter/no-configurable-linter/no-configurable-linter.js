@@ -16,10 +16,13 @@ const parsedFeature = {
   children: [],
 };
 
+const languageKeywords = ['Given', 'Scenario'];
+
 const successfulParser = {
   parse() {
     return {
       feature: parsedFeature,
+      languageKeywords,
     };
   },
 };
@@ -180,6 +183,7 @@ describe('No Configurable File Linter', function() {
     assert.deepEqual(result.getSuccesses(), [{
       feature: parsedFeature,
       file,
+      languageKeywords,
     }]);
   });
 

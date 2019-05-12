@@ -17,6 +17,6 @@ const createError = (tag) => {
 
 module.exports = {
   name: rule,
-  run: flatMapNodeTags(({tags}) => flatMap(createError)(tags)),
+  run: ({feature}) => flatMapNodeTags(({tags}) => flatMap(createError)(tags))(feature),
   isValidConfig: () => [],
 };

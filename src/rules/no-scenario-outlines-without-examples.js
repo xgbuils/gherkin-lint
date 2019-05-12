@@ -14,7 +14,7 @@ const createError = (scenario) => ({
   location: scenario.location,
 });
 
-const noScenarioOutlinesWithoutExamples = (feature) => {
+const noScenarioOutlinesWithoutExamples = ({feature}) => {
   return intoArray(compose(
     filter(isScenarioOutline),
     filter(hasNoExamples),

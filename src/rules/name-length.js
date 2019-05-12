@@ -17,8 +17,8 @@ const {
   flatMapSteps,
 } = require('../utils/gherkin');
 
-const test = (configuration) => (name, location, type) => {
-  const expectedLength = configuration[type];
+const test = (config) => (name, location, type) => {
+  const expectedLength = config[type];
   const length = name && name.length;
   return length > expectedLength ? [{
     type: 'rule',
@@ -37,11 +37,11 @@ const testNodeFactory = (testLength, type) => (scenario) => {
   return testLength(scenario.name, scenario.location, type);
 };
 
-function nameLength(feature, unused, configuration) {
+function nameLength({feature, config}) {
   if (Object.keys(feature).length === 0) {
     return [];
   }
-  const testLength = test(Object.assign({}, availableConfigs, configuration));
+  const testLength = test(Object.assign({}, availableConfigs, config));
   const testStep = testStepFactory(testLength);
   const testSteps = flatMapSteps(testStep);
   const checkStepsAfter = applyAfter(testSteps);

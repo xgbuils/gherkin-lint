@@ -12,6 +12,6 @@ const noUnNamedScenarios = flatMapScenarios(createError);
 
 module.exports = {
   name: rule,
-  run: noUnNamedScenarios,
+  run: ({feature}) => noUnNamedScenarios(feature),
   isValidConfig: () => [],
 };

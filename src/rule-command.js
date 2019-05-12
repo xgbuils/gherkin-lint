@@ -13,8 +13,10 @@ class RuleCommand {
     this.suppressOtherRules = suppressOtherRules;
   }
 
-  execute({feature, file}) {
-    return this.run(feature, file, this.config);
+  execute(params) {
+    return this.run(Object.assign({
+      config: this.config,
+    }, params));
   }
 
   hasPriority() {

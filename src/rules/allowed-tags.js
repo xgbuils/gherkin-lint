@@ -27,8 +27,8 @@ const checkTags = (predicate) => (node) => {
   ))(node.tags);
 };
 
-function allowedTags(feature, fileName, configuration) {
-  const allowedTags = configuration.tags;
+function allowedTags({feature, config}) {
+  const allowedTags = config.tags;
   const checkAllowedTags = checkTags(isNotAllowed(allowedTags));
 
   return flatMapNodeTags(checkAllowedTags)(feature);

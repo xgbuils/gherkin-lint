@@ -5,6 +5,7 @@ const linterFactory = require('../../../src/linter/factory');
 const pathToDefaultRules = path.resolve(__dirname, '..', '..', '..', 'src', 'rules');
 const pathToLocalRules = path.join(__dirname, 'rules'); // absolute path;
 const pathToOtherRules = path.join('test', 'linter', 'factory', 'other_rules'); // relative path from root
+const Gherkin = require('gherkin');
 
 describe('Linter Factory', function() {
   it('linter that fails', function() {
@@ -16,7 +17,7 @@ describe('Linter Factory', function() {
         pathToDefaultRules, pathToLocalRules, pathToOtherRules,
       ],
       args: [featureFile],
-    }, __dirname);
+    }, Gherkin);
     const result = linter.lint();
     expect(result.logType).to.be.equal('error');
     expect(result.exit).to.be.equal(1);
@@ -38,7 +39,7 @@ describe('Linter Factory', function() {
       format: 'stylish',
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
-    }, __dirname);
+    }, Gherkin);
     const result = linter.lint();
 
     expect(result).to.be.deep.equal({
@@ -55,7 +56,7 @@ describe('Linter Factory', function() {
       format: 'stylish',
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
-    }, __dirname);
+    }, Gherkin);
     const result = linter.lint();
 
     expect(result.logType).to.be.equal('error');
@@ -71,7 +72,7 @@ describe('Linter Factory', function() {
       format: 'stylish',
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
-    }, __dirname);
+    }, Gherkin);
     const result = linter.lint();
 
     expect(result.logType).to.be.equal('error');
@@ -86,7 +87,7 @@ describe('Linter Factory', function() {
     const linter = linterFactory({
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
-    }, __dirname);
+    }, Gherkin);
     const result = linter.lint();
 
     expect(result.logType).to.be.equal('error');

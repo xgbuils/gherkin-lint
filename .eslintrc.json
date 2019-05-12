@@ -12,6 +12,7 @@
     "sourceType": "module"
   },
   "rules": {
+    "new-cap": ["off"],
     "indent": [
       "error",
       2

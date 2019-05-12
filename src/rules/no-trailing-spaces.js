@@ -12,7 +12,7 @@ const createError = ([line, lineNo]) => ({
   },
 });
 
-const noTrailingSpaces = (unused, file) => {
+const noTrailingSpaces = ({file}) => {
   return file.lines.map((line, index) => [line, index + 1])
     .filter(([line, lineNo]) => trailingSpacesRegexp.test(line))
     .map(createError);

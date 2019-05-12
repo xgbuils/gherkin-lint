@@ -26,6 +26,6 @@ const verifyTags = ({tags, location}) => {
 
 module.exports = {
   name: rule,
-  run: flatMapNodeTags(verifyTags),
+  run: ({feature}) => flatMapNodeTags(verifyTags)(feature),
   isValidConfig: () => [],
 };

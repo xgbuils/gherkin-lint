@@ -19,7 +19,7 @@ const appendErrors = (track, step) => {
   return track;
 };
 
-const useAnd = (feature) => {
+const useAnd = ({feature}) => {
   return flatMapFeatureNodes((node) => {
     return reduce(
       filter(({keyword}) => keyword !== 'And ')(appendErrors), {

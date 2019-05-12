@@ -11,18 +11,16 @@ const distance = (tag1, tag2) => {
   return tag2.location.column - tag1.location.column - tag1.name.length;
 };
 
-const createError = ([dist, tag, nextTag]) => {
-  return {
-    type: 'rule',
-    location: {
-      line: tag.location.line,
-      column: tag.location.column + tag.name.length,
-    },
-    rule: rule,
-    message: 'There is more than one space between the tags ' +
-      tag.name + ' and ' + nextTag.name,
-  };
-};
+const createError = ([dist, tag, nextTag]) => ({
+  type: 'rule',
+  location: {
+    line: tag.location.line,
+    column: tag.location.column + tag.name.length,
+  },
+  rule: rule,
+  message: 'There is more than one space between the tags ' +
+    tag.name + ' and ' + nextTag.name,
+});
 
 const collectErrorsPerLine = (tags) => {
   return tags.map((tag, index, tags) => {
@@ -39,7 +37,7 @@ const testTags = (allTags) => {
 };
 
 module.exports = {
-  run: flatMapNodeTags(({tags}) => testTags(tags)),
+  run: ({feature}) => flatMapNodeTags(({tags}) => testTags(tags))(feature),
   name: rule,
   isValidConfig: () => [],
 };

@@ -1,4 +1,3 @@
-const languageMapping = require('gherkin').DIALECTS;
 const rule = 'indentation';
 const objectRuleValidation = require('../config-validation/object-rule-validation');
 const {
@@ -45,9 +44,6 @@ const availableConfigs = Object.assign({}, defaultConfig, {
 });
 
 const parseDocString = (lines) => (docString) => {
-  if (!docString) {
-    return;
-  }
   const {line} = docString.location;
   const docStringLines = docString.content.split(/\r\n|\r|\n/);
   const rawDocStringLines = lines.slice(line, line + docStringLines.length);
@@ -65,8 +61,8 @@ const parseDocString = (lines) => (docString) => {
   });
 };
 
-const mergeConfiguration = (configuration) => {
-  const mergedConfiguration = Object.assign({}, defaultConfig, configuration);
+const mergeConfiguration = (config) => {
+  const mergedConfiguration = Object.assign({}, defaultConfig, config);
   return Object.assign({
     'feature tag': mergedConfiguration['Feature'],
     'scenario tag': mergedConfiguration['Scenario'],
@@ -102,21 +98,23 @@ const findKey = (obj, predicate) => {
 };
 
 const testDocString = (parseDocString, test) => (step) => {
+  if (!step.argument || step.argument.type !== 'DocString') {
+    return [];
+  }
   const docString = parseDocString(step.argument);
-  const getLines = (docString) => (docString || {lines: []}).lines;
   const docStringErrors = test('DocString')(docString);
   if (docStringErrors.length > 0) {
     return docStringErrors;
   }
-  return getLines(docString).map(test('DocString line'));
+  return docString.lines.map(test('DocString line'));
 };
 
-const getStepType = (feature, configuration) => (step) => {
+const getStepType = (feature, languageKeywords, config) => (step) => {
   const keyword = step.keyword;
-  const stepType = findKey(languageMapping[feature.language], (values) => {
+  const stepType = findKey(languageKeywords, (values) => {
     return values instanceof Array && values.indexOf(keyword) !== -1;
   });
-  return stepType in configuration ? stepType : 'Step';
+  return stepType in config ? stepType : 'Step';
 };
 
 const testStep = (getStepType, testDocstring, testNode) => (step) => {
@@ -161,15 +159,16 @@ const testFeature = (testStep, test) => {
   ]);
 };
 
-const run = (feature, {lines}, configuration) => {
+const run = ({feature, languageKeywords, file, config}) => {
+  const {lines} = file;
   if (Object.keys(feature).length === 0) {
     return [];
   }
-  const test = checkNodeIndentation(mergeConfiguration(configuration));
+  const test = checkNodeIndentation(mergeConfiguration(config));
 
   return testFeature(
     testStep(
-      getStepType(feature, configuration),
+      getStepType(feature, languageKeywords, config),
       testDocString(parseDocString(lines), test),
       test
     ),

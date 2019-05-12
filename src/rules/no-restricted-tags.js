@@ -26,8 +26,8 @@ const checkTags = (predicate) => (node) => {
   ))(node.tags);
 };
 
-const noRestrictedTags = (feature, unused, configuration) => {
-  const forbiddenTags = configuration.tags;
+const noRestrictedTags = ({feature, config}) => {
+  const forbiddenTags = config.tags;
   const checkForbiddenTags = checkTags(isForbidden(forbiddenTags));
 
   return flatMapNodeTags(checkForbiddenTags)(feature);

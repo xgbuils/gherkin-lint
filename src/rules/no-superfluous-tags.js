@@ -36,7 +36,7 @@ const noSuperfluousScenarioTags = (featureTags) => (scenario) => {
   ])(scenario);
 };
 
-const noSuperfluousTags = (feature) => {
+const noSuperfluousTags = ({feature}) => {
   const featureTags = getNodeTagNames(feature);
   return flatMap(noSuperfluousScenarioTags(featureTags))(getScenarios(feature));
 };

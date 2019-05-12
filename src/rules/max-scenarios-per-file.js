@@ -15,7 +15,7 @@ const countExamples = (examples) => reduce((count, {tableBody}) => {
 
 const sum = (a, b) => a + b;
 
-function maxScenariosPerFile(feature, unused, config) {
+function maxScenariosPerFile({feature, config}) {
   const mergedConfiguration = Object.assign({}, defaultConfig, config);
   const maxScenarios = mergedConfiguration.maxScenarios;
 
