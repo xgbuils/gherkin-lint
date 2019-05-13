@@ -1,11 +1,11 @@
 const ruleName = 'max-scenarios-per-file';
 const ruleTestBase = require('../rule-test-base');
 const rule = require('../../../src/rules/max-scenarios-per-file.js');
-const runTest = ruleTestBase.createRuleTest(rule, ({variable}) =>
-  `Number of scenarios exceeds maximum: ${variable}/10`);
+const runTest = ruleTestBase.createRuleTest(rule);
+const message = ({variable}) => `Number of scenarios exceeds maximum: ${variable}/10`;
 
-describe('Max Scenarios per File rule', function() {
-  it('detects an error when property is not "maxScenarios"', function() {
+describe('Max Scenarios per File rule', () => {
+  it('detects an error when property is not "maxScenarios"', () => {
     runTest('max-scenarios-per-file/CorrectNumber.feature', {
       'foobar': 20,
     }, {
@@ -19,20 +19,18 @@ describe('Max Scenarios per File rule', function() {
     });
   });
 
-  it('doesn\'t raise errors when the default configuration is used and there are correct number of scenarios', function() {
+  it('does not raise errors when the default configuration is used and there are correct number of scenarios', () => {
     runTest('max-scenarios-per-file/CorrectNumber.feature', {maxScenarios: 10}, []);
     runTest('max-scenarios-per-file/CorrectNumberExamples.feature', {maxScenarios: 10}, []);
     runTest('max-scenarios-per-file/CorrectNumberMixed.feature', {maxScenarios: 10}, []);
   });
 
   context('Too many scenarios', () => {
-    it('detects errors when a feature file has too many scenarios', function() {
+    it('detects errors when a feature file has too many scenarios', () => {
       runTest('max-scenarios-per-file/TooManyScenarios.feature', {
         maxScenarios: 10,
       }, [{
-        messageElements: {
-          variable: 11,
-        },
+        message: message({variable: 11}),
         rule: ruleName,
         location: {
           line: 0,
@@ -43,13 +41,11 @@ describe('Max Scenarios per File rule', function() {
   });
 
   context('Too many examples on Scenario Outline', () => {
-    it('detects errors when a feature file has too many scenarios', function() {
+    it('detects errors when a feature file has too many scenarios', () => {
       runTest('max-scenarios-per-file/TooManyExamples.feature', {
         maxScenarios: 10,
       }, [{
-        messageElements: {
-          variable: 11,
-        },
+        message: message({variable: 11}),
         rule: ruleName,
         location: {
           line: 0,

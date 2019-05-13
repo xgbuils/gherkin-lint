@@ -1,50 +1,50 @@
 const ruleName = 'no-partially-commented-tag-lines';
 const ruleTestBase = require('../rule-test-base');
 const rule = require('../../../src/rules/no-partially-commented-tag-lines');
-const runTest = ruleTestBase.createRuleTest(rule,
-  () => 'Partially commented tag lines not allowed ');
+const NO_PARTIALLY_COMMENTED_TAGS = 'Partially commented tag lines not allowed ';
+const runTest = ruleTestBase.createRuleTest(rule);
 
-describe('No partially commented tag lines Rule', function() {
-  it('doesn\'t raise errors when there are no violations', function() {
+describe('No partially commented tag lines Rule', () => {
+  it('doesn\'t raise errors when there are no violations', () => {
     runTest('no-partially-commented-tag-lines/NoViolations.feature', {}, []);
   });
 
-  it('detects errors there are multiple empty lines', function() {
+  it('detects errors there are multiple empty lines', () => {
     runTest('no-partially-commented-tag-lines/Violations.feature', {}, [{
       location: {
         line: 6,
         column: 13,
       },
       rule: ruleName,
-      messageElements: {},
+      message: NO_PARTIALLY_COMMENTED_TAGS,
     }, {
       location: {
         line: 10,
         column: 7,
       },
       rule: ruleName,
-      messageElements: {},
+      message: NO_PARTIALLY_COMMENTED_TAGS,
     }, {
       location: {
         line: 13,
         column: 12,
       },
       rule: ruleName,
-      messageElements: {},
+      message: NO_PARTIALLY_COMMENTED_TAGS,
     }, {
       location: {
         line: 17,
         column: 7,
       },
       rule: ruleName,
-      messageElements: {},
+      message: NO_PARTIALLY_COMMENTED_TAGS,
     }, {
       location: {
         line: 23,
         column: 8,
       },
       rule: ruleName,
-      messageElements: {},
+      message: NO_PARTIALLY_COMMENTED_TAGS,
     }]);
   });
 });

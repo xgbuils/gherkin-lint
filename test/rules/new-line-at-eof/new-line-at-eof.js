@@ -1,14 +1,13 @@
 const ruleName = 'new-line-at-eof';
 const ruleTestBase = require('../rule-test-base');
 const rule = require('../../../src/rules/new-line-at-eof.js');
-const runYesTest = ruleTestBase.createRuleTest(rule, () =>
-  'New line at EOF(end of file) is required');
-const runNoTest = ruleTestBase.createRuleTest(rule, () =>
-  'New line at EOF(end of file) is not allowed');
+const LINE_IS_REQUIRED = 'New line at EOF(end of file) is required';
+const LINE_IS_FORBIDDEN = 'New line at EOF(end of file) is not allowed';
+const runTest = ruleTestBase.createRuleTest(rule);
 
-describe('New Line At EOF Rule', function() {
-  it('detects an error when property is not "yes" or "no"', function() {
-    runYesTest('new-line-at-eof/NewLineAtEOF.feature', 'maybe', {
+describe('New Line At EOF Rule', () => {
+  it('detects an error when property is not "yes" or "no"', () => {
+    runTest('new-line-at-eof/NewLineAtEOF.feature', 'maybe', {
       message: 'Error(s) in configuration file:',
       type: 'config-error',
       errors: [{
@@ -20,13 +19,13 @@ describe('New Line At EOF Rule', function() {
   });
 
   context('"yes" configuration', () => {
-    it('doesn\'t raise errors when there are new line at eof', function() {
-      runYesTest('new-line-at-eof/NewLineAtEOF.feature', 'yes', []);
+    it('doesn\'t raise errors when there are new line at eof', () => {
+      runTest('new-line-at-eof/NewLineAtEOF.feature', 'yes', []);
     });
 
-    it('raises error when there are no new line at eof', function() {
-      runYesTest('new-line-at-eof/NoNewLineAtEOF.feature', 'yes', [{
-        messageElements: {},
+    it('raises error when there are no new line at eof', () => {
+      runTest('new-line-at-eof/NoNewLineAtEOF.feature', 'yes', [{
+        message: LINE_IS_REQUIRED,
         rule: ruleName,
         location: {
           line: 7,
@@ -37,9 +36,9 @@ describe('New Line At EOF Rule', function() {
   });
 
   context('"no" configuration', () => {
-    it('raises error when there are new line at eof', function() {
-      runNoTest('new-line-at-eof/NewLineAtEOF.feature', 'no', [{
-        messageElements: {},
+    it('raises error when there are new line at eof', () => {
+      runTest('new-line-at-eof/NewLineAtEOF.feature', 'no', [{
+        message: LINE_IS_FORBIDDEN,
         rule: ruleName,
         location: {
           line: 8,
@@ -48,8 +47,8 @@ describe('New Line At EOF Rule', function() {
       }]);
     });
 
-    it('doesn\'t raise error when there are no new line at eof', function() {
-      runNoTest('new-line-at-eof/NoNewLineAtEOF.feature', 'no', []);
+    it('doesn\'t raise error when there are no new line at eof', () => {
+      runTest('new-line-at-eof/NoNewLineAtEOF.feature', 'no', []);
     });
   });
 });

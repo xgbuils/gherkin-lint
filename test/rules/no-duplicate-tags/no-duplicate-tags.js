@@ -1,9 +1,8 @@
 const ruleName = 'no-duplicate-tags';
 const ruleTestBase = require('../rule-test-base');
 const rule = require('../../../src/rules/no-duplicate-tags.js');
-const runTest = ruleTestBase.createRuleTest(rule, ({tags}) =>
-  `Duplicate tags are not allowed: ${tags}`);
-
+const runTest = ruleTestBase.createRuleTest(rule);
+const message = ({tags}) => `Duplicate tags are not allowed: ${tags}`;
 describe('No Duplicate Tags Rule', () => {
   it('doesn\'t raise errors when there are no tags', () => {
     runTest('no-duplicate-tags/NoTags.feature', {}, []);
@@ -15,7 +14,7 @@ describe('No Duplicate Tags Rule', () => {
 
   it('detects errors for features, scenarios, and scenario outlines when there are duplications', () => {
     runTest('no-duplicate-tags/Violations.feature', {}, [{
-      messageElements: {tags: '@featuretag'},
+      message: message({tags: '@featuretag'}),
       rule: ruleName,
       location: {
         line: 1,
@@ -23,7 +22,7 @@ describe('No Duplicate Tags Rule', () => {
       },
     },
     {
-      messageElements: {tags: '@scenariotag'},
+      message: message({tags: '@scenariotag'}),
       rule: ruleName,
       location: {
         line: 7,
@@ -31,7 +30,7 @@ describe('No Duplicate Tags Rule', () => {
       },
     },
     {
-      messageElements: {tags: '@scenariotag'},
+      message: message({tags: '@scenariotag'}),
       rule: ruleName,
       location: {
         line: 7,
@@ -39,7 +38,7 @@ describe('No Duplicate Tags Rule', () => {
       },
     },
     {
-      messageElements: {tags: '@scenariotag'},
+      message: message({tags: '@scenariotag'}),
       rule: ruleName,
       location: {
         line: 11,
@@ -47,7 +46,7 @@ describe('No Duplicate Tags Rule', () => {
       },
     },
     {
-      messageElements: {tags: '@exampletag'},
+      message: message({tags: '@exampletag'}),
       rule: ruleName,
       location: {
         line: 14,
@@ -55,7 +54,7 @@ describe('No Duplicate Tags Rule', () => {
       },
     },
     {
-      messageElements: {tags: '@exampletag'},
+      message: message({tags: '@exampletag'}),
       rule: ruleName,
       location: {
         line: 14,

@@ -1,30 +1,30 @@
 const ruleName = 'no-empty-background';
 const ruleTestBase = require('../rule-test-base');
 const rule = require('../../../src/rules/no-empty-background.js');
-const runTest = ruleTestBase.createRuleTest(rule,
-  () => 'Empty backgrounds are not allowed.');
+const NO_EMPTY_BACKGROUNDS = 'Empty backgrounds are not allowed.';
+const runTest = ruleTestBase.createRuleTest(rule);
 
-describe('No empty Backgrounds Rule', function() {
-  it('does not raise errors when there are no background', function() {
+describe('No empty Backgrounds Rule', () => {
+  it('does not raise errors when there are no background', () => {
     runTest('no-empty-background/NoBackground.feature', {}, []);
   });
 
-  it('does not raise errors when there are no violations', function() {
+  it('does not raise errors when there are no violations', () => {
     runTest('no-empty-background/NoViolations.feature', {}, []);
   });
 
-  it('does not raise errors whith an empty file', function() {
+  it('does not raise errors whith an empty file', () => {
     runTest('Empty.feature', {}, []);
   });
 
-  it('detects errors for scenarios, and scenario outlines', function() {
+  it('detects errors for scenarios, and scenario outlines', () => {
     runTest('no-empty-background/Violations.feature', {}, [{
       location: {
         line: 4,
         column: 2,
       },
       rule: ruleName,
-      messageElements: {},
+      message: NO_EMPTY_BACKGROUNDS,
     }]);
   });
 });

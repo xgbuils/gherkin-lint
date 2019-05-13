@@ -1,11 +1,11 @@
 const ruleName = 'no-restricted-tags';
 const ruleTestBase = require('../rule-test-base');
 const rule = require('../../../src/rules/no-restricted-tags.js');
-const runTest = ruleTestBase.createRuleTest(rule, ({tags, nodeType}) =>
-  `Forbidden tag ${tags} on ${nodeType}`);
+const runTest = ruleTestBase.createRuleTest(rule);
+const message = ({tags, nodeType}) => `Forbidden tag ${tags} on ${nodeType}`;
 
-describe('No Restricted Tags Rule', function() {
-  it('detects an error when property is not "tags"', function() {
+describe('No Restricted Tags Rule', () => {
+  it('detects an error when property is not "tags"', () => {
     runTest('no-restricted-tags/NoViolations.feature', {
       'foobar': ['@featuretag', '@scenariotag'],
     }, {
@@ -19,13 +19,13 @@ describe('No Restricted Tags Rule', function() {
     });
   });
 
-  it('doesn\'t raise errors when there are no forbidden tags', function() {
+  it('doesn\'t raise errors when there are no forbidden tags', () => {
     runTest('no-restricted-tags/NoViolations.feature', {
       'tags': ['@featuretag1', '@scenariotag1'],
     }, []);
   });
 
-  it('detects errors for features, scenarios, and scenario outlines when there are forbidden tags', function() {
+  it('detects errors for features, scenarios, and scenario outlines when there are forbidden tags', () => {
     runTest('no-restricted-tags/Violations.feature', {
       'tags': [
         '@featuretag1',
@@ -36,7 +36,7 @@ describe('No Restricted Tags Rule', function() {
         '@exampletag2',
       ],
     }, [{
-      messageElements: {tags: '@featuretag1', nodeType: 'Feature'},
+      message: message({tags: '@featuretag1', nodeType: 'Feature'}),
       rule: ruleName,
       location: {
         line: 1,
@@ -44,7 +44,7 @@ describe('No Restricted Tags Rule', function() {
       },
     },
     {
-      messageElements: {tags: '@anothertag', nodeType: 'Feature'},
+      message: message({tags: '@anothertag', nodeType: 'Feature'}),
       rule: ruleName,
       location: {
         line: 1,
@@ -52,7 +52,7 @@ describe('No Restricted Tags Rule', function() {
       },
     },
     {
-      messageElements: {tags: '@scenariotag1', nodeType: 'Scenario'},
+      message: message({tags: '@scenariotag1', nodeType: 'Scenario'}),
       rule: ruleName,
       location: {
         line: 7,
@@ -60,7 +60,7 @@ describe('No Restricted Tags Rule', function() {
       },
     },
     {
-      messageElements: {tags: '@scenariotag2', nodeType: 'Scenario'},
+      message: message({tags: '@scenariotag2', nodeType: 'Scenario'}),
       rule: ruleName,
       location: {
         line: 7,
@@ -68,7 +68,7 @@ describe('No Restricted Tags Rule', function() {
       },
     },
     {
-      messageElements: {tags: '@anothertag', nodeType: 'Scenario'},
+      message: message({tags: '@anothertag', nodeType: 'Scenario'}),
       rule: ruleName,
       location: {
         line: 7,
@@ -76,7 +76,7 @@ describe('No Restricted Tags Rule', function() {
       },
     },
     {
-      messageElements: {tags: '@scenariotag1', nodeType: 'ScenarioOutline'},
+      message: message({tags: '@scenariotag1', nodeType: 'ScenarioOutline'}),
       rule: ruleName,
       location: {
         line: 11,
@@ -84,7 +84,7 @@ describe('No Restricted Tags Rule', function() {
       },
     },
     {
-      messageElements: {tags: '@exampletag1', nodeType: 'Examples'},
+      message: message({tags: '@exampletag1', nodeType: 'Examples'}),
       rule: ruleName,
       location: {
         line: 20,
@@ -92,7 +92,7 @@ describe('No Restricted Tags Rule', function() {
       },
     },
     {
-      messageElements: {tags: '@exampletag2', nodeType: 'Examples'},
+      message: message({tags: '@exampletag2', nodeType: 'Examples'}),
       rule: ruleName,
       location: {
         line: 24,

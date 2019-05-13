@@ -1,33 +1,33 @@
 const ruleName = 'no-empty-file';
 const ruleTestBase = require('../rule-test-base');
 const rule = require('../../../src/rules/no-empty-file.js');
-const runTest = ruleTestBase.createRuleTest(rule,
-  () => 'Empty feature files are disallowed');
+const NO_EMPTY_FILE = 'Empty feature files are disallowed';
+const runTest = ruleTestBase.createRuleTest(rule);
 
-describe('No empty files Rule', function() {
-  it('doesn\'t raise errors when there are no violations', function() {
+describe('No empty files Rule', () => {
+  it('doesn\'t raise errors when there are no violations', () => {
     runTest('no-empty-file/NoViolations.feature', {}, []);
   });
 
-  it('detects errors for empty file', function() {
+  it('detects errors for empty file', () => {
     runTest('no-empty-file/BlankFile.feature', {}, [{
       location: {
         line: 1,
         column: 1,
       },
       rule: ruleName,
-      messageElements: {},
+      message: NO_EMPTY_FILE,
     }]);
   });
 
-  it('detects errors for blank file', function() {
+  it('detects errors for blank file', () => {
     runTest('no-empty-file/BlankFile.feature', {}, [{
       location: {
         line: 1,
         column: 1,
       },
       rule: ruleName,
-      messageElements: {},
+      message: NO_EMPTY_FILE,
     }]);
   });
 });

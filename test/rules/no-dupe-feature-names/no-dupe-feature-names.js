@@ -12,26 +12,24 @@ const ruleWithAnotherFile = Object.assign({}, rule, {
     },
   }),
 });
-const errorMessage = ({files}) => `Feature name is already used in: ${files}`;
+const message = ({files}) => `Feature name is already used in: ${files}`;
 
 
-const noViolationTest = ruleTestBase.createRuleTest(rule, errorMessage);
-const violationTest = ruleTestBase.createRuleTest(ruleWithAnotherFile, errorMessage);
+const noViolationTest = ruleTestBase.createRuleTest(rule);
+const violationTest = ruleTestBase.createRuleTest(ruleWithAnotherFile);
 
-describe('No Duplicate Scenario Names Rule', function() {
-  it('does not raise errors when there are no violations', function() {
+describe('No Duplicate Scenario Names Rule', () => {
+  it('does not raise errors when there are no violations', () => {
     noViolationTest(EXAMPLE_FILE, {}, []);
   });
 
-  it('does not raise errors when there are no violations', function() {
+  it('does not raise errors when there are no violations', () => {
     noViolationTest('Empty.feature', {}, []);
   });
 
-  it('detects errors for features, scenarios, and scenario outlines', function() {
+  it('detects errors for features, scenarios, and scenario outlines', () => {
     violationTest(EXAMPLE_FILE, {}, [{
-      messageElements: {
-        files: OTHER_FILE,
-      },
+      message: message({files: OTHER_FILE}),
       rule: ruleName,
       location: {
         line: 2,

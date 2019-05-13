@@ -1,16 +1,18 @@
 const ruleName = 'no-unused-variables';
 const ruleTestBase = require('../rule-test-base');
 const rule = require('../../../src/rules/no-unused-variables.js');
-
-describe('No unused variables rule', function() {
-  it('doesn\'t raise errors when there are no violations', function() {
-    const runTest = ruleTestBase.createRuleTest(rule, '');
+const undeclaredVarMessage = ({variable}) =>
+  `Step variable "${variable}" does not exist the in examples table`;
+const unusedVarMessage = ({variable}) =>
+  `Examples table variable "${variable}" is not used in any step`;
+describe('No unused variables rule', () => {
+  it('doesn\'t raise errors when there are no violations', () => {
+    const runTest = ruleTestBase.createRuleTest(rule);
     runTest('no-unused-variables/NoViolations.feature', {}, []);
   });
 
-  it('detects unused scenario variables', function() {
-    const runTest = ruleTestBase.createRuleTest(rule, ({variable}) =>
-      `Step variable "${variable}" does not exist the in examples table`);
+  it('detects unused scenario variables', () => {
+    const runTest = ruleTestBase.createRuleTest(rule);
 
     runTest('no-unused-variables/UnusedStepVariables.feature', {}, [{
       location: {
@@ -18,7 +20,7 @@ describe('No unused variables rule', function() {
         column: 24,
       },
       rule: ruleName,
-      messageElements: {variable: 'b'},
+      message: undeclaredVarMessage({variable: 'b'}),
     },
     {
       location: {
@@ -26,7 +28,7 @@ describe('No unused variables rule', function() {
         column: 108,
       },
       rule: ruleName,
-      messageElements: {variable: 'b'},
+      message: undeclaredVarMessage({variable: 'b'}),
     },
     {
       location: {
@@ -34,7 +36,7 @@ describe('No unused variables rule', function() {
         column: 8,
       },
       rule: ruleName,
-      messageElements: {variable: 'b'},
+      message: undeclaredVarMessage({variable: 'b'}),
     },
     {
       location: {
@@ -42,7 +44,7 @@ describe('No unused variables rule', function() {
         column: 10,
       },
       rule: ruleName,
-      messageElements: {variable: 'b'},
+      message: undeclaredVarMessage({variable: 'b'}),
     },
     {
       location: {
@@ -54,9 +56,8 @@ describe('No unused variables rule', function() {
     }]);
   });
 
-  it('detects unused variables in the examples table', function() {
-    const runTest = ruleTestBase.createRuleTest(rule, ({variable}) =>
-      `Examples table variable "${variable}" is not used in any step`);
+  it('detects unused variables in the examples table', () => {
+    const runTest = ruleTestBase.createRuleTest(rule);
 
     runTest('no-unused-variables/UnusedExampleVariables.feature', {}, [{
       location: {
@@ -64,14 +65,14 @@ describe('No unused variables rule', function() {
         column: 11,
       },
       rule: ruleName,
-      messageElements: {variable: 'b'},
+      message: unusedVarMessage({variable: 'b'}),
     }, {
       location: {
         line: 19,
         column: 7,
       },
       rule: ruleName,
-      messageElements: {variable: 'b'},
+      message: unusedVarMessage({variable: 'b'}),
     },
     {
       location: {
@@ -79,7 +80,7 @@ describe('No unused variables rule', function() {
         column: 11,
       },
       rule: ruleName,
-      messageElements: {variable: 'b'},
+      message: unusedVarMessage({variable: 'b'}),
     },
     {
       location: {
@@ -87,7 +88,7 @@ describe('No unused variables rule', function() {
         column: 11,
       },
       rule: ruleName,
-      messageElements: {variable: 'b'},
+      message: unusedVarMessage({variable: 'b'}),
     },
     {
       location: {
@@ -95,7 +96,7 @@ describe('No unused variables rule', function() {
         column: 7,
       },
       rule: ruleName,
-      messageElements: {variable: 'b'},
+      message: unusedVarMessage({variable: 'b'}),
     },
     {
       location: {
@@ -103,7 +104,7 @@ describe('No unused variables rule', function() {
         column: 11,
       },
       rule: ruleName,
-      messageElements: {variable: 'b'},
+      message: unusedVarMessage({variable: 'b'}),
     }]);
   });
 });

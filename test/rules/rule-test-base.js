@@ -32,28 +32,25 @@ const createFile = (fileName) => {
   };
 };
 
-const createExpectedError = (messageTemplate) => (error) => {
-  const messageError = error.messageElements
-    ? {message: messageTemplate(error.messageElements)}
-    : {};
+const createExpectedError = (error) => {
   const expectedError = Object.assign({
     type: 'rule',
-  }, error, messageError);
+  }, error);
   delete expectedError['messageElements'];
   return expectedError;
 };
 
-function createRuleTest(rule, messageTemplate) {
+const createRuleTest = (rule) => {
   return function runTest(featureFile, configuration, expected) {
     const expectedErrors = Array.isArray(expected)
-      ? expected.map(createExpectedError(messageTemplate))
-      : createExpectedError(messageTemplate)(expected);
+      ? expected.map(createExpectedError)
+      : createExpectedError(expected);
     const file = createFile(featureFile);
     const errors = lintFile(rule, configuration, file);
     assert.deepEqual(errors, expectedErrors);
   };
-}
+};
 
 module.exports = {
-  createRuleTest: createRuleTest,
+  createRuleTest,
 };

@@ -1,8 +1,8 @@
 const ruleName = 'allowed-tags';
 const ruleTestBase = require('../rule-test-base');
 const rule = require('../../../src/rules/allowed-tags.js');
-const runTest = ruleTestBase.createRuleTest(rule,
-  ({tags, nodeType}) => `Not allowed tag ${tags} on ${nodeType}`);
+const runTest = ruleTestBase.createRuleTest(rule);
+const message = ({tags, nodeType}) => `Not allowed tag ${tags} on ${nodeType}`;
 
 describe('No Allowed Tags Rule', () => {
   it('detects an error when property is not "tags"', () => {
@@ -35,7 +35,7 @@ describe('No Allowed Tags Rule', () => {
     runTest('allowed-tags/Violations.feature', {
       'tags': ['@featuretag', '@scenariotag', '@exampletag'],
     }, [{
-      messageElements: {tags: '@featuretag1', nodeType: 'Feature'},
+      message: message({tags: '@featuretag1', nodeType: 'Feature'}),
       rule: ruleName,
       location: {
         line: 1,
@@ -43,7 +43,7 @@ describe('No Allowed Tags Rule', () => {
       },
     },
     {
-      messageElements: {tags: '@anothertag', nodeType: 'Feature'},
+      message: message({tags: '@anothertag', nodeType: 'Feature'}),
       rule: ruleName,
       location: {
         line: 1,
@@ -51,7 +51,7 @@ describe('No Allowed Tags Rule', () => {
       },
     },
     {
-      messageElements: {tags: '@scenariotag1', nodeType: 'Scenario'},
+      message: message({tags: '@scenariotag1', nodeType: 'Scenario'}),
       rule: ruleName,
       location: {
         line: 7,
@@ -59,7 +59,7 @@ describe('No Allowed Tags Rule', () => {
       },
     },
     {
-      messageElements: {tags: '@scenariotag2', nodeType: 'Scenario'},
+      message: message({tags: '@scenariotag2', nodeType: 'Scenario'}),
       rule: ruleName,
       location: {
         line: 7,
@@ -67,7 +67,7 @@ describe('No Allowed Tags Rule', () => {
       },
     },
     {
-      messageElements: {tags: '@anothertag', nodeType: 'Scenario'},
+      message: message({tags: '@anothertag', nodeType: 'Scenario'}),
       rule: ruleName,
       location: {
         line: 7,
@@ -75,7 +75,7 @@ describe('No Allowed Tags Rule', () => {
       },
     },
     {
-      messageElements: {tags: '@scenariotag1', nodeType: 'ScenarioOutline'},
+      message: message({tags: '@scenariotag1', nodeType: 'ScenarioOutline'}),
       rule: ruleName,
       location: {
         line: 11,
@@ -83,7 +83,7 @@ describe('No Allowed Tags Rule', () => {
       },
     },
     {
-      messageElements: {tags: '@exampletag1', nodeType: 'Examples'},
+      message: message({tags: '@exampletag1', nodeType: 'Examples'}),
       rule: ruleName,
       location: {
         line: 14,
@@ -91,7 +91,7 @@ describe('No Allowed Tags Rule', () => {
       },
     },
     {
-      messageElements: {tags: '@exampletag2', nodeType: 'Examples'},
+      message: message({tags: '@exampletag2', nodeType: 'Examples'}),
       rule: ruleName,
       location: {
         line: 17,
