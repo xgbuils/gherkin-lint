@@ -17,7 +17,7 @@ const createError = (tag) => ({
   location: tag.location,
 });
 
-const verifyTags = ({tags, location}) => {
+const verifyTags = ({tags = [], location}) => {
   return tags.reduce(appendErrors, {
     names: new Set(),
     errors: [],

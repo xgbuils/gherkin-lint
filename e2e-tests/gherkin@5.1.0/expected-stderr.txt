@@ -1,0 +1,4 @@
+/path/to/pickle-lint/e2e-tests/gherkin@5.1.0/Empty.feature
+  1    Empty feature files are disallowed    no-empty-file
+
+

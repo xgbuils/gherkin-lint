@@ -6,8 +6,12 @@ const message = ({left, right}) =>
   `There is more than one space between the tags ${left} and ${right}`;
 
 describe('One space between tags rule', () => {
-  it('doesn\'t raise errors when there are no violations', () => {
+  it('does not raise errors when there are no violations', () => {
     runTest('one-space-between-tags/NoViolations.feature', {}, []);
+  });
+
+  it('does not raise errors when there are no violations', () => {
+    runTest('Empty.feature', {}, []);
   });
 
   it('detects errors for tags on features, scenarios, and scenario outlines', () => {
