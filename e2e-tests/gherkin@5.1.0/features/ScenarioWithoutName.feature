@@ -1,0 +1,2 @@
+Feature: a feature
+Scenario:

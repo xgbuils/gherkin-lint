@@ -13,6 +13,10 @@ describe('No Superfluous Tags Rule', () => {
     runTest('no-superfluous-tags/NoTags.feature', {}, []);
   });
 
+  it('does not raise errors with empty file', () => {
+    runTest('Empty.feature', {}, []);
+  });
+
   it('detects errors for scenarios, and scenario outlines', () => {
     runTest('no-superfluous-tags/SuperfluousScenarioTags.feature', {}, [{
       location: {

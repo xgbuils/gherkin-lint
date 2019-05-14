@@ -4,11 +4,15 @@ const rule = require('../../../src/rules/no-duplicate-tags.js');
 const runTest = ruleTestBase.createRuleTest(rule);
 const message = ({tags}) => `Duplicate tags are not allowed: ${tags}`;
 describe('No Duplicate Tags Rule', () => {
-  it('doesn\'t raise errors when there are no tags', () => {
+  it('does not raise errors when there are no tags', () => {
     runTest('no-duplicate-tags/NoTags.feature', {}, []);
   });
 
-  it('doesn\'t raise errors when there are no duplicated tags', () => {
+  it('does not raise errors with empty file', () => {
+    runTest('Empty.feature', {}, []);
+  });
+
+  it('does not raise errors when there are no duplicated tags', () => {
     runTest('no-duplicate-tags/NoViolations.feature', {}, []);
   });
 
