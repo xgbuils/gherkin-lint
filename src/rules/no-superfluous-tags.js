@@ -9,7 +9,7 @@ const typesMap = {
   ScenarioOutline: 'scenario',
 };
 
-const getNodeTagNames = ({tags, type}) => ({
+const getNodeTagNames = ({tags = [], type}) => ({
   names: new Set(tags.map(getTagName)),
   type: typesMap[type],
 });

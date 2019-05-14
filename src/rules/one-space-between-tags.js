@@ -37,7 +37,7 @@ const testTags = (allTags) => {
 };
 
 module.exports = {
-  run: ({feature}) => flatMapNodeTags(({tags}) => testTags(tags))(feature),
+  run: ({feature}) => flatMapNodeTags(({tags = []}) => testTags(tags))(feature),
   name: rule,
   isValidConfig: () => [],
 };

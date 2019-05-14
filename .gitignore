@@ -1,4 +1,4 @@
-/node_modules
+node_modules
 *.origin
 npm-debug.log
 .DS_Store
