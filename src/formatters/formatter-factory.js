@@ -1,6 +1,6 @@
+const chalk = require('chalk');
 const jsonFormatter = require('./json');
 const stylishFormatter = require('./stylish');
-const style = require('./helpers/style');
 const formatError = require('./helpers/format-error');
 const defaults = require('../defaults');
 
@@ -13,7 +13,7 @@ const lintFormatterFactory = (format) => {
   return {
     format() {
       return [
-        style.boldError('Unsupported format. The supported formats are json and stylish.'),
+        chalk.bold.red('Unsupported format. The supported formats are json and stylish.'),
       ];
     },
   };

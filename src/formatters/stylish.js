@@ -1,6 +1,6 @@
 const {compose, intoArray} = require('../utils/generic');
 const {flatMap} = require('../utils/transducers');
-const style = require('./helpers/style');
+const chalk = require('chalk');
 
 const stylizeRuleErrorWith = (maxErrorMsgLength, maxLineChars) => (error) => {
   let str = '  '; // indent 2 spaces so it looks pretty
@@ -14,7 +14,7 @@ const stylizeRuleErrorWith = (maxErrorMsgLength, maxLineChars) => (error) => {
   }
 
   // print the line number as gray
-  str += style.gray(line) + padding;
+  str += chalk.gray(line) + padding;
 
   let errorMsg = error.message;
 
@@ -27,13 +27,13 @@ const stylizeRuleErrorWith = (maxErrorMsgLength, maxLineChars) => (error) => {
   str += errorMsg + padding;
 
   // print the rule name in gray
-  str += style.gray(error.rule);
+  str += chalk.gray(error.rule);
   // lastly, return our stylish-est string and pretend that this code was never written
   return str;
 };
 
 function stylizeFilePath(filePath) {
-  return style.underline(filePath);
+  return chalk.underline(filePath);
 }
 
 function getMaxLengthOfField(results, selector) {
