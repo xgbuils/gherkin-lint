@@ -10,7 +10,10 @@ function custom() {
       type: 'rule',
       message: 'Another custom-list error',
       rule: rule,
-      line: 109,
+      location: {
+        line: 109,
+        column: 4,
+      },
     },
   ];
 }

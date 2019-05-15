@@ -6,7 +6,10 @@ function custom() {
       type: 'rule',
       message: 'Another custom error',
       rule: rule,
-      line: 456,
+      location: {
+        line: 456,
+        column: 23,
+      },
     },
   ];
 }
