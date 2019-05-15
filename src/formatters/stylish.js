@@ -5,8 +5,8 @@ const style = require('./helpers/style');
 const stylizeRuleErrorWith = (maxErrorMsgLength, maxLineChars) => (error) => {
   let str = '  '; // indent 2 spaces so it looks pretty
   const padding = '    '; // padding of 4 spaces, will be used between line numbers, error msgs and rule names
-
-  let line = error.line ? error.line.toString() : '';
+  let {line} = error.location;
+  line = line ? line.toString() : '';
 
   // add spaces until the line string is as long as our longest line string
   while (line.length < maxLineChars) {
@@ -36,13 +36,13 @@ function stylizeFilePath(filePath) {
   return style.underline(filePath);
 }
 
-function getMaxLengthOfField(results, field) {
+function getMaxLengthOfField(results, selector) {
   let length = 0;
   results.forEach(function({errors}) {
     errors
-      .filter((error) => error[field])
+      .filter((error) => selector(error))
       .forEach(function(error) {
-        const errorStr = error[field].toString();
+        const errorStr = selector(error).toString();
         if (errorStr.length > length) {
           length = errorStr.length;
         }
@@ -60,9 +60,12 @@ const stylizeResult = (result, stylizeRuleError) => {
   ];
 };
 
+const getMessage = ({message}) => message;
+const getLine = ({location}) => location.line;
+
 function format(results) {
-  const maxErrorMsgLength = getMaxLengthOfField(results, 'message');
-  const maxLineChars = getMaxLengthOfField(results, 'line');
+  const maxErrorMsgLength = getMaxLengthOfField(results, getMessage);
+  const maxLineChars = getMaxLengthOfField(results, getLine);
   const stylizeRuleError = stylizeRuleErrorWith(maxErrorMsgLength, maxLineChars);
 
   return intoArray(compose(

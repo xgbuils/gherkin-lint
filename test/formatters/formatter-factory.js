@@ -1,5 +1,6 @@
 const assert = require('chai').assert;
 const formatterFactory = require('../../src/formatters/formatter-factory');
+const {boldError, gray, error, underline} = require('../../src/formatters/helpers/style');
 
 const lintFailures = {
   type: 'lint-errors',
@@ -21,8 +22,8 @@ describe('Formatter factory', function() {
     const formatter = formatterFactory('stylish');
     const result = formatter.format(lintFailures);
     assert.deepEqual(result, [
-      '\u001b[0;4mpath/to/file\u001b[24m',
-      '  \u001b[38;5;243m\u001b[0m    error message    \u001b[38;5;243mundefined\u001b[0m',
+      underline('path/to/file'),
+      `  ${gray('3')}    error message    ${gray(undefined)}`,
       '\n',
     ]);
   });
@@ -51,15 +52,15 @@ describe('Formatter factory', function() {
       }],
     });
     assert.deepEqual(result, [
-      '\u001b[31m\u001b[1merror title\u001b[0m',
-      '\u001b[31m- Invalid rule configuration for "rule-name" - field not needed\u001b[0m',
-      '\u001b[31m- rule does not exist\u001b[0m',
+      boldError('error title'),
+      error('- Invalid rule configuration for "rule-name" - field not needed'),
+      error('- rule does not exist'),
     ]);
   });
 
   it('no existing formatter and linting errors', function() {
     const formatter = formatterFactory('wrong');
     const result = formatter.format(lintFailures);
-    assert.deepEqual(result, ['\u001b[31m\u001b[1mUnsupported format. The supported formats are json and stylish.\u001b[0m']);
+    assert.deepEqual(result, [boldError('Unsupported format. The supported formats are json and stylish.')]);
   });
 });
