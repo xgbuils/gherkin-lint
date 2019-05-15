@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "pickle-lint . > stdout.txt 2> stderr.txt || true && npm run compare",
-    "compare": "npm run compare-stdout && npm run compare-stderr",
-    "compare-stderr": "node ../compare expected-stderr.txt stderr.txt",
-    "compare-stdout": "node ../compare expected-stdout.txt stdout.txt"
+    "compare": "node ../compare"
   },
   "repository": {
     "type": "git",
