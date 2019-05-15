@@ -64,6 +64,7 @@
     "cucumber"
   ],
   "dependencies": {
+    "chalk": "^2.4.2",
     "commander": "^2.20.0",
     "gherkin": "^5.1.0",
     "glob": "^7.1.4"

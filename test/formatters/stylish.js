@@ -1,6 +1,6 @@
 const assert = require('chai').assert;
 const {format} = require('../../src/formatters/stylish');
-const {gray, underline} = require('../../src/formatters/helpers/style');
+const {gray, underline} = require('chalk');
 
 describe('Stylish formatter', () => {
   it('formats lint failures', () => {

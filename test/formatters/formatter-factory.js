@@ -1,6 +1,6 @@
 const assert = require('chai').assert;
 const formatterFactory = require('../../src/formatters/formatter-factory');
-const {boldError, gray, error, underline} = require('../../src/formatters/helpers/style');
+const {bold, gray, red, underline} = require('chalk');
 
 const lintFailures = {
   type: 'lint-errors',
@@ -52,15 +52,15 @@ describe('Formatter factory', function() {
       }],
     });
     assert.deepEqual(result, [
-      boldError('error title'),
-      error('- Invalid rule configuration for "rule-name" - field not needed'),
-      error('- rule does not exist'),
+      bold.red('error title'),
+      red('- Invalid rule configuration for "rule-name" - field not needed'),
+      red('- rule does not exist'),
     ]);
   });
 
   it('no existing formatter and linting errors', function() {
     const formatter = formatterFactory('wrong');
     const result = formatter.format(lintFailures);
-    assert.deepEqual(result, [boldError('Unsupported format. The supported formats are json and stylish.')]);
+    assert.deepEqual(result, [bold.red('Unsupported format. The supported formats are json and stylish.')]);
   });
 });
