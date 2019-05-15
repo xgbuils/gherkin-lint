@@ -1,6 +1,6 @@
 const {Successes, Failures} = require('../successes-failures');
 const sortByLine = (errors) => errors.sort((a, b) => {
-  return a.line - b.line;
+  return a.location.line - b.location.line;
 });
 
 const lintFiles = (files, rules, fileLinter) => {

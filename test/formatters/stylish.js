@@ -1,29 +1,40 @@
 const assert = require('chai').assert;
 const {format} = require('../../src/formatters/stylish');
+const {gray, underline} = require('../../src/formatters/helpers/style');
 
-describe('Stylish formatter', function() {
-  it('formats lint failures', function() {
+describe('Stylish formatter', () => {
+  it('formats lint failures', () => {
     const actual = format([{
       type: 'lint-failures',
       message: 'path/to/file',
       errors: [{
         message: 'weird error message',
-        line: 2,
+        location: {
+          line: 2,
+          column: 5,
+        },
         rule: 'rule-name',
       }, {
         message: 'extra large message error extra large message error',
         rule: 'another-rule',
+        location: {
+          line: 8,
+          column: 3,
+        },
       }, {
         message: 'a',
-        line: 8,
+        location: {
+          line: 12,
+          column: 2,
+        },
         rule: 'weird-rule',
       }],
     }]);
     assert.deepEqual(actual, [
-      '\u001b[0;4mpath/to/file\u001b[24m',
-      '  \u001b[38;5;243m2\u001b[0m    weird error message                                    \u001b[38;5;243mrule-name\u001b[0m',
-      '  \u001b[38;5;243m \u001b[0m    extra large message error extra large message error    \u001b[38;5;243manother-rule\u001b[0m',
-      '  \u001b[38;5;243m8\u001b[0m    a                                                      \u001b[38;5;243mweird-rule\u001b[0m',
+      underline('path/to/file'),
+      `  ${gray('2 ')}    weird error message                                    ${gray('rule-name')}`,
+      `  ${gray('8 ')}    extra large message error extra large message error    ${gray('another-rule')}`,
+      `  ${gray('12')}    a                                                      ${gray('weird-rule')}`,
       '\n',
     ]);
   });

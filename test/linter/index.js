@@ -127,8 +127,16 @@ describe('Linter', () => {
       it('returns the errors of each file', () => {
         const errorsFirstFeature = [{
           message: 'error 1',
+          location: {
+            line: 2,
+            column: 4,
+          },
         }, {
           message: 'error 2',
+          location: {
+            line: 5,
+            column: 3,
+          },
         }];
         const errorsSecondFeature = [];
         const linter = new Linter(
