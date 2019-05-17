@@ -36,22 +36,23 @@ function stylizeFilePath(filePath) {
   return chalk.underline(filePath);
 }
 
-function getMaxLengthOfField(results, selector) {
+function getMaxLengthOfField({errors}, selector) {
   let length = 0;
-  results.forEach(function({errors}) {
-    errors
-      .filter((error) => selector(error))
-      .forEach(function(error) {
-        const errorStr = selector(error).toString();
-        if (errorStr.length > length) {
-          length = errorStr.length;
-        }
-      });
-  });
+  errors.filter((error) => selector(error))
+    .forEach(function(error) {
+      const errorStr = selector(error).toString();
+      if (errorStr.length > length) {
+        length = errorStr.length;
+      }
+    });
   return length;
 }
 
-const stylizeResult = (result, stylizeRuleError) => {
+const stylizeResult = (result) => {
+  const maxErrorMsgLength = getMaxLengthOfField(result, getMessage);
+  const maxLineChars = getMaxLengthOfField(result, getLine);
+  const stylizeRuleError = stylizeRuleErrorWith(maxErrorMsgLength, maxLineChars);
+
   const {errors} = result;
   return [
     [stylizeFilePath(result.message)],
@@ -64,12 +65,8 @@ const getMessage = ({message}) => message;
 const getLine = ({location}) => location.line;
 
 function format(results) {
-  const maxErrorMsgLength = getMaxLengthOfField(results, getMessage);
-  const maxLineChars = getMaxLengthOfField(results, getLine);
-  const stylizeRuleError = stylizeRuleErrorWith(maxErrorMsgLength, maxLineChars);
-
   return intoArray(compose(
-    flatMap((result) => stylizeResult(result, stylizeRuleError)),
+    flatMap((result) => stylizeResult(result)),
     flatMap((lines) => lines)
   ))(results);
 }
