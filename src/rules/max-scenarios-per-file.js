@@ -9,7 +9,7 @@ const defaultConfig = {
   'maxScenarios': 10,
 };
 
-const countExamples = (examples) => reduce((count, {tableBody}) => {
+const countExamples = (examples) => reduce((count, {tableBody = []}) => {
   return count + tableBody.length;
 }, 0)(examples);
 

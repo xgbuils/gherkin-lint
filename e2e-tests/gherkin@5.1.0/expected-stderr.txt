@@ -12,8 +12,11 @@
   2    Missing Scenario name                          no-unnamed-scenarios
 
 
+/path/to/pickle-lint/e2e-tests/gherkin@5.1.0/features/ScenarioWithoutExamplesTable.feature
+  2    Scenario Outline does not have any Examples    no-scenario-outlines-without-examples
+
+
 /path/to/pickle-lint/e2e-tests/gherkin@5.1.0/features/ScenarioWithoutName.feature
-  1    Feature name is already used in: features/ScenarioOutlineWithoutName.feature    no-dupe-feature-names
-  2    Missing Scenario name                                                           no-unnamed-scenarios
+  2    Missing Scenario name    no-unnamed-scenarios
 
 

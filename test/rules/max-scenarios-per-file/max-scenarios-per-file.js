@@ -19,10 +19,9 @@ describe('Max Scenarios per File rule', () => {
     });
   });
 
-  it('does not raise errors when the default configuration is used and there are correct number of scenarios', () => {
-    runTest('max-scenarios-per-file/CorrectNumber.feature', {maxScenarios: 10}, []);
-    runTest('max-scenarios-per-file/CorrectNumberExamples.feature', {maxScenarios: 10}, []);
-    runTest('max-scenarios-per-file/CorrectNumberMixed.feature', {maxScenarios: 10}, []);
+
+  it('does not raise errors when there is a scenario outline without examples', () => {
+    runTest('max-scenarios-per-file/ScenarioOutlineWithoutExamplesTable.feature', {maxScenarios: 10}, []);
   });
 
   context('Too many scenarios', () => {
