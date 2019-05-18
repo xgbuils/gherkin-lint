@@ -70,6 +70,7 @@
     "glob": "^7.1.4"
   },
   "devDependencies": {
+    "@xgbuils/pickle-lint-with-gherkin-5-test": "0.0.1",
     "chai": "^4.2.0",
     "coveralls": "^3.0.3",
     "diff": "^4.0.1",
@@ -83,12 +84,12 @@
     "pickle-lint": "src/main.js"
   },
   "scripts": {
-    "postinstall": "cd e2e-tests/gherkin@5.1.0 && npm install",
     "demo": "node ./src/main.js . -c ./test-data-wip/.gherkin-lintrc",
     "lint": "eslint ./src ./test ./e2e-tests",
     "lint-fix": "eslint ./src ./test/ ./e2e-tests --fix",
     "test-only": "mocha --recursive ./test",
-    "e2e": "cd e2e-tests/gherkin@5.1.0 && npm run test",
+    "e2e-gherkin-5": "pickle-lint-with-gherkin-5-test e2e-tests/gherkin@5.1.0",
+    "e2e": "npm run e2e-gherkin-5",
     "check": "npm-check -i gherkin",
     "test": "npm run lint && npm run test-only && npm run e2e && npm run check",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
