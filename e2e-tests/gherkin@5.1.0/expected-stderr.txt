@@ -20,3 +20,9 @@
   2    Missing Scenario name    no-unnamed-scenarios
 
 
+/path/to/pickle-lint/e2e-tests/gherkin@5.1.0/features/ScenarioWithoutTableBody.feature
+  2    Scenario Outline does not have any Examples               no-scenario-outlines-without-examples
+  4    Examples table variable "key1" is not used in any step    no-unused-variables
+  4    Examples table variable "key2" is not used in any step    no-unused-variables
+
+

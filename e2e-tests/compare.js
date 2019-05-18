@@ -15,22 +15,27 @@ const replaceDirname = (content) => {
   return '';
 };
 
+const appendDiffs = ({chunks, removed, added}) => {
+  if (removed) {
+    chunks.push({
+      removed: justValue(removed),
+    });
+  } else if (added) {
+    chunks.push({
+      added: justValue(added),
+    });
+  }
+  return {chunks};
+};
+
 const collectDiffInfo = (info, lineDiff) => {
-  const {chunks, removed, added} = info;
+  const {chunks} = info;
   if (lineDiff.removed) {
     info.removed = lineDiff.value;
   } else if (lineDiff.added) {
     info.added = lineDiff.value;
   } else {
-    if (removed) {
-      chunks.push({
-        removed: justValue(removed),
-      });
-    } else if (added) {
-      chunks.push({
-        added: justValue(added),
-      });
-    }
+    appendDiffs(info);
     chunks.push({
       equal: justValue(lineDiff.value),
     });
@@ -79,9 +84,9 @@ const formatLineDiff = (chunk) => {
 const buildDiff = (actualContent, expectedContent) => () => {
   const differences = diff.diffLines(actualContent, expectedContent);
   // console.log(differences)
-  const formattedDiff = differences.reduce(collectDiffInfo, {
+  const formattedDiff = appendDiffs(differences.reduce(collectDiffInfo, {
     chunks: [],
-  }).chunks.reduce((line, lineDiff) => line + formatLineDiff(lineDiff), '');
+  })).chunks.reduce((line, lineDiff) => line + formatLineDiff(lineDiff), '');
 
   return actualContent !== expectedContent
     ? formattedDiff
