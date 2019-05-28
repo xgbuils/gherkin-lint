@@ -7,11 +7,11 @@ const message = ({tag, parent, children}) =>
 
 describe('No Homogenous Tags Rule', function() {
   it('doesn\'t raise errors when there are no violations', function() {
-    runTest('no-homogenous-tags/NoViolations.feature', {}, []);
+    return runTest('no-homogenous-tags/NoViolations.feature', {}, []);
   });
 
   it('detects errors for scenarios, and scenario outlines', function() {
-    runTest('no-homogenous-tags/HomogenousScenarioTags.feature', {}, [{
+    return runTest('no-homogenous-tags/HomogenousScenarioTags.feature', {}, [{
       location: {
         line: 1,
         column: 1,
@@ -29,7 +29,7 @@ describe('No Homogenous Tags Rule', function() {
   });
 
   it('detects errors for examples', function() {
-    runTest('no-homogenous-tags/HomogenousExampleTags.feature', {}, [{
+    return runTest('no-homogenous-tags/HomogenousExampleTags.feature', {}, [{
       location: {
         line: 11,
         column: 1,

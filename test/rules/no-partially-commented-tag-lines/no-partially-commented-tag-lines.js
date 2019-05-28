@@ -6,11 +6,11 @@ const runTest = ruleTestBase.createRuleTest(rule);
 
 describe('No partially commented tag lines Rule', () => {
   it('doesn\'t raise errors when there are no violations', () => {
-    runTest('no-partially-commented-tag-lines/NoViolations.feature', {}, []);
+    return runTest('no-partially-commented-tag-lines/NoViolations.feature', {}, []);
   });
 
   it('detects errors there are multiple empty lines', () => {
-    runTest('no-partially-commented-tag-lines/Violations.feature', {}, [{
+    return runTest('no-partially-commented-tag-lines/Violations.feature', {}, [{
       location: {
         line: 6,
         column: 13,

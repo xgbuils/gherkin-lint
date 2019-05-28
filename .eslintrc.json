@@ -29,6 +29,7 @@
       "error",
       "1tbs"
     ],
+    "prefer-promise-reject-errors": "off",
     "space-before-blocks": [
       "error",
       "always"

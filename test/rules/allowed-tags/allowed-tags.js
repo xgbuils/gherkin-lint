@@ -6,7 +6,7 @@ const message = ({tags, nodeType}) => `Not allowed tag ${tags} on ${nodeType}`;
 
 describe('No Allowed Tags Rule', () => {
   it('detects an error when property is not "tags"', () => {
-    runTest('allowed-tags/NoViolations.feature', {
+    return runTest('allowed-tags/NoViolations.feature', {
       'foobar': ['@featuretag', '@scenariotag'],
     }, {
       type: 'config-error',
@@ -20,19 +20,19 @@ describe('No Allowed Tags Rule', () => {
   });
 
   it('doesn\'t raise errors when the file is empty', () => {
-    runTest('Empty.feature', {
+    return runTest('Empty.feature', {
       'tags': ['@featuretag', '@scenariotag'],
     }, []);
   });
 
   it('doesn\'t raise errors when there are no violations', () => {
-    runTest('allowed-tags/NoViolations.feature', {
+    return runTest('allowed-tags/NoViolations.feature', {
       'tags': ['@featuretag', '@scenariotag'],
     }, []);
   });
 
   it('detects errors for features, scenarios, and scenario outlines', () => {
-    runTest('allowed-tags/Violations.feature', {
+    return runTest('allowed-tags/Violations.feature', {
       'tags': ['@featuretag', '@scenariotag', '@exampletag'],
     }, [{
       message: message({tags: '@featuretag1', nodeType: 'Feature'}),

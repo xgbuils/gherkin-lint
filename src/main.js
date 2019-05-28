@@ -31,13 +31,14 @@ const linter = linterFactory({
   rulesDirs: [path.resolve(__dirname, defaultRulesDir)].concat(program.rulesdir || []),
   args: program.args,
 }, Gherkin);
-const {
+
+linter.lint().then(({
   logType,
   errorLines,
   exit,
-} = linter.lint();
+}) => {
+  // eslint-disable-next-line no-console
+  errorLines.forEach((errorLine) => console[logType](errorLine));
 
-// eslint-disable-next-line no-console
-errorLines.forEach((errorLine) => console[logType](errorLine));
-
-process.exit(exit);
+  process.exit(exit);
+});

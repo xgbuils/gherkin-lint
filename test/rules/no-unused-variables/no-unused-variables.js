@@ -8,13 +8,13 @@ const unusedVarMessage = ({variable}) =>
 describe('No unused variables rule', () => {
   it('doesn\'t raise errors when there are no violations', () => {
     const runTest = ruleTestBase.createRuleTest(rule);
-    runTest('no-unused-variables/NoViolations.feature', {}, []);
+    return runTest('no-unused-variables/NoViolations.feature', {}, []);
   });
 
   it('detects unused scenario variables', () => {
     const runTest = ruleTestBase.createRuleTest(rule);
 
-    runTest('no-unused-variables/UnusedStepVariables.feature', {}, [{
+    return runTest('no-unused-variables/UnusedStepVariables.feature', {}, [{
       location: {
         line: 5,
         column: 24,
@@ -59,7 +59,7 @@ describe('No unused variables rule', () => {
   it('detects unused variables in the examples table', () => {
     const runTest = ruleTestBase.createRuleTest(rule);
 
-    runTest('no-unused-variables/UnusedExampleVariables.feature', {}, [{
+    return runTest('no-unused-variables/UnusedExampleVariables.feature', {}, [{
       location: {
         line: 7,
         column: 11,

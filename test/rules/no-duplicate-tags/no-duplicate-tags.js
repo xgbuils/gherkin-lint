@@ -5,19 +5,19 @@ const runTest = ruleTestBase.createRuleTest(rule);
 const message = ({tags}) => `Duplicate tags are not allowed: ${tags}`;
 describe('No Duplicate Tags Rule', () => {
   it('does not raise errors when there are no tags', () => {
-    runTest('no-duplicate-tags/NoTags.feature', {}, []);
+    return runTest('no-duplicate-tags/NoTags.feature', {}, []);
   });
 
   it('does not raise errors with empty file', () => {
-    runTest('Empty.feature', {}, []);
+    return runTest('Empty.feature', {}, []);
   });
 
   it('does not raise errors when there are no duplicated tags', () => {
-    runTest('no-duplicate-tags/NoViolations.feature', {}, []);
+    return runTest('no-duplicate-tags/NoViolations.feature', {}, []);
   });
 
   it('detects errors for features, scenarios, and scenario outlines when there are duplications', () => {
-    runTest('no-duplicate-tags/Violations.feature', {}, [{
+    return runTest('no-duplicate-tags/Violations.feature', {}, [{
       message: message({tags: '@featuretag'}),
       rule: ruleName,
       location: {

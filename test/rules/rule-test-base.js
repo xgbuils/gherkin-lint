@@ -14,12 +14,10 @@ const lintFile = (rule, config, file) => {
   const configSet = {};
   rawRules[ruleName] = rule;
   configSet[ruleName] = ['on', config];
-  const result = new RulesParser(rawRules).parse(configSet);
-  if (result.isSuccess()) {
-    const rules = result.getSuccesses();
-    return new ConfigurableLinter(noConfigurableLinter).lint(file, rules);
-  }
-  return result.getFailures();
+  return new RulesParser(rawRules).parse(configSet).then(
+    (rules) => new ConfigurableLinter(noConfigurableLinter).lint(file, rules),
+    (failures) => (failures)
+  );
 };
 
 const createFile = (fileName) => {
@@ -46,8 +44,9 @@ const createRuleTest = (rule) => {
       ? expected.map(createExpectedError)
       : createExpectedError(expected);
     const file = createFile(featureFile);
-    const errors = lintFile(rule, configuration, file);
-    assert.deepEqual(errors, expectedErrors);
+    return lintFile(rule, configuration, file).then((errors) => {
+      assert.deepEqual(errors, expectedErrors);
+    });
   };
 };
 

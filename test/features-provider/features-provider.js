@@ -67,14 +67,16 @@ describe('Feature Provider', () => {
   context('no ignoring files', () => {
     it('dot pattern returns all features', () => {
       const featureFinder = createFeatureProvider(['.'], noIgnore);
-      const result = featureFinder.provide();
-      assert.equal(result.isSuccess(), true);
-      assert.deepEqual(result.getSuccesses(), [
-        expectedFiles['fixtures']['a.feature'],
-        expectedFiles['fixtures']['foo']['bar.feature'],
-        expectedFiles['fixtures']['foo']['foo.feature'],
-        expectedFiles['other.feature'],
-      ]);
+      return featureFinder.provide().then((result) => {
+        assert.deepEqual(result, [
+          expectedFiles['fixtures']['a.feature'],
+          expectedFiles['fixtures']['foo']['bar.feature'],
+          expectedFiles['fixtures']['foo']['foo.feature'],
+          expectedFiles['other.feature'],
+        ]);
+      }, () => {
+        assert.fail('features provider must not fail');
+      });
     });
 
     it('does not return duplicates', () => {
@@ -82,69 +84,81 @@ describe('Feature Provider', () => {
         'fixtures',
         'fixtures/foo',
       ], noIgnore);
-      const result = featureFinder.provide();
-      assert.equal(result.isSuccess(), true);
-      assert.deepEqual(result.getSuccesses(), [
-        expectedFiles['fixtures']['a.feature'],
-        expectedFiles['fixtures']['foo']['bar.feature'],
-        expectedFiles['fixtures']['foo']['foo.feature'],
-      ]);
+      return featureFinder.provide().then((result) => {
+        assert.deepEqual(result, [
+          expectedFiles['fixtures']['a.feature'],
+          expectedFiles['fixtures']['foo']['bar.feature'],
+          expectedFiles['fixtures']['foo']['foo.feature'],
+        ]);
+      }, () => {
+        assert.fail('features provider must not fail');
+      });
     });
 
     it('two asterisks', () => {
       const featureFinder = createFeatureProvider([
         'fixtures/**',
       ], noIgnore);
-      const result = featureFinder.provide();
-      assert.equal(result.isSuccess(), true);
-      assert.deepEqual(result.getSuccesses(), [
-        expectedFiles['fixtures']['a.feature'],
-        expectedFiles['fixtures']['foo']['bar.feature'],
-        expectedFiles['fixtures']['foo']['foo.feature'],
-      ]);
+      return featureFinder.provide().then((result) => {
+        assert.deepEqual(result, [
+          expectedFiles['fixtures']['a.feature'],
+          expectedFiles['fixtures']['foo']['bar.feature'],
+          expectedFiles['fixtures']['foo']['foo.feature'],
+        ]);
+      }, () => {
+        assert.fail('features provider must not fail');
+      });
     });
 
     it('only directory children files', () => {
       const featureFinder = createFeatureProvider([
         'fixtures/*.*',
       ], noIgnore);
-      const result = featureFinder.provide();
-      assert.equal(result.isSuccess(), true);
-      assert.deepEqual(result.getSuccesses(), [
-        expectedFiles['fixtures']['a.feature'],
-      ]);
+      return featureFinder.provide().then((result) => {
+        assert.deepEqual(result, [
+          expectedFiles['fixtures']['a.feature'],
+        ]);
+      }, () => {
+        assert.fail('features provider must not fail');
+      });
     });
 
     it('complex pattern', () => {
       const featureFinder = createFeatureProvider([
         'fixtures/f*/b*.feature',
       ], noIgnore);
-      const result = featureFinder.provide();
-      assert.equal(result.isSuccess(), true);
-      assert.deepEqual(result.getSuccesses(), [
-        expectedFiles['fixtures']['foo']['bar.feature'],
-      ]);
+      return featureFinder.provide().then((result) => {
+        assert.deepEqual(result, [
+          expectedFiles['fixtures']['foo']['bar.feature'],
+        ]);
+      }, () => {
+        assert.fail('features provider must not fail');
+      });
     });
 
     it('returns a failure when pattern does not find files', () => {
       const featureFinder = createFeatureProvider([
         '/foo',
       ], noIgnore);
-      const result = featureFinder.provide();
-      assert.equal(result.isSuccess(), false);
-      assert.deepEqual(result.getFailures(), noFilesFailure('/foo'));
+      return featureFinder.provide().then(() => {
+        assert.fail('features provider must fail');
+      }, (result) => {
+        assert.deepEqual(result, noFilesFailure('/foo'));
+      });
     });
   });
 
   context('ignoring with custom file', () => {
     it('dot pattern returns all features except ignored files', () => {
       const featureFinder = createFeatureProvider(['.'], customIgnore);
-      const result = featureFinder.provide();
-      assert.equal(result.isSuccess(), true);
-      assert.deepEqual(result.getSuccesses(), [
-        expectedFiles['fixtures']['a.feature'],
-        expectedFiles['other.feature'],
-      ]);
+      return featureFinder.provide().then((result) => {
+        assert.deepEqual(result, [
+          expectedFiles['fixtures']['a.feature'],
+          expectedFiles['other.feature'],
+        ]);
+      }, () => {
+        assert.fail('features provider must not fail');
+      });
     });
 
     it('returns a failure if some pattern does not bring files', () => {
@@ -152,49 +166,59 @@ describe('Feature Provider', () => {
         'fixtures',
         'fixtures/foo',
       ], customIgnore);
-      const result = featureFinder.provide();
-      assert.equal(result.isSuccess(), false);
-      assert.deepEqual(result.getFailures(), noFilesFailure('fixtures/foo'));
+      return featureFinder.provide().then(() => {
+        assert.fail('features provider must fail');
+      }, (result) => {
+        assert.deepEqual(result, noFilesFailure('fixtures/foo'));
+      });
     });
 
     it('complex pattern', () => {
       const featureFinder = createFeatureProvider([
         'f*s',
       ], customIgnore);
-      const result = featureFinder.provide();
-      assert.equal(result.isSuccess(), true);
-      assert.deepEqual(result.getSuccesses(), [
-        expectedFiles['fixtures']['a.feature'],
-      ]);
+      return featureFinder.provide().then((result) => {
+        assert.deepEqual(result, [
+          expectedFiles['fixtures']['a.feature'],
+        ]);
+      }, () => {
+        assert.fail('features provider must not fail');
+      });
     });
 
     it('returns a failure when pattern does not find files', () => {
       const featureFinder = createFeatureProvider([
         'fixtures/f*/b*.feature',
       ], customIgnore);
-      const result = featureFinder.provide();
-      assert.equal(result.isSuccess(), false);
-      assert.deepEqual(result.getFailures(), noFilesFailure('fixtures/f*/b*.feature'));
+      return featureFinder.provide().then(() => {
+        assert.fail('features provider must fail');
+      }, (result) => {
+        assert.deepEqual(result, noFilesFailure('fixtures/f*/b*.feature'));
+      });
     });
   });
 
   context('ignoring with default file', () => {
     it('no pattern returns all features except ignored files', () => {
       const featureFinder = createFeatureProvider([]);
-      const result = featureFinder.provide();
-      assert.equal(result.isSuccess(), true);
-      assert.deepEqual(result.getSuccesses(), [
-        expectedFiles['other.feature'],
-      ]);
+      return featureFinder.provide().then((result) => {
+        assert.deepEqual(result, [
+          expectedFiles['other.feature'],
+        ]);
+      }, () => {
+        assert.fail('features provider must not fail');
+      });
     });
 
     it('returns a failure when pattern does not find files', () => {
       const featureFinder = createFeatureProvider([
         'fixtures/f*/b*.feature',
       ]);
-      const result = featureFinder.provide();
-      assert.equal(result.isSuccess(), false);
-      assert.deepEqual(result.getFailures(), noFilesFailure('fixtures/f*/b*.feature'));
+      return featureFinder.provide().then(() => {
+        assert.fail('features provider must fail');
+      }, (result) => {
+        assert.deepEqual(result, noFilesFailure('fixtures/f*/b*.feature'));
+      });
     });
   });
 
@@ -203,9 +227,11 @@ describe('Feature Provider', () => {
       const featureFinder = createFeatureProvider([
         'no_features',
       ]);
-      const result = featureFinder.provide();
-      assert.equal(result.isSuccess(), false);
-      assert.deepEqual(result.getFailures(), noFilesFailure('no_features'));
+      return featureFinder.provide().then(() => {
+        assert.fail('features provider must fail');
+      }, (result) => {
+        assert.deepEqual(result, noFilesFailure('no_features'));
+      });
     });
   });
 });

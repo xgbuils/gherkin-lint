@@ -6,11 +6,11 @@ const runTest = ruleTestBase.createRuleTest(rule);
 
 describe('No multiple empty lines', () => {
   it('doesn\'t raise errors when there are no violations', () => {
-    runTest('no-multiple-empty-lines/NoViolations.feature', {}, []);
+    return runTest('no-multiple-empty-lines/NoViolations.feature', {}, []);
   });
 
   it('detects errors there are multiple empty lines', () => {
-    runTest('no-multiple-empty-lines/Violations.feature', {}, [{
+    return runTest('no-multiple-empty-lines/Violations.feature', {}, [{
       location: {
         line: 2,
         column: 1,

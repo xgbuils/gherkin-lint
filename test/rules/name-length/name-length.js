@@ -8,7 +8,7 @@ const message = ({element, length}) =>
 
 describe('Name length rule', () => {
   it('detects an error when property is not "Feature", "Step" or "Scenario"', () => {
-    runTest('name-length/CorrectLength.feature', {
+    return runTest('name-length/CorrectLength.feature', {
       'foobar': 60,
     }, {
       type: 'config-error',
@@ -22,15 +22,15 @@ describe('Name length rule', () => {
   });
 
   it('does not raise errors when the default configuration is used and there are no length violations', () => {
-    runTest('name-length/CorrectLength.feature', {}, []);
+    return runTest('name-length/CorrectLength.feature', {}, []);
   });
 
   it('does not raise errors with empty file', () => {
-    runTest('Empty.feature', {}, []);
+    return runTest('Empty.feature', {}, []);
   });
 
   it('detects errors for features, scenarios, scenario outlines and steps', () => {
-    runTest('name-length/WrongLength.feature', {}, [{
+    return runTest('name-length/WrongLength.feature', {}, [{
       message: message({element: 'Feature', length: 89}),
       rule: ruleName,
       location: {

@@ -6,11 +6,11 @@ const runTest = ruleTestBase.createRuleTest(rule);
 
 describe('No empty files Rule', () => {
   it('doesn\'t raise errors when there are no violations', () => {
-    runTest('no-empty-file/NoViolations.feature', {}, []);
+    return runTest('no-empty-file/NoViolations.feature', {}, []);
   });
 
   it('detects errors for empty file', () => {
-    runTest('no-empty-file/BlankFile.feature', {}, [{
+    return runTest('no-empty-file/BlankFile.feature', {}, [{
       location: {
         line: 1,
         column: 1,
@@ -21,7 +21,7 @@ describe('No empty files Rule', () => {
   });
 
   it('detects errors for blank file', () => {
-    runTest('no-empty-file/BlankFile.feature', {}, [{
+    return runTest('no-empty-file/BlankFile.feature', {}, [{
       location: {
         line: 1,
         column: 1,

@@ -14,26 +14,28 @@ const rulesProvider = {
 };
 
 const hasRules = function(rulesOrErrors, expectedRules) {
-  if (!rulesOrErrors.isSuccess()) {
-    assert.fail(`Expected no errors. Found: ${ rulesOrErrors.errors}`);
-  }
-  const rules = rulesOrErrors.getSuccesses().map(function(rule) {
-    return {
-      name: rule.name,
-      config: rule.config,
-    };
+  return rulesOrErrors.then((rules) => {
+    const rulesProjection = rules.map(function(rule) {
+      return {
+        name: rule.name,
+        config: rule.config,
+      };
+    });
+    assert.deepEqual(rulesProjection, expectedRules);
+  }, () => {
+    assert.fail(`Expected no errors. Found: ${rulesOrErrors.errors}`);
   });
-  assert.deepEqual(rules, expectedRules);
 };
 
 const hasErrors = function(rulesOrErrors, expectedErrors) {
-  if (rulesOrErrors.isSuccess()) {
+  return rulesOrErrors.then(() => {
     assert.fail('Expected errors but not found');
-  }
-  assert.deepEqual(rulesOrErrors.getFailures(), {
-    type: 'config-error',
-    message: 'Error(s) in configuration file:',
-    errors: expectedErrors,
+  }, (errors) => {
+    assert.deepEqual(errors, {
+      type: 'config-error',
+      message: 'Error(s) in configuration file:',
+      errors: expectedErrors,
+    });
   });
 };
 
@@ -45,7 +47,7 @@ describe('Rule Parser', function() {
         'no-multiple-empty-lines': 'off',
         'no-trailing-spaces': 'on',
       });
-      hasRules(rulesOrErrors, [{
+      return hasRules(rulesOrErrors, [{
         name: 'no-files-without-scenarios',
         config: {},
       }, {
@@ -60,7 +62,7 @@ describe('Rule Parser', function() {
       const rulesOrErrors = new RulesParser(rulesProvider.provide()).parse({
         'new-line-at-eof': ['on', 'yes'],
       });
-      hasRules(rulesOrErrors, [{
+      return hasRules(rulesOrErrors, [{
         name: 'new-line-at-eof',
         config: 'yes',
       }]);
@@ -79,14 +81,14 @@ describe('Rule Parser', function() {
           'and': 1,
         }],
       });
-      hasRules(rulesOrErrors, []);
+      return hasRules(rulesOrErrors, []);
     });
   });
 
   describe('Verification fails when', function() {
     it('a non existing rule', function() {
       const rulesOrErrors = new RulesParser(rulesProvider.provide()).parse({'fake-rule': 'on'});
-      hasErrors(rulesOrErrors, [{
+      return hasErrors(rulesOrErrors, [{
         type: 'undefined-rule',
         message: 'Rule "fake-rule" does not exist',
       }]);
@@ -95,7 +97,7 @@ describe('Rule Parser', function() {
     it('first item is not "on" or "off"', function() {
       const rulesOrErrors = new RulesParser(rulesProvider.provide())
         .parse({'indentation': ['yes', {}]});
-      hasErrors(rulesOrErrors, [{
+      return hasErrors(rulesOrErrors, [{
         type: 'config-rule-error',
         message: 'The first part of config should be "on" or "off"',
       }]);
@@ -104,7 +106,7 @@ describe('Rule Parser', function() {
     it('array config does not have 2 items', function() {
       const rulesOrErrors = new RulesParser(rulesProvider.provide())
         .parse({'indentation': ['on', {}, 2]});
-      hasErrors(rulesOrErrors, [{
+      return hasErrors(rulesOrErrors, [{
         type: 'config-rule-error',
         message: 'The config should only have 2 parts.',
       }]);
@@ -115,7 +117,7 @@ describe('Rule Parser', function() {
         'indentation': ['on', {'featur': 0}],
         'new-line-at-eof': ['on', 'y'],
       });
-      hasErrors(rulesOrErrors, [{
+      return hasErrors(rulesOrErrors, [{
         type: 'config-rule-error',
         rule: 'indentation',
         message: 'The rule does not have the specified configuration option "featur"',
@@ -129,7 +131,7 @@ describe('Rule Parser', function() {
     it('string config is not "on" or "off"', function() {
       const rulesOrErrors = new RulesParser(rulesProvider.provide())
         .parse({'indentation': 'no'});
-      hasErrors(rulesOrErrors, [{
+      return hasErrors(rulesOrErrors, [{
         type: 'config-rule-error',
         message: 'config should be "on" or "off"',
       }]);

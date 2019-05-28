@@ -1,44 +1,47 @@
-const {Successes, Failures} = require('../successes-failures');
 const sortByLine = (errors) => errors.sort((a, b) => {
   return a.location.line - b.location.line;
 });
 
 const lintFiles = (files, rules, fileLinter) => {
-  const output = [];
+  const outputPromise = files.reduce((errorsPromise, file) => {
+    return errorsPromise.then((errors) => {
+      return fileLinter.lint(file, rules).then((fileErrors) => {
+        if (fileErrors.length > 0) {
+          const fileBlob = {
+            message: file.path,
+            errors: sortByLine(fileErrors),
+          };
+          errors.push(fileBlob);
+        }
+        return errors;
+      });
+    });
+  }, Promise.resolve([]));
 
-  files.forEach((file) => {
-    const errors = fileLinter.lint(file, rules);
-    if (errors.length > 0) {
-      const fileBlob = {
-        message: file.path,
-        errors: sortByLine(errors),
-      };
-      output.push(fileBlob);
-    }
+  return outputPromise.then((output) => {
+    return output.length > 0
+      ? Promise.reject({
+        type: 'lint-errors',
+        errors: output,
+      })
+      : Promise.resolve({});
   });
-
-  return output.length > 0
-    ? Failures.of({
-      type: 'lint-errors',
-      errors: output,
-    })
-    : Successes.of({});
 };
 
 class Linter {
-  constructor(configProvider, rulesParser, featureFinder, fileLinter) {
+  constructor(configProvider, rulesParser, featureProvider, fileLinter) {
     this.configProvider = configProvider;
     this.rulesParser = rulesParser;
-    this.featureFinder = featureFinder;
+    this.featureProvider = featureProvider;
     this.fileLinter = fileLinter;
   }
 
   lint() {
     const result = this.configProvider.provide()
-      .chain((config) => this.rulesParser.parse(config))
-      .chain((rules) => {
-        return this.featureFinder.provide()
-          .chain((files) => lintFiles(files, rules, this.fileLinter));
+      .then((config) => this.rulesParser.parse(config))
+      .then((rules) => {
+        return this.featureProvider.provide()
+          .then((files) => lintFiles(files, rules, this.fileLinter));
       });
     return result;
   }

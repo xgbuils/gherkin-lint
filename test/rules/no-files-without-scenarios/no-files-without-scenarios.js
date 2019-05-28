@@ -6,11 +6,11 @@ const runTest = ruleTestBase.createRuleTest(rule);
 
 describe('No files without scenarios Rule', () => {
   it('doesn\'t raise errors when there are no violations', () => {
-    runTest('no-files-without-scenarios/NoViolations.feature', {}, []);
+    return runTest('no-files-without-scenarios/NoViolations.feature', {}, []);
   });
 
   it('detects errors when there are not scenarios', () => {
-    runTest('no-files-without-scenarios/Violations.feature', {}, [{
+    return runTest('no-files-without-scenarios/Violations.feature', {}, [{
       location: {
         line: 1,
         column: 1,

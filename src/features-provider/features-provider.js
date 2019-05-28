@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const getPath = require('../utils/get-path');
 const defaults = require('../defaults');
-const {Successes, Failures} = require('../successes-failures');
 const getGlobPatterns = require('./get-glob-patterns');
 
 const defaultIgnoredFiles = 'node_modules/**'; // Ignore node_modules by default
@@ -45,7 +44,7 @@ const getIgnorePatterns = (ignore, cwd) => {
 };
 
 const reportFailure = (pattern) => {
-  return Failures.of({
+  return Promise.reject({
     type: 'feature-pattern-error',
     message: `${invalidFormatMessage(pattern)}${USE_EXISTING_FEATURE}`,
   });
@@ -66,7 +65,7 @@ class FeatureProvider {
       ignore: getIgnorePatterns(ignore, cwd),
       cwd,
     };
-    let result = Successes.of([]);
+    let resultPromise = Promise.resolve([]);
     for (let index = 0; index < patterns.length; ++index) {
       const pattern = patterns[index];
       const globPatterns = getGlobPatterns(pattern, '**/*.feature');
@@ -76,10 +75,13 @@ class FeatureProvider {
       if (fileNames.length === 0) {
         return reportFailure(pattern);
       }
-      result = result.append(Successes.of([...fileNames]));
+      resultPromise = resultPromise.then((result) => {
+        result.push(...fileNames);
+        return result;
+      });
     }
 
-    return result.chain((files) => Successes.of(parseFileList(files)));
+    return resultPromise.then((files) => parseFileList(files));
   }
 }
 

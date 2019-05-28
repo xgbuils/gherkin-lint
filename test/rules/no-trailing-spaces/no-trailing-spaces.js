@@ -7,11 +7,11 @@ const runTest = ruleTestBase.createRuleTest(rule, () =>
 
 describe('No Trailing Spaces Rule', () => {
   it('doesn\'t raise errors when there are no violations', () => {
-    runTest('no-trailing-spaces/NoViolations.feature', {}, []);
+    return runTest('no-trailing-spaces/NoViolations.feature', {}, []);
   });
 
   it('detects errors for scenarios, and scenario outlines', () => {
-    runTest('no-trailing-spaces/Violations.feature', {}, [{
+    return runTest('no-trailing-spaces/Violations.feature', {}, [{
       location: {
         line: 3,
         column: 12,

@@ -6,19 +6,19 @@ const runTest = ruleTestBase.createRuleTest(rule);
 
 describe('No empty Backgrounds Rule', () => {
   it('does not raise errors when there are no background', () => {
-    runTest('no-empty-background/NoBackground.feature', {}, []);
+    return runTest('no-empty-background/NoBackground.feature', {}, []);
   });
 
   it('does not raise errors when there are no violations', () => {
-    runTest('no-empty-background/NoViolations.feature', {}, []);
+    return runTest('no-empty-background/NoViolations.feature', {}, []);
   });
 
   it('does not raise errors whith an empty file', () => {
-    runTest('Empty.feature', {}, []);
+    return runTest('Empty.feature', {}, []);
   });
 
   it('detects errors for scenarios, and scenario outlines', () => {
-    runTest('no-empty-background/Violations.feature', {}, [{
+    return runTest('no-empty-background/Violations.feature', {}, [{
       location: {
         line: 4,
         column: 2,

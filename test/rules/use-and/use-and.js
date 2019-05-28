@@ -7,11 +7,11 @@ const message = ({keyword, text}) =>
 
 describe('Use And Rule', () => {
   it('does not raise errors when there are no violations', () => {
-    runTest('use-and/NoViolations.feature', {}, []);
+    return runTest('use-and/NoViolations.feature', {}, []);
   });
 
   it('detects errors for scenarios, and scenario outlines', () => {
-    runTest('use-and/Violations.feature', {}, [{
+    return runTest('use-and/Violations.feature', {}, [{
       location: {
         line: 9,
         column: 6,

@@ -7,7 +7,7 @@ const runTest = ruleTestBase.createRuleTest(rule);
 
 describe('New Line At EOF Rule', () => {
   it('detects an error when property is not "yes" or "no"', () => {
-    runTest('new-line-at-eof/NewLineAtEOF.feature', 'maybe', {
+    return runTest('new-line-at-eof/NewLineAtEOF.feature', 'maybe', {
       message: 'Error(s) in configuration file:',
       type: 'config-error',
       errors: [{
@@ -20,11 +20,11 @@ describe('New Line At EOF Rule', () => {
 
   context('"yes" configuration', () => {
     it('doesn\'t raise errors when there are new line at eof', () => {
-      runTest('new-line-at-eof/NewLineAtEOF.feature', 'yes', []);
+      return runTest('new-line-at-eof/NewLineAtEOF.feature', 'yes', []);
     });
 
     it('raises error when there are no new line at eof', () => {
-      runTest('new-line-at-eof/NoNewLineAtEOF.feature', 'yes', [{
+      return runTest('new-line-at-eof/NoNewLineAtEOF.feature', 'yes', [{
         message: LINE_IS_REQUIRED,
         rule: ruleName,
         location: {
@@ -37,7 +37,7 @@ describe('New Line At EOF Rule', () => {
 
   context('"no" configuration', () => {
     it('raises error when there are new line at eof', () => {
-      runTest('new-line-at-eof/NewLineAtEOF.feature', 'no', [{
+      return runTest('new-line-at-eof/NewLineAtEOF.feature', 'no', [{
         message: LINE_IS_FORBIDDEN,
         rule: ruleName,
         location: {
@@ -48,7 +48,7 @@ describe('New Line At EOF Rule', () => {
     });
 
     it('doesn\'t raise error when there are no new line at eof', () => {
-      runTest('new-line-at-eof/NoNewLineAtEOF.feature', 'no', []);
+      return runTest('new-line-at-eof/NoNewLineAtEOF.feature', 'no', []);
     });
   });
 });

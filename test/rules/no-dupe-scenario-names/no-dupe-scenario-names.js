@@ -9,11 +9,11 @@ const VIOLATIONS_FILE = 'no-dupe-scenario-names/Violations.feature';
 
 describe('No Duplicate Scenario Names Rule', () => {
   it('doesn\'t raise errors when there are no violations', () => {
-    runTest(NO_VIOLATIONS_FILE, {}, []);
+    return runTest(NO_VIOLATIONS_FILE, {}, []);
   });
 
   it('detects errors for features, scenarios, and scenario outlines', () => {
-    runTest(VIOLATIONS_FILE, {}, [{
+    return runTest(VIOLATIONS_FILE, {}, [{
       message: message({
         files: [
           `${PATH}${VIOLATIONS_FILE}:7`,

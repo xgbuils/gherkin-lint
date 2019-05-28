@@ -2,7 +2,8 @@ const assert = require('chai').assert;
 const fs = require('fs');
 const NoConfigurableLinter = require('../../../src/linter/no-configurable-linter.js');
 const Gherkin = require('gherkin');
-const parser = new Gherkin.Parser();
+const ParserAdapter = require('../../../src/parser-adapter');
+const parser = ParserAdapter(Gherkin);
 const linter = new NoConfigurableLinter(parser);
 const createFile = (fileName) => ({
   content: fs.readFileSync(
@@ -20,16 +21,15 @@ const languageKeywords = ['Given', 'Scenario'];
 
 const successfulParser = {
   parse() {
-    return {
+    return Promise.resolve({
       feature: parsedFeature,
       languageKeywords,
-    };
+    });
   },
 };
 
 describe('No Configurable File Linter', function() {
   it('detects up-to-one-background-per-file violations', function() {
-    const result = linter.lint(createFile('MultipleBackgrounds.feature'));
     const expected = [{
       location: {
         line: 9,
@@ -38,11 +38,15 @@ describe('No Configurable File Linter', function() {
       message: 'Multiple "Background" definitions in the same file are disallowed',
       rule: 'up-to-one-background-per-file',
     }];
-    assert.deepEqual(result.getFailures(), expected);
+    return linter.lint(createFile('MultipleBackgrounds.feature'))
+      .then(() => {
+        assert.fail('linter must not fail');
+      }, (actualError) => {
+        assert.deepEqual(actualError, expected);
+      });
   });
 
   it('detects no-tags-on-backgrounds violations', function() {
-    const result = linter.lint(createFile('TagOnBackground.feature'));
     const expected = [{
       location: {
         line: 4,
@@ -51,11 +55,15 @@ describe('No Configurable File Linter', function() {
       message: 'Tags on Backgrounds are dissallowed',
       rule: 'no-tags-on-backgrounds',
     }];
-    assert.deepEqual(result.getFailures(), expected);
+    return linter.lint(createFile('TagOnBackground.feature'))
+      .then(() => {
+        assert.fail('linter must not fail');
+      }, (actualError) => {
+        assert.deepEqual(actualError, expected);
+      });
   });
 
   it('detects one-feature-per-file violations', function() {
-    const result = linter.lint(createFile('MultipleFeatures.feature'));
     const expected = [{
       location: {
         line: 7,
@@ -64,11 +72,15 @@ describe('No Configurable File Linter', function() {
       message: 'Multiple "Feature" definitions in the same file are disallowed',
       rule: 'one-feature-per-file',
     }];
-    assert.deepEqual(result.getFailures(), expected);
+    return linter.lint(createFile('MultipleFeatures.feature'))
+      .then(() => {
+        assert.fail('linter must not fail');
+      }, (actualError) => {
+        assert.deepEqual(actualError, expected);
+      });
   });
 
   it('detects no-multiline-steps violations', function() {
-    const result = linter.lint(createFile('MultilineStep.feature'));
     const expected = [{
       location: {
         line: 9,
@@ -77,11 +89,15 @@ describe('No Configurable File Linter', function() {
       message: 'Steps should begin with "Given", "When", "Then", "And" or "But". Multiline steps are dissallowed',
       rule: 'no-multiline-steps',
     }];
-    assert.deepEqual(result.getFailures(), expected);
+    return linter.lint(createFile('MultilineStep.feature'))
+      .then(() => {
+        assert.fail('linter must not fail');
+      }, (actualError) => {
+        assert.deepEqual(actualError, expected);
+      });
   });
 
   it('detects no-multiline-steps violations in backgrounds', function() {
-    const result = linter.lint(createFile('MultilineBackgroundStep.feature'));
     const expected = [{
       location: {
         line: 5,
@@ -90,11 +106,15 @@ describe('No Configurable File Linter', function() {
       message: 'Steps should begin with "Given", "When", "Then", "And" or "But". Multiline steps are dissallowed',
       rule: 'no-multiline-steps',
     }];
-    assert.deepEqual(result.getFailures(), expected);
+    return linter.lint(createFile('MultilineBackgroundStep.feature'))
+      .then(() => {
+        assert.fail('linter must not fail');
+      }, (actualError) => {
+        assert.deepEqual(actualError, expected);
+      });
   });
 
   it('detects no-multiline-steps violations in scenario outlines', function() {
-    const result = linter.lint(createFile('MultilineScenarioOutlineStep.feature'));
     const expected = [{
       location: {
         line: 9,
@@ -103,11 +123,15 @@ describe('No Configurable File Linter', function() {
       message: 'Steps should begin with "Given", "When", "Then", "And" or "But". Multiline steps are dissallowed',
       rule: 'no-multiline-steps',
     }];
-    assert.deepEqual(result.getFailures(), expected);
+    return linter.lint(createFile('MultilineScenarioOutlineStep.feature'))
+      .then(() => {
+        assert.fail('linter must not fail');
+      }, (actualError) => {
+        assert.deepEqual(actualError, expected);
+      });
   });
 
   it('detects multiline scenario and multiple features errors', function() {
-    const result = linter.lint(createFile('MultilineStepAndTwoFeatures.feature'));
     const expected = [{
       location: {
         line: 9,
@@ -123,11 +147,15 @@ describe('No Configurable File Linter', function() {
       message: 'Multiple "Feature" definitions in the same file are disallowed',
       rule: 'one-feature-per-file',
     }];
-    assert.deepEqual(result.getFailures(), expected);
+    return linter.lint(createFile('MultilineStepAndTwoFeatures.feature'))
+      .then(() => {
+        assert.fail('linter must not fail');
+      }, (actualError) => {
+        assert.deepEqual(actualError, expected);
+      });
   });
 
   it('detects no-examples-in-scenarios violations', function() {
-    const result = linter.lint(createFile('ExampleInScenario.feature'));
     const expected = [{
       location: {
         line: 6,
@@ -136,11 +164,15 @@ describe('No Configurable File Linter', function() {
       message: 'Cannot use "Examples" in a "Scenario", use a "Scenario Outline" instead',
       rule: 'no-examples-in-scenarios',
     }];
-    assert.deepEqual(result.getFailures(), expected);
+    return linter.lint(createFile('ExampleInScenario.feature'))
+      .then(() => {
+        assert.fail('linter must not fail');
+      }, (actualError) => {
+        assert.deepEqual(actualError, expected);
+      });
   });
 
   it('detects additional violations that happen after the "no-tags-on-backgrounds" rule', function() {
-    const result = linter.lint(createFile('TagOnBackgroundAndMultilineStep.feature'));
     const expected = [{
       location: {
         line: 4,
@@ -156,11 +188,15 @@ describe('No Configurable File Linter', function() {
       message: 'Steps should begin with "Given", "When", "Then", "And" or "But". Multiline steps are dissallowed',
       rule: 'no-multiline-steps',
     }];
-    assert.deepEqual(result.getFailures(), expected);
+    return linter.lint(createFile('TagOnBackgroundAndMultilineStep.feature'))
+      .then(() => {
+        assert.fail('linter must not fail');
+      }, (actualError) => {
+        assert.deepEqual(actualError, expected);
+      });
   });
 
   it('detects additional violations that happen after the "one-feature-per-file violations" rule', function() {
-    const result = linter.lint(createFile('MultipleBackgroundsWithTags.feature'));
     const expected = [{
       location: {
         line: 4,
@@ -169,7 +205,12 @@ describe('No Configurable File Linter', function() {
       message: 'Tags on Backgrounds are dissallowed',
       rule: 'no-tags-on-backgrounds',
     }];
-    assert.deepEqual(result.getFailures(), expected);
+    return linter.lint(createFile('MultipleBackgroundsWithTags.feature'))
+      .then(() => {
+        assert.fail('linter must not fail');
+      }, (actualError) => {
+        assert.deepEqual(actualError, expected);
+      });
   });
 
   it('correctly parses files that have the correct Gherkin format', function() {
@@ -178,13 +219,14 @@ describe('No Configurable File Linter', function() {
       filePath: 'path/to/file',
       content: '',
     };
-    const result = noConfigurableLinter.lint(file);
-    assert.equal(result.isSuccess(), true);
-    assert.deepEqual(result.getSuccesses(), [{
-      feature: parsedFeature,
-      file,
-      languageKeywords,
-    }]);
+    return noConfigurableLinter.lint(file)
+      .then((result) => {
+        assert.deepEqual(result, [{
+          feature: parsedFeature,
+          file,
+          languageKeywords,
+        }]);
+      });
   });
 
   it('parser throws an error with unexpected error message', () => {
@@ -200,12 +242,16 @@ describe('No Configurable File Linter', function() {
       },
     };
     const wrongLinter = new NoConfigurableLinter(wrongParser);
-    const result = wrongLinter.lint(createFile('ExampleInScenario.feature'));
-    assert.deepEqual(result.getFailures(), [{
-      rule: 'unexpected-error',
-      message: error.message,
-      location: {},
-    }]);
+    return wrongLinter.lint(createFile('ExampleInScenario.feature'))
+      .then(() => {
+        assert.fail('linter must fail');
+      }, (actualError) => {
+        assert.deepEqual(actualError, [{
+          rule: 'unexpected-error',
+          message: error.message,
+          location: {},
+        }]);
+      });
   });
 
   it('parser throws an error without errors property', () => {
@@ -216,7 +262,11 @@ describe('No Configurable File Linter', function() {
       },
     };
     const wrongLinter = new NoConfigurableLinter(wrongParser);
-    const test = () => wrongLinter.lint(createFile('ExampleInScenario.feature'));
-    assert.throws(test, error);
+    return wrongLinter.lint(createFile('ExampleInScenario.feature'))
+      .then(() => {
+        assert.fail('linter must fail');
+      }, (actualError) => {
+        assert.deepEqual(error, actualError);
+      });
   });
 });

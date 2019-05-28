@@ -116,31 +116,31 @@ const wrongIndentationErrors = [{
 
 describe('Indentation rule', () => {
   it('doesn\'t raise errors when the default conifguration is used and there are no indentation violations (spaces)', () => {
-    runTest('indentation/CorrectIndentationSpaces.feature', {}, []);
+    return runTest('indentation/CorrectIndentationSpaces.feature', {}, []);
   });
 
   it('doesn\'t raise errors when scenario outline does not have examples', () => {
-    runTest('indentation/CorrectIndentationWithoutExamples.feature', {}, []);
+    return runTest('indentation/CorrectIndentationWithoutExamples.feature', {}, []);
   });
 
   it('doesn\'t raise errors when the file is empty', () => {
-    runTest('Empty.feature', {}, []);
+    return runTest('Empty.feature', {}, []);
   });
 
   it('doesn\'t raise errors when the default conifguration is used are and there no indentation violations (tabs)', () => {
-    runTest('indentation/CorrectIndentationTabs.feature', {}, []);
+    return runTest('indentation/CorrectIndentationTabs.feature', {}, []);
   });
 
   it('detects errors for features, backgrounds, scenarios, scenario outlines and steps (spaces)', () => {
-    runTest('indentation/WrongIndentationSpaces.feature', {}, wrongIndentationErrors);
+    return runTest('indentation/WrongIndentationSpaces.feature', {}, wrongIndentationErrors);
   });
 
   it('detects errors for features, backgrounds, scenarios, scenario outlines and steps (tabs)', () => {
-    runTest('indentation/WrongIndentationTabs.feature', {}, wrongIndentationErrors);
+    return runTest('indentation/WrongIndentationTabs.feature', {}, wrongIndentationErrors);
   });
 
   it('detects errors for features, backgrounds, scenarios, scenario outlines and steps in other languages', () => {
-    runTest('indentation/WrongIndentationDifferentLanguage.feature', {}, [{
+    return runTest('indentation/WrongIndentationDifferentLanguage.feature', {}, [{
       message: message({element: 'Feature', expected: 0, actual: 4}),
       rule: ruleName,
       location: {
@@ -249,20 +249,20 @@ describe('Indentation rule', () => {
   });
 
   it('defaults the tag indentation settings when they are not set', () => {
-    runTest('indentation/CorrectIndentationWithFeatureAndScenarioOverrides.feature', {
+    return runTest('indentation/CorrectIndentationWithFeatureAndScenarioOverrides.feature', {
       'Feature': 1,
       'Scenario': 3,
     }, []);
   });
 
   it('observe tag indentation settings when they are overriden', () => {
-    runTest('indentation/CorrectIndentationWithScenarioTagOverrides.feature', {
+    return runTest('indentation/CorrectIndentationWithScenarioTagOverrides.feature', {
       'scenario tag': 3,
     }, []);
   });
 
   it('Wrong "then" step in customized configuration', () => {
-    runTest('indentation/WrongSteps.feature', {
+    return runTest('indentation/WrongSteps.feature', {
       Feature: 1,
       Background: 4,
       Scenario: 1,
@@ -288,13 +288,13 @@ describe('Indentation rule', () => {
 
   context('DocString', () => {
     it('Correct indentation', () => {
-      runTest('indentation/CorrectIndentationDocStrings.feature', {
+      return runTest('indentation/CorrectIndentationDocStrings.feature', {
         DocString: 4,
       }, []);
     });
 
     it('Wrong indentation', () => {
-      runTest('indentation/WrongIndentationDocStrings.feature', {
+      return runTest('indentation/WrongIndentationDocStrings.feature', {
         DocString: 4,
       }, [{
         message: message({element: 'DocString', expected: 4, actual: 2}),

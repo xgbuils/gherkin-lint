@@ -6,19 +6,19 @@ const message = ({tag, label}) => `${tag} tag is already used at ${label} level`
 
 describe('No Superfluous Tags Rule', () => {
   it('does not raise errors when there are no violations', () => {
-    runTest('no-superfluous-tags/NoViolations.feature', {}, []);
+    return runTest('no-superfluous-tags/NoViolations.feature', {}, []);
   });
 
   it('does not raise errors when there are no tags', () => {
-    runTest('no-superfluous-tags/NoTags.feature', {}, []);
+    return runTest('no-superfluous-tags/NoTags.feature', {}, []);
   });
 
   it('does not raise errors with empty file', () => {
-    runTest('Empty.feature', {}, []);
+    return runTest('Empty.feature', {}, []);
   });
 
   it('detects errors for scenarios, and scenario outlines', () => {
-    runTest('no-superfluous-tags/SuperfluousScenarioTags.feature', {}, [{
+    return runTest('no-superfluous-tags/SuperfluousScenarioTags.feature', {}, [{
       location: {
         line: 7,
         column: 3,
@@ -43,7 +43,7 @@ describe('No Superfluous Tags Rule', () => {
   });
 
   it('detects errors for examples', () => {
-    runTest('no-superfluous-tags/SuperfluousExampleTags.feature', {}, [{
+    return runTest('no-superfluous-tags/SuperfluousExampleTags.feature', {}, [{
       location: {
         line: 10,
         column: 13,
@@ -61,7 +61,7 @@ describe('No Superfluous Tags Rule', () => {
   });
 
   it('detects errors for combined superfluous tags', () => {
-    runTest('no-superfluous-tags/CombinedSuperfluousTags.feature', {}, [{
+    return runTest('no-superfluous-tags/CombinedSuperfluousTags.feature', {}, [{
       location: {
         line: 7,
         column: 6,

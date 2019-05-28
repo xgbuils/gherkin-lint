@@ -27,15 +27,25 @@ const linterFactory = ({format, ignore, config, rulesDirs, args}, Gherkin) => {
 
   return {
     lint() {
-      const results = linter.lint();
-      const successful = results.isSuccess();
-      const failures = successful ? results.getSuccesses() : results.getFailures();
-      const errorLines = formatter.format(failures);
-      return {
-        logType: successful ? 'log' : 'error',
-        errorLines,
-        exit: errorLines.length > 0 ? 1 : 0,
-      };
+      return linter.lint().then(
+        (results) => ({
+          logType: 'log',
+          failures: {},
+        }),
+        (failures) => ({
+          logType: 'error',
+          failures,
+        })
+      )
+        .then(({logType, failures}) => ({
+          logType,
+          errorLines: formatter.format(failures),
+        }))
+        .then(({logType, errorLines}) => ({
+          logType,
+          errorLines,
+          exit: errorLines.length > 0 ? 1 : 0,
+        }));
     },
   };
 };

@@ -1,5 +1,4 @@
 const expect = require('chai').expect;
-const {Successes, Failures} = require('../../../src/successes-failures');
 const ConfigurableLinter = require('../../../src/linter/configurable-linter');
 
 const errorRule = (name, error) => ({
@@ -44,7 +43,7 @@ const PRIORITY_RULE_THAT_FAILS = priorityRule(
 
 const successfulNoConfigurableLinter = {
   lint() {
-    return Successes.of([{}]);
+    return Promise.resolve([{}]);
   },
 };
 const file = {};
@@ -63,9 +62,14 @@ describe('ConfigurableLinter', function() {
             ANOTHER_RULE_THAT_FAILS,
           ];
 
-          expect(linter.lint(file, rules)).to.be.deep.equal([
-            ERROR_THREE,
-          ]);
+          return linter.lint(file, rules)
+            .then((result) => {
+              expect(result).to.be.deep.equal([
+                ERROR_THREE,
+              ]);
+            }, () => {
+              expect.fail('linter must not reject');
+            });
         });
       });
 
@@ -80,10 +84,15 @@ describe('ConfigurableLinter', function() {
             ANOTHER_RULE_THAT_FAILS,
           ];
 
-          expect(linter.lint(file, rules)).to.be.deep.equal([
-            ERROR_ONE,
-            ERROR_TWO,
-          ]);
+          return linter.lint(file, rules)
+            .then((result) => {
+              expect(result).to.be.deep.equal([
+                ERROR_ONE,
+                ERROR_TWO,
+              ]);
+            }, () => {
+              expect.fail('linter must not reject');
+            });
         });
       });
     });
@@ -97,16 +106,26 @@ describe('ConfigurableLinter', function() {
         ANOTHER_RULE_THAT_FAILS,
       ];
 
-      expect(linter.lint(file, rules)).to.be.deep.equal([
-        ERROR_ONE,
-        ERROR_TWO,
-      ]);
+      return linter.lint(file, rules)
+        .then((result) => {
+          expect(result).to.be.deep.equal([
+            ERROR_ONE,
+            ERROR_TWO,
+          ]);
+        }, () => {
+          expect.fail('linter must not reject');
+        });
     });
 
     it('returns no errors when all rules are disabled', function() {
       const linter = new ConfigurableLinter(successfulNoConfigurableLinter, []);
 
-      expect(linter.lint(file, [])).to.be.deep.equal([]);
+      return linter.lint(file, [])
+        .then((result) => {
+          expect(result).to.be.deep.equal([]);
+        }, () => {
+          expect.fail('linter must not reject');
+        });
     });
   });
 
@@ -119,7 +138,7 @@ describe('ConfigurableLinter', function() {
       };
       const failedNoConfigurableLinter = {
         lint() {
-          return Failures.of([error]);
+          return Promise.reject([error]);
         },
       };
       const linter = new ConfigurableLinter(failedNoConfigurableLinter);
@@ -129,7 +148,12 @@ describe('ConfigurableLinter', function() {
         PRIORITY_RULE_THAT_FAILS,
       ];
 
-      expect(linter.lint(file, rules)).to.be.deep.equal([error]);
+      return linter.lint(file, rules)
+        .then((result) => {
+          expect(result).to.be.deep.equal([error]);
+        }, () => {
+          expect.fail('linter must not reject');
+        });
     });
   });
 });

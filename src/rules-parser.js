@@ -1,5 +1,4 @@
 const enablingSettings = ['on', 'off'];
-const {Successes, Failures} = require('./successes-failures');
 const RuleCommand = require('./rule-command');
 
 function isValidEnablingSetting(enablingSetting) {
@@ -10,20 +9,20 @@ function normalizeRule(rules, config, ruleName) {
   const rule = rules[ruleName];
   const ruleConfig = config[ruleName];
   if (!rule) {
-    return Failures.of([{
+    return Promise.reject([{
       type: 'undefined-rule',
       message: `Rule "${ ruleName }" does not exist`,
     }]);
   } else if (Array.isArray(ruleConfig)) {
     if (!isValidEnablingSetting(ruleConfig[0])) {
-      return Failures.of([{
+      return Promise.reject([{
         type: 'config-rule-error',
         message: 'The first part of config should be "on" or "off"',
       }]);
     }
 
     if (ruleConfig.length != 2 ) {
-      return Failures.of([{
+      return Promise.reject([{
         type: 'config-rule-error',
         message: 'The config should only have 2 parts.',
       }]);
@@ -31,11 +30,11 @@ function normalizeRule(rules, config, ruleName) {
     const errorList = rule.isValidConfig(config);
     errorList.forEach((error) => error.type = 'config-rule-error');
     if (errorList.length > 0) {
-      return Failures.of(errorList);
+      return Promise.reject(errorList);
     } else if (ruleConfig[0] === 'off') {
-      return Successes.of([]);
+      return Promise.resolve([]);
     }
-    return Successes.of([new RuleCommand({
+    return Promise.resolve([new RuleCommand({
       name: rule.name,
       run: rule.run,
       init: rule.init,
@@ -44,14 +43,14 @@ function normalizeRule(rules, config, ruleName) {
     })]);
   } else {
     if (!isValidEnablingSetting(ruleConfig)) {
-      return Failures.of([{
+      return Promise.reject([{
         type: 'config-rule-error',
         message: 'config should be "on" or "off"',
       }]);
     } else if (ruleConfig === 'off') {
-      return Successes.of([]);
+      return Promise.resolve([]);
     }
-    return Successes.of([new RuleCommand({
+    return Promise.resolve([new RuleCommand({
       name: rule.name,
       run: rule.run,
       init: rule.init,
@@ -64,18 +63,31 @@ function RuleParser(rules) {
   this.rules = rules;
 }
 
+const append = (result, array) => {
+  result.push(...array);
+  return result;
+};
+
 RuleParser.prototype.parse = function(config) {
   const {rules} = this;
-  const result = Object.keys(config).reduce(function(result, ruleName) {
-    return result.append(normalizeRule(rules, config, ruleName));
-  }, Successes.of([]));
-  return result.isSuccess()
-    ? result
-    : Failures.of({
-      type: 'config-error',
-      message: 'Error(s) in configuration file:',
-      errors: result.getFailures(),
-    });
+  const resultPromise = Object.keys(config).reduce(function(resultPromise, ruleName) {
+    const rulePromise = normalizeRule(rules, config, ruleName);
+    return resultPromise.then(
+      (result) => rulePromise.then(
+        (rules) => append(result, rules),
+        (errors) => Promise.reject(errors)
+      ),
+      (errorResults) => rulePromise.then(
+        (rules) => Promise.reject(errorResults),
+        (errorRules) => Promise.reject(append(errorResults, errorRules))
+      )
+    );
+  }, Promise.resolve([]));
+  return resultPromise.catch((errors) => Promise.reject({
+    type: 'config-error',
+    message: 'Error(s) in configuration file:',
+    errors,
+  }));
 };
 
 module.exports = RuleParser;

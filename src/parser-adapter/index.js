@@ -1,13 +1,13 @@
 module.exports = (Gherkin) => {
-  const {DIALECTS, Parser} = Gherkin;
+  const {Parser, DIALECTS} = Gherkin;
   const parser = new Parser();
   return {
-    parse(content) {
+    parse({content}) {
       const {feature = {}} = parser.parse(content);
-      return {
+      return Promise.resolve({
         languageKeywords: DIALECTS[feature.language],
         feature,
-      };
+      });
     },
   };
 };

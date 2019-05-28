@@ -18,18 +18,19 @@ describe('Linter Factory', function() {
       ],
       args: [featureFile],
     }, Gherkin);
-    const result = linter.lint();
-    expect(result.logType).to.be.equal('error');
-    expect(result.exit).to.be.equal(1);
-    expect(result.errorLines[0]).to.include('failure.feature');
-
-    expect(result.errorLines[1]).to.include('Wrong indentation for "Feature", expected indentation level of 0, but got 4');
-    expect(result.errorLines[2]).to.include('Another custom-list error');
-    expect(result.errorLines[3]).to.include('Custom error');
-
-    expect(result.errorLines[4]).to.include('Another custom error');
-    expect(result.errorLines[5]).to.include('\n');
-    expect(result.errorLines.length).to.be.equal(6);
+    return linter.lint().then((result) => {
+      expect(result.logType).to.be.equal('error');
+      expect(result.exit).to.be.equal(1);
+      expect(result.errorLines[0]).to.include('failure.feature');
+      expect(result.errorLines[1]).to.include('Wrong indentation for "Feature", expected indentation level of 0, but got 4');
+      expect(result.errorLines[2]).to.include('Another custom-list error');
+      expect(result.errorLines[3]).to.include('Custom error');
+      expect(result.errorLines[4]).to.include('Another custom error');
+      expect(result.errorLines[5]).to.include('\n');
+      expect(result.errorLines.length).to.be.equal(6);
+    }, () => {
+      expect.fail('linter must not fail');
+    });
   });
 
   it('linter that succeed', function() {
@@ -40,12 +41,14 @@ describe('Linter Factory', function() {
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
     }, Gherkin);
-    const result = linter.lint();
-
-    expect(result).to.be.deep.equal({
-      logType: 'log',
-      exit: 0,
-      errorLines: [],
+    return linter.lint().then((result) => {
+      expect(result).to.be.deep.equal({
+        logType: 'log',
+        exit: 0,
+        errorLines: [],
+      });
+    }, () => {
+      expect.fail('linter must not fail');
     });
   });
 
@@ -57,13 +60,15 @@ describe('Linter Factory', function() {
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
     }, Gherkin);
-    const result = linter.lint();
-
-    expect(result.logType).to.be.equal('error');
-    expect(result.exit).to.be.equal(1);
-    expect(result.errorLines.length).to.be.equal(1);
-    expect(result.errorLines[0]).to.include('Could not find specified config file');
-    expect(result.errorLines[0]).to.include('.not-found-lintrc');
+    return linter.lint().then((result) => {
+      expect(result.logType).to.be.equal('error');
+      expect(result.exit).to.be.equal(1);
+      expect(result.errorLines.length).to.be.equal(1);
+      expect(result.errorLines[0]).to.include('Could not find specified config file');
+      expect(result.errorLines[0]).to.include('.not-found-lintrc');
+    }, () => {
+      expect.fail('linter must not fail');
+    });
   });
 
   it('default config file not found', function() {
@@ -73,13 +78,15 @@ describe('Linter Factory', function() {
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
     }, Gherkin);
-    const result = linter.lint();
-
-    expect(result.logType).to.be.equal('error');
-    expect(result.exit).to.be.equal(1);
-    expect(result.errorLines.length).to.be.equal(1);
-    expect(result.errorLines[0]).to.include('Could not find default config file ".gherkin-lintrc" in the working directory.');
-    expect(result.errorLines[0]).to.include('To use a custom name/path provide the config file using the "-c" arg.');
+    return linter.lint().then((result) => {
+      expect(result.logType).to.be.equal('error');
+      expect(result.exit).to.be.equal(1);
+      expect(result.errorLines.length).to.be.equal(1);
+      expect(result.errorLines[0]).to.include('Could not find default config file ".gherkin-lintrc" in the working directory.');
+      expect(result.errorLines[0]).to.include('To use a custom name/path provide the config file using the "-c" arg.');
+    }, () => {
+      expect.fail('linter must not fail');
+    });
   });
 
   it('default format is stylish', function() {
@@ -88,12 +95,14 @@ describe('Linter Factory', function() {
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
     }, Gherkin);
-    const result = linter.lint();
-
-    expect(result.logType).to.be.equal('error');
-    expect(result.exit).to.be.equal(1);
-    expect(result.errorLines.length).to.be.equal(1);
-    expect(result.errorLines[0]).to.include('Could not find default config file ".gherkin-lintrc" in the working directory.');
-    expect(result.errorLines[0]).to.include('To use a custom name/path provide the config file using the "-c" arg.');
+    return linter.lint().then((result) => {
+      expect(result.logType).to.be.equal('error');
+      expect(result.exit).to.be.equal(1);
+      expect(result.errorLines.length).to.be.equal(1);
+      expect(result.errorLines[0]).to.include('Could not find default config file ".gherkin-lintrc" in the working directory.');
+      expect(result.errorLines[0]).to.include('To use a custom name/path provide the config file using the "-c" arg.');
+    }, () => {
+      expect.fail('linter must not fail');
+    });
   });
 });

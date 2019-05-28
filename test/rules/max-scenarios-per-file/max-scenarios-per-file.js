@@ -6,7 +6,7 @@ const message = ({variable}) => `Number of scenarios exceeds maximum: ${variable
 
 describe('Max Scenarios per File rule', () => {
   it('detects an error when property is not "maxScenarios"', () => {
-    runTest('max-scenarios-per-file/CorrectNumber.feature', {
+    return runTest('max-scenarios-per-file/CorrectNumber.feature', {
       'foobar': 20,
     }, {
       type: 'config-error',
@@ -21,12 +21,12 @@ describe('Max Scenarios per File rule', () => {
 
 
   it('does not raise errors when there is a scenario outline without examples', () => {
-    runTest('max-scenarios-per-file/ScenarioOutlineWithoutExamplesTable.feature', {maxScenarios: 10}, []);
+    return runTest('max-scenarios-per-file/ScenarioOutlineWithoutExamplesTable.feature', {maxScenarios: 10}, []);
   });
 
   context('Too many scenarios', () => {
     it('detects errors when a feature file has too many scenarios', () => {
-      runTest('max-scenarios-per-file/TooManyScenarios.feature', {
+      return runTest('max-scenarios-per-file/TooManyScenarios.feature', {
         maxScenarios: 10,
       }, [{
         message: message({variable: 11}),
@@ -41,7 +41,7 @@ describe('Max Scenarios per File rule', () => {
 
   context('Too many examples on Scenario Outline', () => {
     it('detects errors when a feature file has too many scenarios', () => {
-      runTest('max-scenarios-per-file/TooManyExamples.feature', {
+      return runTest('max-scenarios-per-file/TooManyExamples.feature', {
         maxScenarios: 10,
       }, [{
         message: message({variable: 11}),

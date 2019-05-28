@@ -19,13 +19,11 @@ class ConfigurableLinter {
   }
 
   lint(file, rules) {
-    const result = this.noConfigurableLinter.lint(file);
-    if (result.isSuccess()) {
-      const [params] = result.getSuccesses();
-      return runRules(rules, params);
-    } else {
-      return result.getFailures();
-    }
+    return this.noConfigurableLinter.lint(file)
+      .then(
+        ([params]) => runRules(rules, params),
+        (failures) => failures
+      );
   }
 }
 

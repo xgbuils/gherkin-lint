@@ -7,15 +7,15 @@ const message = ({left, right}) =>
 
 describe('One space between tags rule', () => {
   it('does not raise errors when there are no violations', () => {
-    runTest('one-space-between-tags/NoViolations.feature', {}, []);
+    return runTest('one-space-between-tags/NoViolations.feature', {}, []);
   });
 
   it('does not raise errors when there are no violations', () => {
-    runTest('Empty.feature', {}, []);
+    return runTest('Empty.feature', {}, []);
   });
 
   it('detects errors for tags on features, scenarios, and scenario outlines', () => {
-    runTest('one-space-between-tags/Violations.feature', {}, [{
+    return runTest('one-space-between-tags/Violations.feature', {}, [{
       location: {
         line: 1,
         column: 13,

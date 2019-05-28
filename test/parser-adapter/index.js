@@ -11,6 +11,7 @@ describe('ParserAdapter', () => {
       };
       const tree = {feature};
       const content = 'file content';
+      const file = {content};
       const languageKeywords = ['Then', 'When', 'Given'];
 
       const Gherkin = {
@@ -28,9 +29,13 @@ describe('ParserAdapter', () => {
       };
 
       const parser = ParserAdapter(Gherkin);
-      expect(parser.parse(content)).to.be.deep.equal({
-        feature,
-        languageKeywords,
+      return parser.parse(file).then((result) => {
+        expect(result).to.be.deep.equal({
+          feature,
+          languageKeywords,
+        });
+      }, () => {
+        expect.fail('parser must not fail');
       });
     });
   });

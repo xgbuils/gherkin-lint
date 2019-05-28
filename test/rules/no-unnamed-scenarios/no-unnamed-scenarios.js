@@ -6,11 +6,11 @@ const runTest = ruleTestBase.createRuleTest(rule, () => 'Missing Scenario name')
 
 describe('No Unnamed Scenarios Rule', () => {
   it('does not raise errors when there are no violations', () => {
-    runTest('no-unnamed-scenarios/NoViolations.feature', {}, []);
+    return runTest('no-unnamed-scenarios/NoViolations.feature', {}, []);
   });
 
   it('detects errors for scenarios, and scenario outlines', () => {
-    runTest('no-unnamed-scenarios/Violations.feature', {}, [{
+    return runTest('no-unnamed-scenarios/Violations.feature', {}, [{
       location: {
         line: 6,
         column: 2,

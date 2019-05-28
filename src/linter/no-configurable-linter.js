@@ -1,5 +1,3 @@
-const {Successes, Failures} = require('../successes-failures');
-
 const getLocation = (lineContent) => {
   const [, line, column] = lineContent.match(/\((\d+):(\d+).*/) || [];
   return column === undefined ? {} : {
@@ -15,18 +13,17 @@ class NoConfigurableLinter {
 
   lint(file) {
     try {
-      const {feature, languageKeywords} = this.parser.parse(file.content);
-      return Successes.of([{
-        feature,
-        languageKeywords,
-        file,
-      }]);
+      return this.parser.parse(file)
+        .then(({feature, languageKeywords}) => [{
+          feature,
+          languageKeywords,
+          file,
+        }]);
     } catch (e) {
       if (e.errors) {
-        return Failures.of(processFatalErrors(e.errors));
-      } else {
-        throw e;
+        return Promise.reject(processFatalErrors(e.errors));
       }
+      return Promise.reject(e);
     }
   }
 }

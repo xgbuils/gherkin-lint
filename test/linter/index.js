@@ -1,5 +1,4 @@
 const expect = require('chai').expect;
-const {Successes, Failures} = require('../../src/successes-failures');
 const Linter = require('../../src/linter/');
 
 const firstNameFeature = 'first.feature';
@@ -14,13 +13,13 @@ const configProviderFailure = {
 
 const successfulConfigProvider = {
   provide() {
-    return Successes.of({});
+    return Promise.resolve({});
   },
 };
 
 const failedConfigProvider = {
   provide() {
-    return Failures.of(configProviderFailure);
+    return Promise.reject(configProviderFailure);
   },
 };
 
@@ -34,13 +33,13 @@ const rulesParserFailure = {
 
 const successfulRulesParser = {
   parse() {
-    return Successes.of({});
+    return Promise.resolve({});
   },
 };
 
 const failedRulesParser = {
   parse() {
-    return Failures.of(rulesParserFailure);
+    return Promise.reject(rulesParserFailure);
   },
 };
 
@@ -60,19 +59,19 @@ const secondFile = {
 
 const successfulFeatureFinder = {
   provide() {
-    return Successes.of([firstFile, secondFile]);
+    return Promise.resolve([firstFile, secondFile]);
   },
 };
 
 const failedFeatureFinder = {
   provide() {
-    return Failures.of(featureFinderFailure);
+    return Promise.reject(featureFinderFailure);
   },
 };
 
 const createSuccessfulFileLinter = (config = {}) => ({
   lint(file) {
-    return config[file.name] || [];
+    return Promise.resolve(config[file.name] || []);
   },
 });
 
@@ -87,9 +86,11 @@ describe('Linter', () => {
           createSuccessfulFileLinter()
         );
 
-        const result = linter.lint();
-        expect(result.isSuccess()).to.be.equal(false);
-        expect(result.getFailures()).to.be.equal(configProviderFailure);
+        return linter.lint().then(() => {
+          expect.fail('linter must fail');
+        }, (result) => {
+          expect(result).to.be.equal(configProviderFailure);
+        });
       });
     });
 
@@ -102,9 +103,11 @@ describe('Linter', () => {
           createSuccessfulFileLinter()
         );
 
-        const result = linter.lint();
-        expect(result.isSuccess()).to.be.equal(false);
-        expect(result.getFailures()).to.be.equal(rulesParserFailure);
+        return linter.lint().then(() => {
+          expect.fail('linter must fail');
+        }, (result) => {
+          expect(result).to.be.equal(rulesParserFailure);
+        });
       });
     });
 
@@ -117,9 +120,11 @@ describe('Linter', () => {
           createSuccessfulFileLinter()
         );
 
-        const result = linter.lint();
-        expect(result.isSuccess()).to.be.equal(false);
-        expect(result.getFailures()).to.be.equal(featureFinderFailure);
+        return linter.lint().then(() => {
+          expect.fail('linter must fail');
+        }, (result) => {
+          expect(result).to.be.equal(featureFinderFailure);
+        });
       });
     });
 
@@ -149,14 +154,16 @@ describe('Linter', () => {
           })
         );
 
-        const result = linter.lint();
-        expect(result.isSuccess()).to.be.equal(false);
-        expect(result.getFailures()).to.be.deep.equal({
-          type: 'lint-errors',
-          errors: [{
-            message: firstFile.path,
-            errors: errorsFirstFeature,
-          }],
+        return linter.lint().then(() => {
+          expect.fail('linter must fail');
+        }, (result) => {
+          expect(result).to.be.deep.equal({
+            type: 'lint-errors',
+            errors: [{
+              message: firstFile.path,
+              errors: errorsFirstFeature,
+            }],
+          });
         });
       });
     });
@@ -173,9 +180,11 @@ describe('Linter', () => {
           })
         );
 
-        const result = linter.lint();
-        expect(result.isSuccess()).to.be.equal(true);
-        expect(result.getSuccesses()).to.be.deep.equal({});
+        return linter.lint().then((result) => {
+          expect(result).to.be.deep.equal({});
+        }, () => {
+          expect.fail('linter must not fail');
+        });
       });
     });
   });

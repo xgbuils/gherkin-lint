@@ -1,7 +1,6 @@
 const fs = require('fs');
 const defaults = require('./defaults');
 const getPath = require('./utils/get-path');
-const {Successes, Failures} = require('./successes-failures');
 
 class ConfigProvider {
   constructor({file, cwd}) {
@@ -21,16 +20,16 @@ class ConfigProvider {
     const {fileName, message, cwd} = this;
     const configPath = getPath(cwd, fileName);
     if (!fs.existsSync(configPath)) {
-      return Failures.of({
+      return Promise.reject({
         type: 'config-error',
         message,
       });
     }
 
     try {
-      return Successes.of(JSON.parse(fs.readFileSync(configPath)));
+      return Promise.resolve(JSON.parse(fs.readFileSync(configPath)));
     } catch (e) {
-      return Failures.of({
+      return Promise.reject({
         type: 'config-error',
         message: e.toString(),
       });

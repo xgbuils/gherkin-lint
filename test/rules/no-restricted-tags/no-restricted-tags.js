@@ -6,7 +6,7 @@ const message = ({tags, nodeType}) => `Forbidden tag ${tags} on ${nodeType}`;
 
 describe('No Restricted Tags Rule', () => {
   it('detects an error when property is not "tags"', () => {
-    runTest('no-restricted-tags/NoViolations.feature', {
+    return runTest('no-restricted-tags/NoViolations.feature', {
       'foobar': ['@featuretag', '@scenariotag'],
     }, {
       type: 'config-error',
@@ -20,13 +20,13 @@ describe('No Restricted Tags Rule', () => {
   });
 
   it('doesn\'t raise errors when there are no forbidden tags', () => {
-    runTest('no-restricted-tags/NoViolations.feature', {
+    return runTest('no-restricted-tags/NoViolations.feature', {
       'tags': ['@featuretag1', '@scenariotag1'],
     }, []);
   });
 
   it('detects errors for features, scenarios, and scenario outlines when there are forbidden tags', () => {
-    runTest('no-restricted-tags/Violations.feature', {
+    return runTest('no-restricted-tags/Violations.feature', {
       'tags': [
         '@featuretag1',
         '@anothertag',

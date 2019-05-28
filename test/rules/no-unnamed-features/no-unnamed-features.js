@@ -6,11 +6,11 @@ const runTest = ruleTestBase.createRuleTest(rule, () => 'Missing Feature name');
 
 describe('No Unnamed Features Rule', () => {
   it('does not raise errors when there are no violations', () => {
-    runTest('no-unnamed-features/NoViolations.feature', {}, []);
+    return runTest('no-unnamed-features/NoViolations.feature', {}, []);
   });
 
   it('detects errors for scenarios, and scenario outlines', () => {
-    runTest('no-unnamed-features/Violations.feature', {}, [{
+    return runTest('no-unnamed-features/Violations.feature', {}, [{
       location: {
         line: 3,
         column: 4,
