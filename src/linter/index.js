@@ -1,22 +1,22 @@
+const {flatten} = require('../utils/generic');
+
 const sortByLine = (errors) => errors.sort((a, b) => {
   return a.location.line - b.location.line;
 });
 
+const lintFileWith = (fileLinter, rules) => (file) => {
+  return fileLinter.lint(file, rules).then((fileErrors) => {
+    return fileErrors.length > 0 ? [{
+      message: file.path,
+      errors: sortByLine(fileErrors),
+    }] : [];
+  });
+};
+
 const lintFiles = (files, rules, fileLinter) => {
-  const outputPromise = files.reduce((errorsPromise, file) => {
-    return errorsPromise.then((errors) => {
-      return fileLinter.lint(file, rules).then((fileErrors) => {
-        if (fileErrors.length > 0) {
-          const fileBlob = {
-            message: file.path,
-            errors: sortByLine(fileErrors),
-          };
-          errors.push(fileBlob);
-        }
-        return errors;
-      });
-    });
-  }, Promise.resolve([]));
+  const lintFile = lintFileWith(fileLinter, rules);
+  const outputPromise = Promise.all(files.map(lintFile))
+    .then(flatten);
 
   return outputPromise.then((output) => {
     return output.length > 0

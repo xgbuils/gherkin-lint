@@ -1,4 +1,4 @@
-const {flatMap, uniq} = require('../utils/generic');
+const {flatMap, flatten, uniq} = require('../utils/generic');
 const glob = require('glob');
 const fs = require('fs');
 const path = require('path');
@@ -50,6 +50,17 @@ const reportFailure = (pattern) => {
   });
 };
 
+const getFileNames = (globOptions) => (pattern) => {
+  const globPatterns = getGlobPatterns(pattern, '**/*.feature');
+  const fileNames = filterFeatures(flatMap((globPattern) => {
+    return glob.sync(globPattern, globOptions);
+  })(globPatterns));
+  if (fileNames.length === 0) {
+    return reportFailure(pattern);
+  }
+  return Promise.resolve(fileNames);
+};
+
 class FeatureProvider {
   constructor(args, {ignore = defaults.ignore, cwd}) {
     this.args = args;
@@ -65,23 +76,9 @@ class FeatureProvider {
       ignore: getIgnorePatterns(ignore, cwd),
       cwd,
     };
-    let resultPromise = Promise.resolve([]);
-    for (let index = 0; index < patterns.length; ++index) {
-      const pattern = patterns[index];
-      const globPatterns = getGlobPatterns(pattern, '**/*.feature');
-      const fileNames = filterFeatures(flatMap((globPattern) => {
-        return glob.sync(globPattern, globOptions);
-      })(globPatterns));
-      if (fileNames.length === 0) {
-        return reportFailure(pattern);
-      }
-      resultPromise = resultPromise.then((result) => {
-        result.push(...fileNames);
-        return result;
-      });
-    }
-
-    return resultPromise.then((files) => parseFileList(files));
+    return Promise.all(patterns.map(getFileNames(globOptions)))
+      .then(flatten)
+      .then(parseFileList);
   }
 }
 

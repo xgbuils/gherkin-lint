@@ -1,4 +1,5 @@
 const enablingSettings = ['on', 'off'];
+const {flatten} = require('./utils/generic');
 const RuleCommand = require('./rule-command');
 
 function isValidEnablingSetting(enablingSetting) {
@@ -59,35 +60,56 @@ function normalizeRule(rules, config, ruleName) {
   }
 }
 
-function RuleParser(rules) {
-  this.rules = rules;
+const getRuleResultPromises = (rules, config) => {
+  return Object.keys(config).map((ruleName) => {
+    return normalizeRule(rules, config, ruleName);
+  });
+};
+
+const getErrors = (prom) => {
+  return prom.then(
+    (result) => [],
+    (errors) => (errors)
+  );
+};
+
+const filterRules = (rulePromises) => {
+  return Promise.all(rulePromises).then(
+    flatten,
+    () => []
+  );
+};
+
+const filterErrors = (rulePromises) => {
+  return Promise.all(rulePromises.map(getErrors))
+    .then(flatten)
+    .then((errors) => {
+      return errors.length > 0 ? Promise.reject(errors) : [];
+    });
+};
+
+const buildConfigErrors = (errors) => ({
+  type: 'config-error',
+  message: 'Error(s) in configuration file:',
+  errors,
+});
+
+class RuleParser {
+  constructor(rules) {
+    this.rules = rules;
+  }
+
+  parse(config) {
+    const {rules} = this;
+    const promises = getRuleResultPromises(rules, config);
+    const rulesPromise = filterRules(promises);
+    const errorsPromise = filterErrors(promises);
+    return Promise.all([rulesPromise, errorsPromise])
+      .then(
+        ([rules]) => rules,
+        (errors) => Promise.reject(buildConfigErrors(errors))
+      );
+  }
 }
-
-const append = (result, array) => {
-  result.push(...array);
-  return result;
-};
-
-RuleParser.prototype.parse = function(config) {
-  const {rules} = this;
-  const resultPromise = Object.keys(config).reduce(function(resultPromise, ruleName) {
-    const rulePromise = normalizeRule(rules, config, ruleName);
-    return resultPromise.then(
-      (result) => rulePromise.then(
-        (rules) => append(result, rules),
-        (errors) => Promise.reject(errors)
-      ),
-      (errorResults) => rulePromise.then(
-        (rules) => Promise.reject(errorResults),
-        (errorRules) => Promise.reject(append(errorResults, errorRules))
-      )
-    );
-  }, Promise.resolve([]));
-  return resultPromise.catch((errors) => Promise.reject({
-    type: 'config-error',
-    message: 'Error(s) in configuration file:',
-    errors,
-  }));
-};
 
 module.exports = RuleParser;
