@@ -238,7 +238,7 @@ describe('No Configurable File Linter', function() {
     };
     const wrongParser = {
       parse() {
-        throw e;
+        return Promise.reject(e);
       },
     };
     const wrongLinter = new NoConfigurableLinter(wrongParser);
@@ -258,7 +258,7 @@ describe('No Configurable File Linter', function() {
     const error = 'error';
     const wrongParser = {
       parse() {
-        throw error;
+        return Promise.reject(error);
       },
     };
     const wrongLinter = new NoConfigurableLinter(wrongParser);
