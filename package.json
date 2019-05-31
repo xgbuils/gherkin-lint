@@ -78,7 +78,8 @@
     "eslint-config-google": "^0.13.0",
     "mocha": "6.1.4",
     "npm-check": "^5.9.0",
-    "nyc": "^14.1.1"
+    "nyc": "^14.1.1",
+    "sinon": "^7.3.2"
   },
   "bin": {
     "pickle-lint": "src/main.js"

@@ -12,19 +12,17 @@ class NoConfigurableLinter {
   }
 
   lint(file) {
-    try {
-      return this.parser.parse(file)
-        .then(({feature, languageKeywords}) => [{
-          feature,
-          languageKeywords,
-          file,
-        }]);
-    } catch (e) {
-      if (e.errors) {
-        return Promise.reject(processFatalErrors(e.errors));
-      }
-      return Promise.reject(e);
-    }
+    return this.parser.parse(file)
+      .then(({feature, languageKeywords}) => [{
+        feature,
+        languageKeywords,
+        file,
+      }], (e) => {
+        if (e.errors) {
+          return Promise.reject(processFatalErrors(e.errors));
+        }
+        return Promise.reject(e);
+      });
   }
 }
 
