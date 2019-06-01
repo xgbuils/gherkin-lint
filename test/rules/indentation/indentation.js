@@ -115,19 +115,19 @@ const wrongIndentationErrors = [{
 }];
 
 describe('Indentation rule', () => {
-  it('doesn\'t raise errors when the default conifguration is used and there are no indentation violations (spaces)', () => {
+  it('does not raise errors when the default conifguration is used and there are no indentation violations (spaces)', () => {
     return runTest('indentation/CorrectIndentationSpaces.feature', {}, []);
   });
 
-  it('doesn\'t raise errors when scenario outline does not have examples', () => {
+  it('does not raise errors when scenario outline does not have examples', () => {
     return runTest('indentation/CorrectIndentationWithoutExamples.feature', {}, []);
   });
 
-  it('doesn\'t raise errors when the file is empty', () => {
+  it('does not raise errors when the file is empty', () => {
     return runTest('Empty.feature', {}, []);
   });
 
-  it('doesn\'t raise errors when the default conifguration is used are and there no indentation violations (tabs)', () => {
+  it('does not raise errors when the default conifguration is used are and there no indentation violations (tabs)', () => {
     return runTest('indentation/CorrectIndentationTabs.feature', {}, []);
   });
 
@@ -259,31 +259,6 @@ describe('Indentation rule', () => {
     return runTest('indentation/CorrectIndentationWithScenarioTagOverrides.feature', {
       'scenario tag': 3,
     }, []);
-  });
-
-  it('Wrong "then" step in customized configuration', () => {
-    return runTest('indentation/WrongSteps.feature', {
-      Feature: 1,
-      Background: 4,
-      Scenario: 1,
-      Examples: 2,
-      example: 4,
-      then: 0,
-    }, [{
-      message: message({element: 'then', expected: 0, actual: 3}),
-      rule: ruleName,
-      location: {
-        line: 7,
-        column: 4,
-      },
-    }, {
-      message: message({element: 'then', expected: 0, actual: 5}),
-      rule: ruleName,
-      location: {
-        line: 12,
-        column: 6,
-      },
-    }]);
   });
 
   context('DocString', () => {

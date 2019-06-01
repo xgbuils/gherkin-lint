@@ -28,11 +28,6 @@ const defaultConfig = {
   'Step': 2,
   'Examples': 0,
   'example': 2,
-  'given': 2,
-  'when': 2,
-  'then': 2,
-  'and': 2,
-  'but': 2,
   'DocString': 4,
 };
 
@@ -93,10 +88,6 @@ const checkTags = (testNode) => (node) => {
   return flatMap(compose(testNode, getFirstTag))(tagsPerLine);
 };
 
-const findKey = (obj, predicate) => {
-  return Object.keys(obj).find((key) => predicate(obj[key]));
-};
-
 const testDocString = (parseDocString, test) => (step) => {
   if (!step.argument || step.argument.type !== 'DocString') {
     return [];
@@ -109,16 +100,8 @@ const testDocString = (parseDocString, test) => (step) => {
   return docString.lines.map(test('DocString line'));
 };
 
-const getStepType = (feature, languageKeywords, config) => (step) => {
-  const keyword = step.keyword;
-  const stepType = findKey(languageKeywords, (values) => {
-    return values instanceof Array && values.indexOf(keyword) !== -1;
-  });
-  return stepType in config ? stepType : 'Step';
-};
-
-const testStep = (getStepType, testDocstring, testNode) => (step) => {
-  const stepType = getStepType(step);
+const testStep = (testDocstring, testNode) => (step) => {
+  const stepType = step.type;
   return applyOver([
     testNode(stepType),
     testDocstring,
@@ -168,7 +151,6 @@ const run = ({feature, languageKeywords, file, config}) => {
 
   return testFeature(
     testStep(
-      getStepType(feature, languageKeywords, config),
       testDocString(parseDocString(lines), test),
       test
     ),

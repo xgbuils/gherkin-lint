@@ -6,7 +6,7 @@ const stylizeRuleErrorWith = (maxErrorMsgLength, maxLineChars) => (error) => {
   let str = '  '; // indent 2 spaces so it looks pretty
   const padding = '    '; // padding of 4 spaces, will be used between line numbers, error msgs and rule names
   let {line} = error.location;
-  line = line ? line.toString() : '';
+  line = line.toString();
 
   // add spaces until the line string is as long as our longest line string
   while (line.length < maxLineChars) {

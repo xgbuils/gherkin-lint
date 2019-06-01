@@ -11,11 +11,6 @@ const reduce = (reducer, acc) => (input) => {
   if (Array.isArray(input)) {
     return input.reduce(reducer, acc);
   }
-  for (const name in input) {
-    if (({}).hasOwnProperty.call(input, name)) {
-      acc = reducer(acc, input[name]);
-    }
-  }
   return acc;
 };
 

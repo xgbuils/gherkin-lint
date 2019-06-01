@@ -77,8 +77,6 @@ describe('Rule Parser', function() {
           'Background': 1,
           'Scenario': 1,
           'Step': 1,
-          'given': 1,
-          'and': 1,
         }],
       });
       return hasRules(rulesOrErrors, []);
