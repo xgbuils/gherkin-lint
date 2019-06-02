@@ -28,9 +28,9 @@ const linterFactory = ({format, ignore, config, rulesDirs, args}, Gherkin) => {
   return {
     lint() {
       return linter.lint().then(
-        (results) => ({
+        (failures) => ({
           logType: 'log',
-          failures: {},
+          failures,
         }),
         (failures) => ({
           logType: 'error',
