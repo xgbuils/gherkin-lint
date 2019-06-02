@@ -154,9 +154,7 @@ describe('Linter', () => {
           })
         );
 
-        return linter.lint().then(() => {
-          expect.fail('linter must fail');
-        }, (result) => {
+        return linter.lint().then((result) => {
           expect(result).to.be.deep.equal({
             type: 'lint-errors',
             errors: [{
@@ -164,6 +162,8 @@ describe('Linter', () => {
               errors: errorsFirstFeature,
             }],
           });
+        }, () => {
+          expect.fail('linter must not fail');
         });
       });
     });

@@ -19,12 +19,10 @@ const lintFiles = (files, rules, fileLinter) => {
     .then(flatten);
 
   return outputPromise.then((output) => {
-    return output.length > 0
-      ? Promise.reject({
-        type: 'lint-errors',
-        errors: output,
-      })
-      : Promise.resolve({});
+    return output.length > 0 ? {
+      type: 'lint-errors',
+      errors: output,
+    } : {};
   });
 };
 
