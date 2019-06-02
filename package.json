@@ -70,10 +70,9 @@
     "glob": "^7.1.4"
   },
   "devDependencies": {
-    "@xgbuils/pickle-lint-with-gherkin-5-test": "0.0.1",
+    "@xgbuils/pickle-lint-with-gherkin-5-test": "0.0.2",
     "chai": "^4.2.0",
     "coveralls": "^3.0.3",
-    "diff": "^4.0.1",
     "eslint": "^5.16.0",
     "eslint-config-google": "^0.13.0",
     "mocha": "6.1.4",
@@ -86,8 +85,8 @@
   },
   "scripts": {
     "demo": "node ./src/main.js . -c ./test-data-wip/.gherkin-lintrc",
-    "lint": "eslint ./src ./test ./e2e-tests",
-    "lint-fix": "eslint ./src ./test/ ./e2e-tests --fix",
+    "lint": "eslint ./src ./test",
+    "lint-fix": "eslint ./src ./test/ --fix",
     "test-only": "mocha --recursive ./test",
     "e2e-gherkin-5": "pickle-lint-with-gherkin-5-test e2e-tests/gherkin@5.1.0",
     "e2e": "npm run e2e-gherkin-5",
