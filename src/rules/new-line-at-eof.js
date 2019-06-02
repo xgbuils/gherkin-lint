@@ -1,5 +1,5 @@
 const rule = 'new-line-at-eof';
-const stringRuleValidation = require('../config-validation/string-rule-validation');
+const stringRuleValidation = require('../config/string-rule-validation');
 
 const availableConfigs = [
   'yes',

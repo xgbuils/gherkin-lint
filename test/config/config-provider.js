@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const ConfigProvider = require('../../src/config-provider.js');
+const ConfigProvider = require('../../src/config/config-provider.js');
 const cwd = __dirname;
 
 describe('Config Provider', () => {

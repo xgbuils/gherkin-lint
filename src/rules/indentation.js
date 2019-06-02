@@ -1,5 +1,5 @@
 const rule = 'indentation';
-const objectRuleValidation = require('../config-validation/object-rule-validation');
+const objectRuleValidation = require('../config/object-rule-validation');
 const {
   getExamples,
   getTableBody,

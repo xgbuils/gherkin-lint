@@ -1,5 +1,5 @@
 const rule = 'allowed-tags';
-const objectRuleValidation = require('../config-validation/object-rule-validation');
+const objectRuleValidation = require('../config/object-rule-validation');
 const {compose, intoArray} = require('../utils/generic');
 const {filter, map} = require('../utils/transducers');
 

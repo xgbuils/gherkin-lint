@@ -70,7 +70,7 @@
     "glob": "^7.1.4"
   },
   "devDependencies": {
-    "@xgbuils/pickle-lint-with-gherkin-5-test": "0.0.2",
+    "@xgbuils/pickle-lint-with-gherkin-5-test": "0.0.3",
     "chai": "^4.2.0",
     "coveralls": "^3.0.3",
     "eslint": "^5.16.0",

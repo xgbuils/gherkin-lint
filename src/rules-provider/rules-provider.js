@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const getPath = require('./utils/get-path');
+const getPath = require('../utils/get-path');
 
 class RulesProvider {
   constructor({rulesDirs, cwd}) {

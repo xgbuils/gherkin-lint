@@ -1,5 +1,5 @@
 const rule = 'name-length';
-const objectRuleValidation = require('../config-validation/object-rule-validation');
+const objectRuleValidation = require('../config/object-rule-validation');
 const availableConfigs = {
   'Feature': 70,
   'Step': 70,

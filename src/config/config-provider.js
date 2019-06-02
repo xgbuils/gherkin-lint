@@ -1,6 +1,6 @@
 const fs = require('fs');
-const defaults = require('./defaults');
-const getPath = require('./utils/get-path');
+const defaults = require('../defaults');
+const getPath = require('../utils/get-path');
 
 class ConfigProvider {
   constructor({file, cwd}) {

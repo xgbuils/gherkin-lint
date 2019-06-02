@@ -1,14 +1,14 @@
 const assert = require('chai').assert;
-const RulesParser = require('../src/rules-parser.js');
+const RulesParser = require('../../src/rules-provider/rules-parser.js');
 
 const rulesProvider = {
   provide() {
     return {
-      'indentation': require('../src/rules/indentation'),
-      'new-line-at-eof': require('../src/rules/new-line-at-eof'),
-      'no-files-without-scenarios': require('../src/rules/no-files-without-scenarios'),
-      'no-multiple-empty-lines': require('../src/rules/no-multiple-empty-lines'),
-      'no-trailing-spaces': require('../src/rules/no-trailing-spaces'),
+      'indentation': require('../../src/rules/indentation'),
+      'new-line-at-eof': require('../../src/rules/new-line-at-eof'),
+      'no-files-without-scenarios': require('../../src/rules/no-files-without-scenarios'),
+      'no-multiple-empty-lines': require('../../src/rules/no-multiple-empty-lines'),
+      'no-trailing-spaces': require('../../src/rules/no-trailing-spaces'),
     };
   },
 };

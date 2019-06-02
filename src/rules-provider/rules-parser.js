@@ -1,5 +1,5 @@
 const enablingSettings = ['on', 'off'];
-const {flatten} = require('./utils/generic');
+const {flatten} = require('../utils/generic');
 const RuleCommand = require('./rule-command');
 
 function isValidEnablingSetting(enablingSetting) {
