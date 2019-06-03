@@ -6,6 +6,7 @@ const pathToDefaultRules = path.resolve(__dirname, '..', '..', '..', 'src', 'rul
 const pathToLocalRules = path.join(__dirname, 'rules'); // absolute path;
 const pathToOtherRules = path.join('test', 'linter', 'factory', 'other_rules'); // relative path from root
 const Gherkin = require('gherkin');
+const cwd = process.cwd();
 
 describe('Linter Factory', function() {
   it('linter that report rule failures', function() {
@@ -17,7 +18,7 @@ describe('Linter Factory', function() {
         pathToDefaultRules, pathToLocalRules, pathToOtherRules,
       ],
       args: [featureFile],
-    }, Gherkin);
+    }, Gherkin, {cwd});
     return linter.lint().then((result) => {
       expect(result.logType).to.be.equal('log');
       expect(result.exit).to.be.equal(1);
@@ -40,7 +41,7 @@ describe('Linter Factory', function() {
       format: 'stylish',
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
-    }, Gherkin);
+    }, Gherkin, {cwd});
     return linter.lint().then((result) => {
       expect(result).to.be.deep.equal({
         logType: 'log',
@@ -59,7 +60,7 @@ describe('Linter Factory', function() {
       format: 'stylish',
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
-    }, Gherkin);
+    }, Gherkin, {cwd});
     return linter.lint().then((result) => {
       expect(result.logType).to.be.equal('error');
       expect(result.exit).to.be.equal(1);
@@ -77,7 +78,7 @@ describe('Linter Factory', function() {
       format: 'stylish',
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
-    }, Gherkin);
+    }, Gherkin, {cwd});
     return linter.lint().then((result) => {
       expect(result.logType).to.be.equal('error');
       expect(result.exit).to.be.equal(1);
@@ -94,7 +95,7 @@ describe('Linter Factory', function() {
     const linter = linterFactory({
       rulesDirs: [pathToDefaultRules],
       args: [featureFile],
-    }, Gherkin);
+    }, Gherkin, {cwd});
     return linter.lint().then((result) => {
       expect(result.logType).to.be.equal('error');
       expect(result.exit).to.be.equal(1);

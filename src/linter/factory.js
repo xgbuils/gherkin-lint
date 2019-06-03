@@ -8,8 +8,7 @@ const NoConfigurableLinter = require('./no-configurable-linter');
 const ConfigurableLinter = require('./configurable-linter');
 const ParserAdapter = require('../parser-adapter/');
 
-const linterFactory = ({format, ignore, config, rulesDirs, args}, Gherkin) => {
-  const cwd = process.cwd();
+const linterFactory = ({format, ignore, config, rulesDirs, args}, Gherkin, {cwd}) => {
   const parser = ParserAdapter(Gherkin);
   const formatter = formatterFactory(format);
   const noConfigurableFileLinter = new NoConfigurableLinter(parser);
